@@ -5,8 +5,11 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from analyzer.models import Resume
-from analyzer.serializers import ResumeUploadSerializer
+from analyzer.models import JobDescription, Resume
+from analyzer.serializers import (
+    JobDescriptionSerializer,
+    ResumeUploadSerializer,
+)
 
 
 @api_view(["GET"])
@@ -64,3 +67,11 @@ class ResumeUploadView(generics.CreateAPIView):
             },
             status=status.HTTP_201_CREATED,
         )
+
+
+class JobDescriptionCreateView(generics.CreateAPIView):
+    queryset = JobDescription.objects.all()
+    serializer_class = JobDescriptionSerializer
+    permission_classes = [
+        AllowAny,
+    ]

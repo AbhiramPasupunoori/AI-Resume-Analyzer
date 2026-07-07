@@ -16,35 +16,42 @@ SKILLS_FILE = (
 
 @lru_cache(maxsize=1)
 def load_skill_entries() -> list[dict[str, Any]]:
-    """Load skill names and aliases from the JSON dataset."""
+    """
+    Load and normalize all skill entries from skills.json.
+    """
 
     if not SKILLS_FILE.exists():
         raise FileNotFoundError(
-            f"Skills dataset not found: {SKILLS_FILE}"
+            f"Skills dataset was not found: {SKILLS_FILE}"
         )
 
-    with SKILLS_FILE.open("r", encoding="utf-8") as file:
+    with SKILLS_FILE.open(
+        "r",
+        encoding="utf-8",
+    ) as file:
         skill_groups = json.load(file)
 
     entries: list[dict[str, Any]] = []
 
     for category, skills in skill_groups.items():
         for skill in skills:
-            name = str(skill.get("name", "")).strip()
+            name = skill.get("name", "").strip()
             aliases = skill.get("aliases", [])
 
             if not name:
                 continue
 
+            clean_aliases = [
+                str(alias).strip()
+                for alias in aliases
+                if str(alias).strip()
+            ]
+
             entries.append(
                 {
                     "name": name,
                     "category": category,
-                    "aliases": [
-                        str(alias).strip()
-                        for alias in aliases
-                        if str(alias).strip()
-                    ],
+                    "aliases": clean_aliases,
                 }
             )
 
@@ -62,7 +69,9 @@ RULE_DETAILS: dict[str, dict[str, str]] = {}
 
 
 def build_skill_matcher() -> None:
-    """Create spaCy matching patterns for every skill."""
+    """
+    Convert skill names and aliases into spaCy patterns.
+    """
 
     for index, entry in enumerate(load_skill_entries()):
         rule_name = f"SKILL_{index}"
@@ -81,7 +90,10 @@ def build_skill_matcher() -> None:
         if not patterns:
             continue
 
-        MATCHER.add(rule_name, patterns)
+        MATCHER.add(
+            rule_name,
+            patterns,
+        )
 
         RULE_DETAILS[rule_name] = {
             "name": entry["name"],
@@ -93,7 +105,9 @@ build_skill_matcher()
 
 
 def extract_skills(text: str) -> list[str]:
-    """Return canonical skill names detected in the text."""
+    """
+    Return canonical skill names detected in text.
+    """
 
     if not text or not text.strip():
         return []
@@ -103,12 +117,14 @@ def extract_skills(text: str) -> list[str]:
 
     detected_skills: set[str] = set()
 
-    for match_id, _start, _end in matches:
+    for match_id, _, _ in matches:
         rule_name = NLP.vocab.strings[match_id]
-        details = RULE_DETAILS.get(rule_name)
+        rule_details = RULE_DETAILS.get(rule_name)
 
-        if details:
-            detected_skills.add(details["name"])
+        if rule_details:
+            detected_skills.add(
+                rule_details["name"]
+            )
 
     return sorted(
         detected_skills,
@@ -119,7 +135,9 @@ def extract_skills(text: str) -> list[str]:
 def extract_skill_details(
     text: str,
 ) -> list[dict[str, str]]:
-    """Return skill names, categories and matched text."""
+    """
+    Return skills with category and matched resume text.
+    """
 
     if not text or not text.strip():
         return []
@@ -131,17 +149,17 @@ def extract_skill_details(
 
     for match_id, start, end in matches:
         rule_name = NLP.vocab.strings[match_id]
-        details = RULE_DETAILS.get(rule_name)
+        rule_details = RULE_DETAILS.get(rule_name)
 
-        if not details:
+        if not rule_details:
             continue
 
-        skill_name = details["name"]
+        canonical_name = rule_details["name"]
 
-        if skill_name not in detected:
-            detected[skill_name] = {
-                "name": skill_name,
-                "category": details["category"],
+        if canonical_name not in detected:
+            detected[canonical_name] = {
+                "name": canonical_name,
+                "category": rule_details["category"],
                 "matched_text": document[start:end].text,
             }
 
@@ -155,7 +173,9 @@ def compare_resume_with_job(
     resume_text: str,
     job_description_text: str,
 ) -> dict[str, object]:
-    """Compare resume skills with job-description skills."""
+    """
+    Compare resume skills with job-description skills.
+    """
 
     resume_skills = extract_skills(resume_text)
     job_skills = extract_skills(job_description_text)
@@ -178,14 +198,15 @@ def compare_resume_with_job(
         key=str.casefold,
     )
 
-    skill_coverage_percentage = (
-        round(
-            len(matched_skills) / len(job_skills) * 100,
+    if job_skills:
+        coverage_percentage = round(
+            len(matched_skills)
+            / len(job_skills)
+            * 100,
             2,
         )
-        if job_skills
-        else 0.0
-    )
+    else:
+        coverage_percentage = 0.0
 
     return {
         "resume_skills": resume_skills,
@@ -193,5 +214,5 @@ def compare_resume_with_job(
         "matched_skills": matched_skills,
         "missing_skills": missing_skills,
         "additional_resume_skills": additional_resume_skills,
-        "skill_coverage_percentage": skill_coverage_percentage,
+        "skill_coverage_percentage": coverage_percentage,
     }
