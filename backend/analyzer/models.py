@@ -40,6 +40,12 @@ class Resume(models.Model):
 
     def __str__(self) -> str:
         return self.original_filename
+    
+    def delete(self, *args, **kwargs):
+        if self.file:
+            self.file.delete(save=False)
+
+        super().delete(*args, **kwargs)
 
 
 class JobDescription(models.Model):
