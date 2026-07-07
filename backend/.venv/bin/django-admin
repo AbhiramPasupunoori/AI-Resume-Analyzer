@@ -1,4 +1,4 @@
-#!/Users/abhiram/Desktop/ai-resume-analyzer/backend/.venv/bin/python
+#!/Users/abhiram/Documents/GitHub/AI-Resume-Analyzer/backend/.venv/bin/python
 import sys
 from django.core.management import execute_from_command_line
 if __name__ == '__main__':
