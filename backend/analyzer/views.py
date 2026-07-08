@@ -5,9 +5,10 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from analyzer.models import JobDescription, Resume
+from analyzer.models import JobDescription, Resume, ResumeAnalysis
 from analyzer.serializers import (
     JobDescriptionSerializer,
+    ResumeAnalysisSerializer,
     ResumeUploadSerializer,
 )
 
@@ -72,6 +73,43 @@ class ResumeUploadView(generics.CreateAPIView):
 class JobDescriptionCreateView(generics.CreateAPIView):
     queryset = JobDescription.objects.all()
     serializer_class = JobDescriptionSerializer
+    permission_classes = [
+        AllowAny,
+    ]
+
+class ResumeAnalysisListCreateView(
+    generics.ListCreateAPIView
+):
+    queryset = (
+        ResumeAnalysis.objects
+        .select_related(
+            "resume",
+            "job_description",
+        )
+        .all()
+    )
+
+    serializer_class = ResumeAnalysisSerializer
+
+    permission_classes = [
+        AllowAny,
+    ]
+
+
+class ResumeAnalysisDetailView(
+    generics.RetrieveAPIView
+):
+    queryset = (
+        ResumeAnalysis.objects
+        .select_related(
+            "resume",
+            "job_description",
+        )
+        .all()
+    )
+
+    serializer_class = ResumeAnalysisSerializer
+
     permission_classes = [
         AllowAny,
     ]
