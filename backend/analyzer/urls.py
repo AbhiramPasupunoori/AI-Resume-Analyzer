@@ -2,6 +2,8 @@ from django.urls import path
 
 from analyzer.views import (
     JobDescriptionCreateView,
+    ResumeAnalysisDetailView,
+    ResumeAnalysisListCreateView,
     ResumeUploadView,
     database_health_check,
     health_check,
@@ -30,5 +32,15 @@ urlpatterns = [
         "job-descriptions/",
         JobDescriptionCreateView.as_view(),
         name="job-description-create",
+    ),
+    path(
+        "analyses/",
+        ResumeAnalysisListCreateView.as_view(),
+        name="analysis-list-create",
+    ),
+    path(
+        "analyses/<int:pk>/",
+        ResumeAnalysisDetailView.as_view(),
+        name="analysis-detail",
     ),
 ]
