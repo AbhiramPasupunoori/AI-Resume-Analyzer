@@ -165,3 +165,8 @@ SUPPORTED_RESUME_EXTENSIONS = [
     ".pdf",
     ".docx",
 ]
+
+SENTENCE_TRANSFORMER_MODEL = os.getenv(
+    "SENTENCE_TRANSFORMER_MODEL",
+    "sentence-transformers/all-MiniLM-L6-v2",
+)

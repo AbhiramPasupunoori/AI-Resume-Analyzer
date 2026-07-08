@@ -8,6 +8,11 @@ from analyzer.models import (
     Resume,
     ResumeAnalysis,
 )
+from analyzer.services.similarity_service import (
+    SemanticSimilarityError,
+    calculate_semantic_score,
+    calculate_semantic_similarity,
+)
 from analyzer.services.skill_extractor import (
     compare_resume_with_job,
 )
@@ -21,7 +26,7 @@ def calculate_skill_score(
     skill_coverage_percentage: float,
 ) -> Decimal:
     """
-    Convert a skill coverage percentage into a score out of 45.
+    Convert skill coverage percentage into a score out of 45.
 
     Example:
         80% coverage = 36 out of 45.
@@ -77,7 +82,9 @@ def create_resume_analysis(
     )
 
     try:
-        analysis.status = ResumeAnalysis.Status.PROCESSING
+        analysis.status = (
+            ResumeAnalysis.Status.PROCESSING
+        )
 
         analysis.save(
             update_fields=[
@@ -86,9 +93,15 @@ def create_resume_analysis(
             ]
         )
 
+        # --------------------------------------------
+        # 1. Skill comparison
+        # --------------------------------------------
+
         comparison = compare_resume_with_job(
             resume_text=resume.extracted_text,
-            job_description_text=job_description.description,
+            job_description_text=(
+                job_description.description
+            ),
         )
 
         skill_coverage_percentage = comparison[
@@ -99,15 +112,58 @@ def create_resume_analysis(
             skill_coverage_percentage
         )
 
-        processing_time_ms = (
-            calculate_processing_time_ms(started_at)
+        # --------------------------------------------
+        # 2. Semantic similarity
+        # --------------------------------------------
+
+        semantic_result = (
+            calculate_semantic_similarity(
+                resume_text=resume.extracted_text,
+                job_description_text=(
+                    job_description.description
+                ),
+            )
         )
 
+        semantic_score = calculate_semantic_score(
+            semantic_result["similarity"]
+        )
+
+        semantic_percentage = Decimal(
+            str(semantic_result["percentage"])
+        ).quantize(
+            Decimal("0.01"),
+            rounding=ROUND_HALF_UP,
+        )
+
+        # The total currently contains skill score
+        # and semantic score.
+        overall_score = (
+            skill_score + semantic_score
+        ).quantize(
+            Decimal("0.01"),
+            rounding=ROUND_HALF_UP,
+        )
+
+        overall_score = min(
+            overall_score,
+            Decimal("100.00"),
+        )
+
+        processing_time_ms = (
+            calculate_processing_time_ms(
+                started_at
+            )
+        )
+
+        # --------------------------------------------
+        # 3. Save results
+        # --------------------------------------------
+
         with transaction.atomic():
-            # Keep the job's stored required skills updated.
-            job_description.required_skills = comparison[
-                "job_skills"
-            ]
+            job_description.required_skills = (
+                comparison["job_skills"]
+            )
 
             job_description.save(
                 update_fields=[
@@ -133,17 +189,23 @@ def create_resume_analysis(
             ]
 
             analysis.skill_score = skill_score
+            analysis.semantic_score = semantic_score
 
-            # At this stage, the overall score only contains
-            # the skill component.
-            analysis.overall_score = skill_score
+            # Store semantic similarity as a percentage.
+            analysis.semantic_similarity = (
+                semantic_percentage
+            )
+
+            analysis.overall_score = overall_score
 
             analysis.status = (
                 ResumeAnalysis.Status.COMPLETED
             )
 
             analysis.error_message = ""
-            analysis.analysis_time_ms = processing_time_ms
+            analysis.analysis_time_ms = (
+                processing_time_ms
+            )
 
             analysis.save(
                 update_fields=[
@@ -152,6 +214,8 @@ def create_resume_analysis(
                     "matched_skills",
                     "missing_skills",
                     "skill_score",
+                    "semantic_score",
+                    "semantic_similarity",
                     "overall_score",
                     "status",
                     "error_message",
@@ -162,12 +226,43 @@ def create_resume_analysis(
 
         return analysis
 
+    except SemanticSimilarityError as error:
+        analysis.status = (
+            ResumeAnalysis.Status.FAILED
+        )
+
+        analysis.error_message = str(error)
+
+        analysis.analysis_time_ms = (
+            calculate_processing_time_ms(
+                started_at
+            )
+        )
+
+        analysis.save(
+            update_fields=[
+                "status",
+                "error_message",
+                "analysis_time_ms",
+                "updated_at",
+            ]
+        )
+
+        raise ResumeAnalysisProcessingError(
+            str(error)
+        ) from error
+
     except Exception as error:
-        analysis.status = ResumeAnalysis.Status.FAILED
+        analysis.status = (
+            ResumeAnalysis.Status.FAILED
+        )
+
         analysis.error_message = str(error)[:2000]
 
         analysis.analysis_time_ms = (
-            calculate_processing_time_ms(started_at)
+            calculate_processing_time_ms(
+                started_at
+            )
         )
 
         analysis.save(
