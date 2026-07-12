@@ -1,3 +1,6 @@
+from decimal import Decimal
+from unittest.mock import patch
+
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -34,7 +37,19 @@ class ResumeAnalysisApiTests(APITestCase):
             )
         )
 
-    def test_create_resume_analysis(self):
+    @patch(
+        "analyzer.services.analysis_service."
+        "calculate_semantic_similarity"
+    )
+    def test_create_resume_analysis(
+        self,
+        mocked_similarity,
+    ):
+        mocked_similarity.return_value = {
+            "similarity": 0.72,
+            "percentage": 72.0,
+        }
+
         url = reverse(
             "analyzer:analysis-list-create"
         )
@@ -79,7 +94,23 @@ class ResumeAnalysisApiTests(APITestCase):
 
         self.assertGreater(
             analysis.skill_score,
-            0,
+            Decimal("0.00"),
+        )
+
+        self.assertEqual(
+            analysis.semantic_similarity,
+            Decimal("72.00"),
+        )
+
+        self.assertEqual(
+            analysis.semantic_score,
+            Decimal("18.00"),
+        )
+
+        self.assertEqual(
+            analysis.overall_score,
+            analysis.skill_score
+            + analysis.semantic_score,
         )
 
     def test_rejects_resume_without_text(self):

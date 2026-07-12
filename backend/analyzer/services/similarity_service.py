@@ -1,21 +1,17 @@
-import os
 import re
 from decimal import Decimal, ROUND_HALF_UP
 from functools import lru_cache
 
 import numpy as np
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 from sentence_transformers import SentenceTransformer
 
 
-try:
-    MODEL_NAME = settings.SENTENCE_TRANSFORMER_MODEL
-except ImproperlyConfigured:
-    MODEL_NAME = os.getenv(
-        "SENTENCE_TRANSFORMER_MODEL",
-        "sentence-transformers/all-MiniLM-L6-v2",
-    )
+MODEL_NAME = getattr(
+    settings,
+    "SENTENCE_TRANSFORMER_MODEL",
+    "sentence-transformers/all-MiniLM-L6-v2",
+)
 
 
 class SemanticSimilarityError(Exception):
