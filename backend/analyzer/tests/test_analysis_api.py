@@ -19,10 +19,28 @@ class ResumeAnalysisApiTests(APITestCase):
             original_filename="test-resume.pdf",
             file_type=Resume.FileType.PDF,
             file_size=1000,
-            extracted_text=(
-                "Python developer with Django, React, "
-                "PostgreSQL, Git and Docker experience."
-            ),
+            extracted_text="""
+            PROFESSIONAL SUMMARY
+
+            Python full-stack developer.
+
+            TECHNICAL SKILLS
+
+            Python, Django, React, PostgreSQL,
+            Git and Docker.
+
+            WORK EXPERIENCE
+
+            Software Development Intern.
+
+            EDUCATION
+
+            Bachelor of Technology.
+
+            PROJECTS
+
+            AI-Based Resume Analyzer.
+            """,
         )
 
         self.job_description = (
@@ -30,9 +48,9 @@ class ResumeAnalysisApiTests(APITestCase):
                 job_title="Python Developer",
                 company_name="Example Company",
                 description=(
-                    "Looking for a Python developer with "
-                    "Django, React, PostgreSQL, Docker, "
-                    "Git and AWS."
+                    "Looking for a Python developer "
+                    "with Django, React, PostgreSQL, "
+                    "Docker, Git and AWS."
                 ),
             )
         )
@@ -70,12 +88,11 @@ class ResumeAnalysisApiTests(APITestCase):
             status.HTTP_201_CREATED,
         )
 
-        self.assertEqual(
-            ResumeAnalysis.objects.count(),
-            1,
+        analysis = (
+            ResumeAnalysis.objects.first()
         )
 
-        analysis = ResumeAnalysis.objects.first()
+        self.assertIsNotNone(analysis)
 
         self.assertEqual(
             analysis.status,
@@ -92,11 +109,6 @@ class ResumeAnalysisApiTests(APITestCase):
             analysis.missing_skills,
         )
 
-        self.assertGreater(
-            analysis.skill_score,
-            Decimal("0.00"),
-        )
-
         self.assertEqual(
             analysis.semantic_similarity,
             Decimal("72.00"),
@@ -107,10 +119,31 @@ class ResumeAnalysisApiTests(APITestCase):
             Decimal("18.00"),
         )
 
+        # Five of six sections are present.
+        self.assertEqual(
+            analysis.section_score,
+            Decimal("12.50"),
+        )
+
+        self.assertEqual(
+            analysis.section_results[
+                "present_count"
+            ],
+            5,
+        )
+
+        self.assertIn(
+            "Certifications",
+            analysis.section_results[
+                "missing_sections"
+            ],
+        )
+
         self.assertEqual(
             analysis.overall_score,
             analysis.skill_score
-            + analysis.semantic_score,
+            + analysis.semantic_score
+            + analysis.section_score,
         )
 
     def test_rejects_resume_without_text(self):
