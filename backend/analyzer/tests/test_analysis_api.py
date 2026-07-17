@@ -143,7 +143,18 @@ class ResumeAnalysisApiTests(APITestCase):
             analysis.overall_score,
             analysis.skill_score
             + analysis.semantic_score
-            + analysis.section_score,
+            + analysis.section_score
+            + analysis.achievement_score
+            + analysis.readability_score,
+        )
+
+        self.assertIn("score_breakdown", response.data)
+        self.assertIn("achievement_results", response.data)
+        self.assertIn("readability_results", response.data)
+        self.assertTrue(response.data["recommendations"])
+        self.assertEqual(
+            response.data["score_breakdown"]["overall"]["maximum"],
+            100,
         )
 
     def test_rejects_resume_without_text(self):
