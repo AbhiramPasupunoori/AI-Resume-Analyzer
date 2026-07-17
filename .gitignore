@@ -1,3 +1,23 @@
+# Python virtual environments
+backend/.venv/
+backend/venv/
+.venv/
+venv/
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environment and uploaded files
+backend/.env
+backend/media/
+
+# Editor and operating-system files
+.DS_Store
 
 # Python virtual environment
 backend/.venv/
