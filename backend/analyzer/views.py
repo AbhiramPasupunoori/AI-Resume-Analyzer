@@ -39,6 +39,12 @@ def database_health_check(request):
     )
 
 
+class ResumeListView(generics.ListAPIView):
+    queryset = Resume.objects.all()
+    serializer_class = ResumeUploadSerializer
+    permission_classes = [AllowAny]
+
+
 class ResumeUploadView(generics.CreateAPIView):
     queryset = Resume.objects.all()
     serializer_class = ResumeUploadSerializer
@@ -70,12 +76,24 @@ class ResumeUploadView(generics.CreateAPIView):
         )
 
 
-class JobDescriptionCreateView(generics.CreateAPIView):
+class ResumeDetailView(generics.RetrieveDestroyAPIView):
+    queryset = Resume.objects.all()
+    serializer_class = ResumeUploadSerializer
+    permission_classes = [AllowAny]
+
+
+class JobDescriptionListCreateView(generics.ListCreateAPIView):
     queryset = JobDescription.objects.all()
     serializer_class = JobDescriptionSerializer
     permission_classes = [
         AllowAny,
     ]
+
+
+class JobDescriptionDetailView(generics.RetrieveDestroyAPIView):
+    queryset = JobDescription.objects.all()
+    serializer_class = JobDescriptionSerializer
+    permission_classes = [AllowAny]
 
 class ResumeAnalysisListCreateView(
     generics.ListCreateAPIView
@@ -97,7 +115,7 @@ class ResumeAnalysisListCreateView(
 
 
 class ResumeAnalysisDetailView(
-    generics.RetrieveAPIView
+    generics.RetrieveDestroyAPIView
 ):
     queryset = (
         ResumeAnalysis.objects

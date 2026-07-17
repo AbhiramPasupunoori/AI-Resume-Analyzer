@@ -18,3 +18,10 @@ backend/media/
 
 # Editor and operating-system files
 .DS_Store
+
+# Python virtual environment
+backend/.venv/
+backend/__pycache__/
+backend/**/*.pyc
+backend/.pytest_cache/
+backend/.cache/
