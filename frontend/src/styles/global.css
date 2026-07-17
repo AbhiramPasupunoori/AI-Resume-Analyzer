@@ -154,25 +154,6 @@ textarea {
   margin-bottom: 24px;
 }
 
-.overall-score {
-  background: #0f172a;
-  color: white;
-  padding: 24px;
-  border-radius: 18px;
-  min-width: 220px;
-  text-align: center;
-}
-
-.overall-score span {
-  display: block;
-  margin-bottom: 8px;
-  color: #cbd5e1;
-}
-
-.overall-score strong {
-  font-size: 32px;
-}
-
 .score-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -240,5 +221,53 @@ textarea {
   width: 100%;
   height: 320px;
   margin-top: 20px;
+}
+.overall-score-card {
+  background: white;
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+  text-align: center;
+  position: relative;
+  min-width: 260px;
+}
+
+.score-circle {
+  transform: rotate(-90deg);
+}
+
+.score-circle-progress {
+  transition: stroke-dashoffset 0.8s ease;
+}
+
+.score-circle-content {
+  position: absolute;
+  top: 76px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.score-circle-content strong {
+  font-size: 28px;
+  color: #111827;
+}
+
+.score-circle-content span {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.overall-score-card h3 {
+  margin: 18px 0 6px;
+  font-size: 22px;
+  color: #111827;
+}
+
+.overall-score-card p {
+  margin: 0;
+  color: #6b7280;
 }
 }

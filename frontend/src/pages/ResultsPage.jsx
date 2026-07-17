@@ -6,6 +6,7 @@ import ScoreBreakdown from "../components/ScoreBreakdown";
 import SkillList from "../components/SkillList";
 import ScoreChart from "../components/ScoreChart";
 import RecommendationList from "../components/RecommendationList";
+import OverallScoreCircle from "../components/OverallScoreCircle";
 
 function ResultsPage() {
   const { id } = useParams();
@@ -45,12 +46,14 @@ function ResultsPage() {
   return (
     <main className="page">
       <div className="result-header">
-        <h1>Resume Analysis Result</h1>
-
-        <div className="overall-score">
-          <span>Overall Score</span>
-          <strong>{analysis.overall_score} / 100</strong>
+        <div>
+          <h1>Resume Analysis Result</h1>
+          <p className="muted">
+            Review your resume match score, missing skills and improvement areas.
+          </p>
         </div>
+
+        <OverallScoreCircle score={analysis.overall_score} />
       </div>
 
       <div className="card">
