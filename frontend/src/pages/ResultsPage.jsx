@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { getAnalysis } from "../api/analysisApi";
 import ScoreBreakdown from "../components/ScoreBreakdown";
 import SkillList from "../components/SkillList";
+import ScoreChart from "../components/ScoreChart";
 import RecommendationList from "../components/RecommendationList";
 
 function ResultsPage() {
@@ -66,6 +67,7 @@ function ResultsPage() {
       </div>
 
       <ScoreBreakdown scoreBreakdown={analysis.score_breakdown} />
+      <ScoreChart scoreBreakdown={analysis.score_breakdown} />
 
       <div className="grid two-columns">
         <SkillList
