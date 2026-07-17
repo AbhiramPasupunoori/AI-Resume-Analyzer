@@ -8,6 +8,9 @@ from analyzer.models import (
     Resume,
     ResumeAnalysis,
 )
+from analyzer.services.achievement_detector import analyze_achievements
+from analyzer.services.readability_service import analyze_readability
+from analyzer.services.recommendation_service import generate_recommendations
 from analyzer.services.section_detector import (
     analyze_resume_sections,
 )
@@ -104,6 +107,12 @@ def create_resume_analysis(
             ),
         )
 
+        if not comparison["job_skills"]:
+            raise ResumeAnalysisProcessingError(
+                "No supported skills were found in the job description. "
+                "Add specific technical skills and try again."
+            )
+
         skill_coverage_percentage = comparison[
             "skill_coverage_percentage"
         ]
@@ -171,12 +180,47 @@ def create_resume_analysis(
             ),
         }
 
-        # Current score maximum:
-        # 45 skill + 25 semantic + 15 sections = 85.
+        # -----------------------------------------
+        # 4. Achievement quality: maximum 10 points
+        # -----------------------------------------
+
+        achievement_analysis = analyze_achievements(
+            resume.extracted_text
+        )
+        achievement_score = achievement_analysis["score"]
+        achievement_results_for_storage = {
+            **achievement_analysis,
+            "score": float(achievement_score),
+        }
+
+        # -----------------------------------------
+        # 5. Readability: maximum 5 points
+        # -----------------------------------------
+
+        readability_analysis = analyze_readability(
+            resume.extracted_text
+        )
+        readability_score = readability_analysis["score"]
+        readability_results_for_storage = {
+            **readability_analysis,
+            "score": float(readability_score),
+        }
+
+        recommendations = generate_recommendations(
+            missing_skills=comparison["missing_skills"],
+            missing_sections=section_analysis["missing_sections"],
+            achievement_score=float(achievement_score),
+            readability_score=float(readability_score),
+            semantic_similarity=float(semantic_percentage),
+        )
+
+        # Full score maximum: 45 + 25 + 15 + 10 + 5 = 100.
         overall_score = (
             skill_score
             + semantic_score
             + section_score
+            + achievement_score
+            + readability_score
         ).quantize(
             Decimal("0.01"),
             rounding=ROUND_HALF_UP,
@@ -194,7 +238,7 @@ def create_resume_analysis(
         )
 
         # -----------------------------------------
-        # 4. Save the completed analysis
+        # 6. Save the completed analysis
         # -----------------------------------------
 
         with transaction.atomic():
@@ -241,6 +285,18 @@ def create_resume_analysis(
                 section_results_for_storage
             )
 
+            analysis.achievement_score = achievement_score
+            analysis.achievement_results = (
+                achievement_results_for_storage
+            )
+
+            analysis.readability_score = readability_score
+            analysis.readability_results = (
+                readability_results_for_storage
+            )
+
+            analysis.recommendations = recommendations
+
             analysis.overall_score = overall_score
 
             analysis.status = (
@@ -264,6 +320,11 @@ def create_resume_analysis(
                     "semantic_similarity",
                     "section_score",
                     "section_results",
+                    "achievement_score",
+                    "achievement_results",
+                    "readability_score",
+                    "readability_results",
+                    "recommendations",
                     "overall_score",
                     "status",
                     "error_message",
@@ -274,7 +335,7 @@ def create_resume_analysis(
 
         return analysis
 
-    except SemanticSimilarityError as error:
+    except (SemanticSimilarityError, ResumeAnalysisProcessingError) as error:
         analysis.status = (
             ResumeAnalysis.Status.FAILED
         )
@@ -296,9 +357,10 @@ def create_resume_analysis(
             ]
         )
 
-        raise ResumeAnalysisProcessingError(
-            str(error)
-        ) from error
+        if isinstance(error, ResumeAnalysisProcessingError):
+            raise
+
+        raise ResumeAnalysisProcessingError(str(error)) from error
 
     except Exception as error:
         analysis.status = (

@@ -282,6 +282,10 @@ class ResumeAnalysisSerializer(
         queryset=Resume.objects.all(),
         source="resume",
         write_only=True,
+        error_messages={
+            "does_not_exist": "No resume exists with ID {pk_value}.",
+            "incorrect_type": "Resume ID must be an integer.",
+        },
     )
 
     job_description_id = (
@@ -289,6 +293,12 @@ class ResumeAnalysisSerializer(
             queryset=JobDescription.objects.all(),
             source="job_description",
             write_only=True,
+            error_messages={
+                "does_not_exist": (
+                    "No job description exists with ID {pk_value}."
+                ),
+                "incorrect_type": "Job description ID must be an integer.",
+            },
         )
     )
 
@@ -338,6 +348,8 @@ class ResumeAnalysisSerializer(
             "matched_skills",
             "missing_skills",
             "section_results",
+            "achievement_results",
+            "readability_results",
             "recommendations",
             "error_message",
             "analysis_time_ms",
@@ -364,6 +376,8 @@ class ResumeAnalysisSerializer(
             "matched_skills",
             "missing_skills",
             "section_results",
+            "achievement_results",
+            "readability_results",
             "recommendations",
             "error_message",
             "analysis_time_ms",

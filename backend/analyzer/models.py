@@ -175,6 +175,16 @@ class ResumeAnalysis(models.Model):
         blank=True,
     )
 
+    achievement_results = models.JSONField(
+        default=dict,
+        blank=True,
+    )
+
+    readability_results = models.JSONField(
+        default=dict,
+        blank=True,
+    )
+
     recommendations = models.JSONField(
         default=list,
         blank=True,
