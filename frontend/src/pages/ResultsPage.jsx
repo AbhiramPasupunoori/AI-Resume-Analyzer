@@ -1,12 +1,18 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { getAnalysis } from "../api/analysisApi";
-import ScoreBreakdown from "../components/ScoreBreakdown";
-import SkillList from "../components/SkillList";
-import ScoreChart from "../components/ScoreChart";
-import RecommendationList from "../components/RecommendationList";
+
 import OverallScoreCircle from "../components/OverallScoreCircle";
+import ScoreBreakdown from "../components/ScoreBreakdown";
+import ScoreChart from "../components/ScoreChart";
+import SkillList from "../components/SkillList";
+import RecommendationList from "../components/RecommendationList";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
+import EmptyState from "../components/EmptyState";
+
+import { getErrorMessage } from "../utils/errorUtils";
 
 function ResultsPage() {
   const { id } = useParams();
@@ -15,32 +21,49 @@ function ResultsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    async function loadAnalysis() {
-      try {
-        setLoading(true);
-        const data = await getAnalysis(id);
-        setAnalysis(data);
-      } catch (error) {
-        setError("Could not load analysis result.");
-      } finally {
-        setLoading(false);
-      }
-    }
+  const loadAnalysis = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError("");
 
-    loadAnalysis();
+      const data = await getAnalysis(id);
+      setAnalysis(data);
+    } catch (error) {
+      setError(getErrorMessage(error));
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
 
+  useEffect(() => {
+    loadAnalysis();
+  }, [loadAnalysis]);
+
   if (loading) {
-    return <main className="page">Loading result...</main>;
+    return (
+      <main className="page">
+        <LoadingSpinner message="Loading analysis result..." />
+      </main>
+    );
   }
 
   if (error) {
-    return <main className="page error-box">{error}</main>;
+    return (
+      <main className="page">
+        <ErrorMessage message={error} onRetry={loadAnalysis} />
+      </main>
+    );
   }
 
   if (!analysis) {
-    return <main className="page">No analysis found.</main>;
+    return (
+      <main className="page">
+        <EmptyState
+          title="No analysis found"
+          message="The requested analysis result could not be found."
+        />
+      </main>
+    );
   }
 
   return (
@@ -58,11 +81,11 @@ function ResultsPage() {
 
       <div className="card">
         <h2>Resume</h2>
-        <p>{analysis.resume?.original_filename}</p>
+        <p>{analysis.resume?.original_filename || "Not available"}</p>
 
         <h2>Job</h2>
         <p>
-          {analysis.job_description?.job_title}
+          {analysis.job_description?.job_title || "Not available"}
           {analysis.job_description?.company_name
             ? ` at ${analysis.job_description.company_name}`
             : ""}
@@ -70,6 +93,7 @@ function ResultsPage() {
       </div>
 
       <ScoreBreakdown scoreBreakdown={analysis.score_breakdown} />
+
       <ScoreChart scoreBreakdown={analysis.score_breakdown} />
 
       <div className="grid two-columns">
@@ -89,27 +113,29 @@ function ResultsPage() {
       <div className="card">
         <h2>Section Results</h2>
 
-        {analysis.section_results?.present_sections && (
+        {analysis.section_results?.present_sections ? (
           <>
             <p>
-              Present:{" "}
+              <strong>Present:</strong>{" "}
               {analysis.section_results.present_sections.join(", ")}
             </p>
+
             <p>
-              Missing:{" "}
+              <strong>Missing:</strong>{" "}
               {analysis.section_results.missing_sections.join(", ")}
             </p>
+
             <p>
-              Completeness:{" "}
+              <strong>Completeness:</strong>{" "}
               {analysis.section_results.completeness_percentage}%
             </p>
           </>
+        ) : (
+          <p className="muted">No section results available.</p>
         )}
       </div>
 
-      <RecommendationList
-        recommendations={analysis.recommendations}
-      />
+      <RecommendationList recommendations={analysis.recommendations} />
     </main>
   );
 }

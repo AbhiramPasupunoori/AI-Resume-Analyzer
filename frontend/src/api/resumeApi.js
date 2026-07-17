@@ -1,6 +1,6 @@
 import apiClient from "./client";
 
-export async function uploadResume(file) {
+export async function uploadResume(file, onUploadProgress) {
   const formData = new FormData();
 
   formData.append("file", file);
@@ -9,6 +9,7 @@ export async function uploadResume(file) {
     headers: {
       "Content-Type": "multipart/form-data",
     },
+    onUploadProgress,
   });
 
   return response.data;
