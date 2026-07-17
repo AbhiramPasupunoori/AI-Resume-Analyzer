@@ -3,9 +3,13 @@ import { useNavigate } from "react-router-dom";
 
 import ResumeUpload from "../components/ResumeUpload";
 import JobDescriptionForm from "../components/JobDescriptionForm";
+import ErrorMessage from "../components/ErrorMessage";
+import LoadingSpinner from "../components/LoadingSpinner";
+
 import { uploadResume } from "../api/resumeApi";
 import { createJobDescription } from "../api/jobDescriptionApi";
 import { createAnalysis } from "../api/analysisApi";
+import { getErrorMessage } from "../utils/errorUtils";
 
 function AnalyzePage() {
   const navigate = useNavigate();
@@ -21,39 +25,72 @@ function AnalyzePage() {
   const [savedJobDescription, setSavedJobDescription] = useState(null);
 
   const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState("");
 
   function handleFileChange(file, validationError) {
     setSelectedFile(file);
     setFileError(validationError);
     setUploadedResume(null);
+    setUploadProgress(0);
+    setError("");
   }
 
-  async function handleAnalyze() {
-    setError("");
-
+  function validateForm() {
     if (!selectedFile) {
-      setError("Please upload a resume file.");
-      return;
+      return "Please upload a resume file.";
+    }
+
+    if (fileError) {
+      return fileError;
     }
 
     if (!jobTitle.trim()) {
-      setError("Please enter a job title.");
-      return;
+      return "Please enter a job title.";
     }
 
     if (jobDescription.trim().length < 30) {
-      setError("Please enter a detailed job description.");
+      return "Please enter a more detailed job description.";
+    }
+
+    return "";
+  }
+
+  async function handleAnalyze() {
+    const validationError = validateForm();
+
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
     try {
       setLoading(true);
+      setError("");
+      setUploadProgress(0);
 
-      const resumeUploadResponse = await uploadResume(selectedFile);
+      setLoadingMessage("Uploading resume...");
+
+      const resumeUploadResponse = await uploadResume(
+        selectedFile,
+        (progressEvent) => {
+          if (!progressEvent.total) {
+            return;
+          }
+
+          const percent = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+
+          setUploadProgress(percent);
+        }
+      );
+
       const resume = resumeUploadResponse.resume;
-
       setUploadedResume(resume);
+
+      setLoadingMessage("Saving job description...");
 
       const job = await createJobDescription({
         jobTitle,
@@ -63,6 +100,8 @@ function AnalyzePage() {
 
       setSavedJobDescription(job);
 
+      setLoadingMessage("Analyzing resume match...");
+
       const analysis = await createAnalysis({
         resumeId: resume.id,
         jobDescriptionId: job.id,
@@ -70,15 +109,10 @@ function AnalyzePage() {
 
       navigate(`/results/${analysis.id}`);
     } catch (error) {
-      const responseData = error.response?.data;
-
-      if (responseData) {
-        setError(JSON.stringify(responseData));
-      } else {
-        setError("Something went wrong. Please check if Django is running.");
-      }
+      setError(getErrorMessage(error));
     } finally {
       setLoading(false);
+      setLoadingMessage("");
     }
   }
 
@@ -109,15 +143,33 @@ function AnalyzePage() {
         />
       </div>
 
-      {fileError && <div className="error-box">{fileError}</div>}
-      {error && <div className="error-box">{error}</div>}
+      {fileError && <ErrorMessage message={fileError} />}
+      {error && <ErrorMessage message={error} />}
+
+      {loading && (
+        <>
+          <LoadingSpinner message={loadingMessage} />
+
+          {uploadProgress > 0 && uploadProgress < 100 && (
+            <div className="progress-wrapper">
+              <div className="progress-bar">
+                <div
+                  className="progress-fill"
+                  style={{ width: `${uploadProgress}%` }}
+                ></div>
+              </div>
+              <p>{uploadProgress}% uploaded</p>
+            </div>
+          )}
+        </>
+      )}
 
       <button
         className="primary-button"
         onClick={handleAnalyze}
         disabled={loading}
       >
-        {loading ? "Analyzing..." : "Analyze Resume"}
+        {loading ? "Processing..." : "Analyze Resume"}
       </button>
     </main>
   );
