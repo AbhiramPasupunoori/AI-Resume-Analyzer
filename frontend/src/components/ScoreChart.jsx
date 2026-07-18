@@ -48,16 +48,32 @@ function ScoreChart({ scoreBreakdown }) {
   ];
 
   return (
-    <div className="card">
+    <div className="card chart-card">
       <h2>Score Breakdown Chart</h2>
-      <p className="muted">
-        Visual comparison of each scoring category.
-      </p>
+      <p className="muted">Visual comparison of each scoring category.</p>
 
       <div className="chart-container">
         <ResponsiveContainer width="100%" height={320}>
           <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
+            <defs>
+              <linearGradient id="scoreBarGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#60a5fa" />
+                <stop offset="100%" stopColor="#2563eb" />
+              </linearGradient>
+
+              <linearGradient
+                id="maximumBarGradient"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop offset="0%" stopColor="#c084fc" />
+                <stop offset="100%" stopColor="#7c3aed" />
+              </linearGradient>
+            </defs>
+
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,.2)" />
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
@@ -66,12 +82,13 @@ function ScoreChart({ scoreBreakdown }) {
             <Bar
               dataKey="score"
               name="Score"
+              fill="url(#scoreBarGradient)"
               radius={[8, 8, 0, 0]}
             />
-
             <Bar
               dataKey="maximum"
               name="Maximum"
+              fill="url(#maximumBarGradient)"
               radius={[8, 8, 0, 0]}
             />
           </BarChart>

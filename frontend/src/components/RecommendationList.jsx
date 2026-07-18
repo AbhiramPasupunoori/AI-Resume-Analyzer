@@ -4,16 +4,15 @@ function RecommendationList({ recommendations }) {
       <h2>Recommendations</h2>
 
       {recommendations && recommendations.length > 0 ? (
-        <ul>
+        <ul className="recommendation-list">
           {recommendations.map((recommendation, index) => (
-            <li key={`${recommendation}-${index}`}>
-              {recommendation}
-            </li>
+            <li key={`${recommendation}-${index}`}>{recommendation}</li>
           ))}
         </ul>
       ) : (
         <p className="muted">
-          Recommendations will appear after the backend recommendation service is added.
+          Recommendations will appear after the backend recommendation service
+          is added.
         </p>
       )}
     </div>

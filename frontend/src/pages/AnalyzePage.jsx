@@ -11,6 +11,8 @@ import { createJobDescription } from "../api/jobDescriptionApi";
 import { createAnalysis } from "../api/analysisApi";
 import { getErrorMessage } from "../utils/errorUtils";
 
+const SAMPLE_JOB_DESCRIPTION = `We are looking for a Python Full-Stack Developer with experience in Django, Django REST Framework, React, PostgreSQL, Docker, Git, REST APIs and cloud deployment. The candidate should be able to build scalable backend APIs, integrate frontend applications and work with databases. Experience with testing, debugging and clean code practices is preferred.`;
+
 function AnalyzePage() {
   const navigate = useNavigate();
 
@@ -28,6 +30,11 @@ function AnalyzePage() {
   const [loadingMessage, setLoadingMessage] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState("");
+
+  const hasResume = Boolean(selectedFile);
+
+  const hasJobDescription =
+    jobTitle.trim().length > 0 && jobDescription.trim().length >= 30;
 
   function handleFileChange(file, validationError) {
     setSelectedFile(file);
@@ -55,6 +62,32 @@ function AnalyzePage() {
     }
 
     return "";
+  }
+
+  function fillExampleJobDescription() {
+    setJobTitle("Python Full-Stack Developer");
+    setCompanyName("Example Technologies");
+    setJobDescription(SAMPLE_JOB_DESCRIPTION);
+    setError("");
+  }
+
+  function clearForm() {
+    setSelectedFile(null);
+    setFileError("");
+    setJobTitle("");
+    setCompanyName("");
+    setJobDescription("");
+    setUploadedResume(null);
+    setSavedJobDescription(null);
+    setUploadProgress(0);
+    setError("");
+  }
+
+  function goToStep(stepId) {
+    document.getElementById(stepId)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   }
 
   async function handleAnalyze() {
@@ -116,137 +149,179 @@ function AnalyzePage() {
     }
   }
 
-  const hasResume = Boolean(selectedFile && !fileError);
-  const hasJobDetails = Boolean(
-    jobTitle.trim() && jobDescription.trim().length >= 30
-  );
-
   return (
     <main className="page analyze-page">
       <div className="page-header analyze-header">
-        <span className="analyze-eyebrow">Resume Match Analysis</span>
+        <span className="modern-badge">Resume Analysis</span>
         <h1>Analyze Your Resume</h1>
         <p>
-          Complete the steps below to see how well your resume matches the role.
+          Follow the steps below to compare your resume with a job description
+          and generate an ATS-style score.
         </p>
       </div>
 
-      <div className="analyze-steps" aria-label="Analysis steps">
-        <div className={`analyze-step ${hasResume ? "is-complete" : "is-active"}`}>
-          <span>{hasResume ? "✓" : "1"}</span>
-          <div>
-            <strong>Upload resume</strong>
-            <small>PDF or DOCX</small>
-          </div>
-        </div>
-        <div className="step-connector" aria-hidden="true"></div>
-        <div
-          className={`analyze-step ${
-            hasJobDetails ? "is-complete" : hasResume ? "is-active" : ""
-          }`}
+      <div className="stepper">
+        <button
+          type="button"
+          className={`step-item ${hasResume ? "completed" : "active"}`}
+          onClick={() => goToStep("upload-resume-step")}
+          aria-controls="upload-resume-step"
         >
-          <span>{hasJobDetails ? "✓" : "2"}</span>
+          <span>1</span>
           <div>
-            <strong>Add job details</strong>
-            <small>Role requirements</small>
+            <strong>Upload Resume</strong>
+            <p>PDF or DOCX format</p>
           </div>
-        </div>
-        <div className="step-connector" aria-hidden="true"></div>
-        <div
-          className={`analyze-step ${
-            hasResume && hasJobDetails ? "is-active" : ""
+        </button>
+
+        <button
+          type="button"
+          className={`step-item ${
+            hasJobDescription ? "completed" : hasResume ? "active" : ""
           }`}
+          onClick={() => goToStep("job-description-step")}
+          aria-controls="job-description-step"
+        >
+          <span>2</span>
+          <div>
+            <strong>Add Job Description</strong>
+            <p>Paste target role details</p>
+          </div>
+        </button>
+
+        <button
+          type="button"
+          className={`step-item ${
+            hasResume && hasJobDescription ? "active" : ""
+          }`}
+          onClick={() => goToStep("run-analysis-step")}
+          aria-controls="run-analysis-step"
         >
           <span>3</span>
           <div>
-            <strong>Get your score</strong>
-            <small>AI-powered insights</small>
+            <strong>Run Analysis</strong>
+            <p>Generate score and suggestions</p>
+          </div>
+        </button>
+      </div>
+
+      <section className="analysis-steps">
+        <div className="analysis-step-card" id="upload-resume-step">
+          <div className="step-card-header">
+            <span className="step-number">Step 1</span>
+            <div>
+              <h2>Upload Resume</h2>
+              <p>
+                Upload your latest resume so the backend can extract and analyze
+                the text.
+              </p>
+            </div>
+          </div>
+
+          <ResumeUpload
+            selectedFile={selectedFile}
+            uploadedResume={uploadedResume}
+            onFileChange={handleFileChange}
+          />
+        </div>
+
+        <div className="analysis-step-card" id="job-description-step">
+          <div className="step-card-header">
+            <span className="step-number">Step 2</span>
+            <div>
+              <h2>Add Job Description</h2>
+              <p>
+                Paste the job description to compare your resume with the role
+                requirements.
+              </p>
+            </div>
+          </div>
+
+          <div className="job-helper-actions">
+            <button
+              type="button"
+              className="secondary-action-button"
+              onClick={fillExampleJobDescription}
+            >
+              Use Example Job Description
+            </button>
+
+            <button type="button" className="ghost-button" onClick={clearForm}>
+              Clear Form
+            </button>
+          </div>
+
+          <JobDescriptionForm
+            jobTitle={jobTitle}
+            companyName={companyName}
+            jobDescription={jobDescription}
+            savedJobDescription={savedJobDescription}
+            onJobTitleChange={setJobTitle}
+            onCompanyNameChange={setCompanyName}
+            onJobDescriptionChange={setJobDescription}
+          />
+        </div>
+
+        <div
+          className="analysis-step-card analyze-submit-card"
+          id="run-analysis-step"
+        >
+          <div className="step-card-header">
+            <span className="step-number">Step 3</span>
+            <div>
+              <h2>Run Resume Analysis</h2>
+              <p>
+                Once both steps are complete, generate the resume analysis
+                result.
+              </p>
+            </div>
+          </div>
+
+          {fileError && <ErrorMessage message={fileError} />}
+          {error && <ErrorMessage message={error} />}
+
+          {loading && (
+            <>
+              <LoadingSpinner message={loadingMessage} />
+
+              {uploadProgress > 0 && uploadProgress < 100 && (
+                <div className="progress-wrapper">
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+
+                  <p>{uploadProgress}% uploaded</p>
+                </div>
+              )}
+            </>
+          )}
+
+          <div className="analyze-summary">
+            <div>
+              <strong>Resume</strong>
+              <p>{selectedFile ? selectedFile.name : "Not selected yet"}</p>
+            </div>
+
+            <div>
+              <strong>Job Title</strong>
+              <p>{jobTitle.trim() || "Not added yet"}</p>
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button
+              className="glow-button"
+              onClick={handleAnalyze}
+              disabled={loading}
+            >
+              {loading ? "Processing..." : "Analyze Resume"}
+            </button>
           </div>
         </div>
-      </div>
-
-      <div className="analyze-content">
-        <section className="analyze-section">
-          <div className="section-step-number">1</div>
-          <div className="section-content">
-            <div className="section-heading">
-              <p>Step 1</p>
-              <h2>Upload your resume</h2>
-              <span>Choose the resume you want to tailor for this role.</span>
-            </div>
-            <ResumeUpload
-              selectedFile={selectedFile}
-              uploadedResume={uploadedResume}
-              onFileChange={handleFileChange}
-            />
-          </div>
-        </section>
-
-        <section className="analyze-section">
-          <div className="section-step-number">2</div>
-          <div className="section-content">
-            <div className="section-heading">
-              <p>Step 2</p>
-              <h2>Add the target job</h2>
-              <span>Provide the role details for an accurate comparison.</span>
-            </div>
-            <JobDescriptionForm
-              jobTitle={jobTitle}
-              companyName={companyName}
-              jobDescription={jobDescription}
-              savedJobDescription={savedJobDescription}
-              onJobTitleChange={setJobTitle}
-              onCompanyNameChange={setCompanyName}
-              onJobDescriptionChange={setJobDescription}
-            />
-          </div>
-        </section>
-
-        <section className="analyze-section analyze-submit-section">
-          <div className="section-step-number">3</div>
-          <div className="section-content">
-            <div className="section-heading">
-              <p>Step 3</p>
-              <h2>Generate your analysis</h2>
-              <span>
-                We’ll calculate your ATS-style score and highlight skill gaps.
-              </span>
-            </div>
-
-            {fileError && <ErrorMessage message={fileError} />}
-            {error && <ErrorMessage message={error} />}
-
-            {loading && (
-              <>
-                <LoadingSpinner message={loadingMessage} />
-
-                {uploadProgress > 0 && uploadProgress < 100 && (
-                  <div className="progress-wrapper">
-                    <div className="progress-bar">
-                      <div
-                        className="progress-fill"
-                        style={{ width: `${uploadProgress}%` }}
-                      ></div>
-                    </div>
-                    <p>{uploadProgress}% uploaded</p>
-                  </div>
-                )}
-              </>
-            )}
-
-            <div className="form-actions analyze-actions">
-              <button
-                className="primary-button"
-                onClick={handleAnalyze}
-                disabled={loading}
-              >
-                {loading ? "Processing..." : "Analyze Resume"}
-              </button>
-              <p>Your resume is processed securely and used only for analysis.</p>
-            </div>
-          </div>
-        </section>
-      </div>
+      </section>
     </main>
   );
 }

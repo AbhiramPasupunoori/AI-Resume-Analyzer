@@ -8,12 +8,7 @@ function JobDescriptionForm({
   savedJobDescription,
 }) {
   return (
-    <div className="card">
-      <h2>Job Description</h2>
-      <p className="muted">
-        Paste the target job description so the system can compare your resume.
-      </p>
-
+    <div className="job-description-form">
       <label>Job Title</label>
       <input
         type="text"
@@ -33,9 +28,7 @@ function JobDescriptionForm({
       <label>Job Description</label>
       <textarea
         value={jobDescription}
-        onChange={(event) =>
-          onJobDescriptionChange(event.target.value)
-        }
+        onChange={(event) => onJobDescriptionChange(event.target.value)}
         placeholder="Paste the full job description here..."
         rows="10"
       />

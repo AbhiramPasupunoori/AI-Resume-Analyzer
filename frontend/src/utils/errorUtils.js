@@ -22,23 +22,27 @@ export function getErrorMessage(error) {
   }
 
   if (data?.analysis) {
-    return data.analysis;
+    return Array.isArray(data.analysis) ? data.analysis[0] : data.analysis;
   }
 
   if (data?.job_title) {
-    return data.job_title[0];
+    return Array.isArray(data.job_title) ? data.job_title[0] : data.job_title;
   }
 
   if (data?.description) {
-    return data.description[0];
+    return Array.isArray(data.description)
+      ? data.description[0]
+      : data.description;
   }
 
   if (data?.resume_id) {
-    return data.resume_id;
+    return Array.isArray(data.resume_id) ? data.resume_id[0] : data.resume_id;
   }
 
   if (data?.job_description_id) {
-    return data.job_description_id;
+    return Array.isArray(data.job_description_id)
+      ? data.job_description_id[0]
+      : data.job_description_id;
   }
 
   return "Something went wrong. Please check your input and try again.";
