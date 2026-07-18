@@ -1,3 +1,6 @@
+/* =========================================================
+   01. THEME VARIABLES
+   ========================================================= */
 :root {
   --bg-main: #080b14;
   --bg-card: rgba(15, 23, 42, 0.82);
@@ -29,6 +32,9 @@
   --shadow-glow: 0 18px 48px rgba(37, 99, 235, 0.12);
 }
 
+/* =========================================================
+   02. GLOBAL RESET, LAYOUT, CARDS AND SHARED UTILITIES
+   ========================================================= */
 * {
   box-sizing: border-box;
 }
@@ -206,63 +212,264 @@ textarea {
   }
 }
 
-.scroll-reveal {
-  opacity: 0;
-  animation: none !important;
-  transition:
-    opacity 0.7s ease,
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.24s ease,
-    background-color 0.24s ease,
-    box-shadow 0.24s ease !important;
-}
+/* =========================================================
+   03. SHARED RESPONSIVE VIEWS
+   ========================================================= */
+/* Tablet and mobile enhancements. Desktop styles above 1024px remain unchanged. */
+@media (min-width: 651px) and (max-width: 1024px) {
+  .navbar {
+    padding-inline: 24px;
+  }
 
-.scroll-reveal.reveal-left {
-  transform: translateX(-72px);
-}
+  .logo {
+    font-size: 18px;
+  }
 
-.scroll-reveal.reveal-right {
-  transform: translateX(72px);
-}
+  .nav-links {
+    gap: 6px;
+  }
 
-.scroll-reveal.is-visible {
-  opacity: 1;
-  transform: translateX(0);
-}
+  .nav-link {
+    padding-inline: 7px;
+  }
 
-@media (hover: hover) and (pointer: fine) {
-  .scroll-reveal.is-visible:hover {
-    transform: translateY(-5px);
+  .page,
+  .modern-home {
+    padding: 42px 24px;
+  }
+
+  .modern-hero {
+    gap: 34px;
+    margin-bottom: 60px;
+  }
+
+  .modern-feature-grid,
+  .dashboard-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stepper {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .step-item {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .step-item span {
+    width: 38px;
+    height: 38px;
+  }
+
+  .dashboard-grid,
+  .insight-grid,
+  .section-checklist {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .result-info-grid,
+  .score-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .history-card {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .history-actions {
+    grid-column: 1 / -1;
   }
 }
 
 @media (max-width: 650px) {
-  .scroll-reveal.reveal-left {
-    transform: translateX(-36px);
+  .navbar {
+    min-height: auto;
+    padding: 12px 14px;
   }
 
-  .scroll-reveal.reveal-right {
-    transform: translateX(36px);
+  .logo {
+    font-size: 18px;
   }
 
-  .scroll-reveal.is-visible {
-    transform: translateX(0);
+  .logo-mark {
+    width: 38px;
+    height: 38px;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: space-between;
+    gap: 3px;
+  }
+
+  .nav-link {
+    padding: 9px 5px;
+    font-size: 13px;
+  }
+
+  .nav-link::after {
+    right: 5px;
+    left: 5px;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+  }
+
+  .page,
+  .modern-home {
+    padding: 28px 14px;
+  }
+
+  .page-header h1,
+  .hero-left h1 {
+    font-size: clamp(2.15rem, 11vw, 3.1rem);
+    line-height: 1.08;
+  }
+
+  .hero-left p {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .modern-hero {
+    gap: 30px;
+    margin-bottom: 52px;
+  }
+
+  .modern-section {
+    margin-bottom: 46px;
+  }
+
+  .modern-section h2,
+  .section-title-row h2 {
+    font-size: 26px;
+  }
+
+  .modern-feature-card,
+  .card,
+  .history-card,
+  .insight-card,
+  .dashboard-stat-card {
+    padding: 20px;
+  }
+
+  .hero-preview,
+  .result-hero,
+  .dashboard-hero,
+  .analysis-step-card {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .upload-preview-box,
+  .upload-dropzone {
+    padding: 28px 16px;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .hero-stats div {
+    min-width: 0;
+    padding: 13px;
+  }
+
+  .modern-hero-actions,
+  .result-actions,
+  .history-actions,
+  .job-helper-actions {
+    flex-direction: column;
+  }
+
+  :is(
+    .modern-hero-actions,
+    .result-actions,
+    .history-actions,
+    .job-helper-actions
+  ) > :is(a, button, label) {
+    width: 100%;
+    text-align: center;
+  }
+
+  .stepper {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .step-item {
+    padding: 14px;
+  }
+
+  .step-card-header,
+  .section-card-header,
+  .insight-card-header {
+    gap: 12px;
+  }
+
+  .selected-file-box {
+    flex-direction: column;
+  }
+
+  .result-hero-content h1,
+  .dashboard-hero h1 {
+    font-size: 2rem;
+  }
+
+  .overall-score-card {
+    padding: 20px 14px;
+  }
+
+  .chart-card {
+    padding-inline: 12px;
+  }
+
+  .chart-container {
+    height: 260px;
+  }
+
+  .section-check-item,
+  .recent-item {
+    padding: 14px;
+  }
+
+  .recent-item {
+    flex-direction: column;
+  }
+
+  .empty-state {
+    padding: 30px 18px;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .scroll-reveal,
-  .scroll-reveal.reveal-left,
-  .scroll-reveal.reveal-right,
-  .scroll-reveal.is-visible {
-    opacity: 1;
-    transform: none;
-    transition: none !important;
+@media (max-width: 380px) {
+  .logo {
+    font-size: 16px;
+  }
+
+  .nav-link {
+    font-size: 12px;
+    padding-inline: 3px;
+  }
+
+  .hero-stats {
+    grid-template-columns: 1fr;
   }
 }
 
+/* =========================================================
+   04. SHARED BUTTONS AND TEXT UTILITIES
+   ========================================================= */
 .gradient-text {
   background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -304,6 +511,9 @@ textarea {
   background: rgba(30, 41, 59, 0.9);
 }
 
+/* =========================================================
+   05. NAVIGATION VIEW
+   ========================================================= */
 .navbar {
   min-height: 74px;
   padding: 0 36px;
@@ -439,6 +649,9 @@ textarea {
   }
 }
 
+/* =========================================================
+   06. HOME PAGE VIEW
+   ========================================================= */
 .modern-home {
   min-height: calc(100vh - 74px);
   padding: 64px 24px;
@@ -454,6 +667,7 @@ textarea {
 }
 
 .modern-badge {
+  position: relative;
   display: inline-block;
   background: rgba(59, 130, 246, 0.14);
   color: #93c5fd;
@@ -474,6 +688,25 @@ textarea {
     text-decoration-color 0.2s ease;
 }
 
+.modern-badge::after {
+  content: "";
+  position: absolute;
+  right: 14px;
+  bottom: 5px;
+  left: 14px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.35s ease;
+}
+
+.modern-badge:hover::after,
+.modern-badge:focus-visible::after {
+  transform: scaleX(1);
+}
+
 .page-badge {
   display: table;
   margin-bottom: 20px;
@@ -485,8 +718,7 @@ textarea {
     background: rgba(59, 130, 246, 0.25);
     border-color: rgba(147, 197, 253, 0.72);
     color: #dbeafe;
-    text-decoration-line: underline;
-    text-decoration-color: #93c5fd;
+    text-decoration: none;
     box-shadow: 0 12px 30px rgba(59, 130, 246, 0.25);
   }
 }
@@ -520,9 +752,10 @@ textarea {
 }
 
 .hero-stats {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 22px;
-  flex-wrap: wrap;
+  width: 100%;
 }
 
 .hero-stats div {
@@ -530,7 +763,7 @@ textarea {
   border: 1px solid var(--border-soft);
   border-radius: 16px;
   padding: 14px 18px;
-  min-width: 120px;
+  min-width: 0;
 }
 
 .hero-stats strong {
@@ -718,6 +951,9 @@ textarea {
   margin: 0;
 }
 
+/* =========================================================
+   07. ANALYZE PAGE VIEW
+   ========================================================= */
 .analyze-page {
   max-width: 1180px;
 }
@@ -969,6 +1205,26 @@ textarea:focus {
   color: var(--text-main);
 }
 
+.ghost-button:hover {
+  transform: translateY(-3px);
+  border-color: rgba(96, 165, 250, 0.65);
+  background: rgba(59, 130, 246, 0.28);
+  color: #dbeafe;
+  box-shadow:
+    0 14px 30px rgba(59, 130, 246, 0.24),
+    0 0 0 1px rgba(139, 92, 246, 0.16);
+}
+
+.ghost-button:focus-visible {
+  outline: 3px solid rgba(147, 197, 253, 0.55);
+  outline-offset: 3px;
+}
+
+.ghost-button:active {
+  transform: translateY(0) scale(0.98);
+  background: rgba(59, 130, 246, 0.36);
+}
+
 .secondary-button {
   background: var(--primary);
   color: white;
@@ -1126,6 +1382,9 @@ textarea:focus {
   transition: width 0.3s ease;
 }
 
+/* =========================================================
+   08. RESULTS PAGE VIEW
+   ========================================================= */
 .results-page {
   max-width: 1180px;
 }
@@ -1523,6 +1782,9 @@ textarea:focus {
   font-weight: 700;
 }
 
+/* =========================================================
+   09. HISTORY PAGE VIEW
+   ========================================================= */
 .history-page {
   max-width: 1180px;
 }
@@ -1568,6 +1830,9 @@ textarea:focus {
   font-size: 20px;
 }
 
+/* =========================================================
+   10. DASHBOARD PAGE VIEW
+   ========================================================= */
 .dashboard-page {
   max-width: 1180px;
 }
@@ -1624,6 +1889,9 @@ textarea:focus {
   color: #93c5fd;
 }
 
+/* =========================================================
+   11. PAGE-SPECIFIC RESPONSIVE VIEWS
+   ========================================================= */
 @media (max-width: 950px) {
   .modern-hero,
   .result-hero,
@@ -1704,6 +1972,9 @@ textarea:focus {
   }
 }
 
+/* =========================================================
+   12. INTERACTIVE BUTTON STATES
+   ========================================================= */
 .glow-button,
 .outline-dark-button,
 .file-upload-button,
@@ -1781,6 +2052,9 @@ textarea:focus {
   }
 }
 
+/* =========================================================
+   13. THEME TOGGLE AND LIGHT THEME OVERRIDES
+   ========================================================= */
 .theme-toggle {
   display: inline-flex;
   width: 42px;
@@ -1928,6 +2202,9 @@ textarea:focus {
   }
 }
 
+/* =========================================================
+   14. ANIMATIONS AND MOTION ACCESSIBILITY
+   ========================================================= */
 @keyframes page-enter {
   from {
     opacity: 0;
@@ -2072,7 +2349,7 @@ textarea:focus {
   }
 }
 
-/* Keep scroll-reveal transitions after component-specific hover rules. */
+/* Single canonical scroll-reveal definition. Keep this after hover rules. */
 .scroll-reveal {
   opacity: 0;
   animation: none !important;
@@ -2125,5 +2402,323 @@ textarea:focus {
     opacity: 1;
     transform: none;
     transition: none !important;
+  }
+}
+
+/* =========================================================
+   15. MOBILE AND IPHONE VIEWS
+   ========================================================= */
+/* Mobile typography */
+@media (max-width: 650px) {
+  body {
+    font-size: 17px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+  }
+
+  .hero-left p,
+  .page-header p,
+  .modern-feature-card p,
+  .result-hero-content p,
+  .dashboard-hero p,
+  .section-title-row p,
+  .insight-card p,
+  .history-card p {
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .glow-button,
+  .outline-dark-button,
+  .file-upload-button,
+  .secondary-action-button,
+  .ghost-button,
+  .secondary-button,
+  .danger-button,
+  input,
+  textarea {
+    font-size: 16px;
+  }
+
+  .modern-badge,
+  .step-number,
+  .skill-badge,
+  .score-status,
+  .step-item p,
+  .section-check-item p,
+  .hero-stats span,
+  .preview-bars span {
+    font-size: 15px;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .hero-stats div {
+    width: auto;
+    min-width: 0;
+    padding: 12px 10px;
+  }
+
+  .hero-stats > div:last-child:nth-child(odd) {
+    grid-column: auto;
+    width: auto;
+    justify-self: stretch;
+  }
+
+  .hero-stats strong {
+    font-size: 22px;
+  }
+
+  .hero-stats span {
+    font-size: 13px;
+  }
+}
+
+/* iPhone portrait compatibility: SE/mini through Plus/Pro Max. */
+@media (max-width: 430px) {
+  html,
+  body,
+  #root {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .navbar {
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-left: max(12px, env(safe-area-inset-left));
+  }
+
+  .nav-links {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) 36px;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .nav-link {
+    min-width: 0;
+    padding-inline: 3px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .page,
+  .modern-home {
+    width: 100%;
+    padding-right: max(14px, env(safe-area-inset-right));
+    padding-left: max(14px, env(safe-area-inset-left));
+  }
+
+  :is(
+    .modern-hero,
+    .hero-left,
+    .hero-preview,
+    .modern-section,
+    .modern-feature-grid,
+    .analysis-steps,
+    .analysis-step-card,
+    .result-hero,
+    .result-hero-content,
+    .result-info-grid,
+    .result-section,
+    .score-grid,
+    .insight-grid,
+    .history-list,
+    .history-card,
+    .dashboard-hero,
+    .dashboard-grid,
+    .dashboard-stat-grid,
+    .card
+  ) {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  p,
+  strong,
+  span {
+    overflow-wrap: anywhere;
+  }
+
+  input,
+  textarea,
+  button,
+  a,
+  label {
+    max-width: 100%;
+  }
+
+  .chart-container,
+  .recharts-responsive-container {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .result-actions > *,
+  .history-actions > *,
+  .job-helper-actions > *,
+  .modern-hero-actions > * {
+    min-height: 46px;
+  }
+
+  .skill-list {
+    gap: 8px;
+  }
+
+  .skill-badge {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .hero-stats > div:last-child:nth-child(odd) {
+    grid-column: auto;
+    width: auto;
+    justify-self: stretch;
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .hero-stats div {
+    padding: 11px 8px;
+  }
+
+  .hero-stats strong {
+    font-size: 21px;
+  }
+
+  .hero-stats span {
+    font-size: 13px;
+  }
+}
+
+/* Compact iPhones, including 320px and 375px layouts. */
+@media (max-width: 360px) {
+  .navbar {
+    padding-right: max(9px, env(safe-area-inset-right));
+    padding-left: max(9px, env(safe-area-inset-left));
+  }
+
+  .logo {
+    gap: 7px;
+    font-size: 16px;
+  }
+
+  .logo-mark {
+    width: 34px;
+    height: 34px;
+  }
+
+  .nav-links {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) 34px;
+    gap: 1px;
+  }
+
+  .nav-link {
+    padding-inline: 1px;
+    font-size: 12px;
+  }
+
+  .theme-toggle {
+    width: 34px;
+    height: 34px;
+  }
+
+  .page,
+  .modern-home {
+    padding-right: max(12px, env(safe-area-inset-right));
+    padding-left: max(12px, env(safe-area-inset-left));
+  }
+
+  .page-header h1,
+  .hero-left h1 {
+    font-size: 2rem;
+  }
+
+  .modern-feature-card,
+  .card,
+  .history-card,
+  .insight-card,
+  .dashboard-stat-card,
+  .hero-preview,
+  .result-hero,
+  .dashboard-hero,
+  .analysis-step-card {
+    padding: 16px;
+  }
+
+  .hero-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .hero-stats > div:last-child:nth-child(odd) {
+    grid-column: auto;
+    width: auto;
+  }
+
+  .hero-stats div {
+    padding: 10px 6px;
+  }
+
+  .hero-stats strong {
+    font-size: 19px;
+  }
+
+  .hero-stats span {
+    font-size: 12px;
+  }
+
+  .preview-score-row {
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .mini-score-circle {
+    width: 62px;
+    height: 62px;
+    flex: 0 0 62px;
+  }
+}
+
+/* Keep all Home statistics on one row at every phone viewport. */
+@media (max-width: 768px) {
+  .hero-stats {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .hero-stats > div,
+  .hero-stats > div:last-child:nth-child(odd) {
+    grid-column: auto;
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+    padding: 11px 8px;
+    justify-self: auto;
+  }
+
+  .hero-stats strong {
+    font-size: clamp(18px, 5vw, 22px);
+  }
+
+  .hero-stats span {
+    font-size: clamp(11px, 3.2vw, 13px);
+    line-height: 1.3;
   }
 }
