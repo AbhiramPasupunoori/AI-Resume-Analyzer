@@ -101,10 +101,7 @@ class ResumeDetailDeleteView(
         resume.delete()
 
         return Response(
-            {
-                "message": "Resume deleted successfully."
-            },
-            status=status.HTTP_200_OK,
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
@@ -132,10 +129,7 @@ class JobDescriptionDetailDeleteView(
         job_description.delete()
 
         return Response(
-            {
-                "message": "Job description deleted successfully."
-            },
-            status=status.HTTP_200_OK,
+            status=status.HTTP_204_NO_CONTENT,
         )
 
 
@@ -179,8 +173,5 @@ class ResumeAnalysisDetailDeleteView(
         analysis.delete()
 
         return Response(
-            {
-                "message": "Analysis deleted successfully."
-            },
-            status=status.HTTP_200_OK,
+            status=status.HTTP_204_NO_CONTENT,
         )
