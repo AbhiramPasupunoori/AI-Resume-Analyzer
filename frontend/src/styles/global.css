@@ -18,6 +18,17 @@
   --shadow-glow: 0 20px 60px rgba(59, 130, 246, 0.18);
 }
 
+:root[data-theme="light"] {
+  --bg-main: #f8fafc;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-light: rgba(241, 245, 249, 0.92);
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-dark: #0f172a;
+  --border-soft: rgba(71, 85, 105, 0.2);
+  --shadow-glow: 0 18px 48px rgba(37, 99, 235, 0.12);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -30,6 +41,9 @@ body {
     radial-gradient(circle at top right, rgba(139, 92, 246, 0.18), transparent 30%),
     var(--bg-main);
   color: var(--text-main);
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
 }
 
 a {
@@ -239,8 +253,35 @@ textarea {
 }
 
 .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-weight: 900;
   font-size: 20px;
+}
+
+.logo-mark {
+  display: inline-grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: #ffffff;
+  box-shadow: 0 9px 22px rgba(59, 130, 246, 0.28);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.logo-mark span {
+  transform: translate(1px, -1px);
+  font-size: 22px;
+}
+
+.logo:hover .logo-mark {
+  transform: rotate(-7deg) scale(1.06);
+  box-shadow: 0 12px 28px rgba(139, 92, 246, 0.38);
 }
 
 .nav-links {
@@ -1598,6 +1639,150 @@ textarea:focus {
   .file-upload-button,
   .secondary-action-button,
   .danger-button {
+    transition: none;
+  }
+}
+
+.theme-toggle {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  padding: 0;
+  background: rgba(59, 130, 246, 0.14);
+  color: #bfdbfe;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.theme-toggle span {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-2px);
+  border-color: #60a5fa;
+  background: rgba(59, 130, 246, 0.26);
+  box-shadow: 0 10px 24px rgba(59, 130, 246, 0.24);
+}
+
+.theme-toggle:focus-visible {
+  outline: 3px solid rgba(96, 165, 250, 0.45);
+  outline-offset: 3px;
+}
+
+:root[data-theme="light"] body {
+  background:
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.13), transparent 32%),
+    radial-gradient(circle at top right, rgba(139, 92, 246, 0.11), transparent 30%),
+    var(--bg-main);
+}
+
+:root[data-theme="light"] .navbar {
+  background: rgba(248, 250, 252, 0.88);
+  color: #0f172a;
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.07);
+}
+
+:root[data-theme="light"] .nav-link {
+  color: #64748b;
+}
+
+:root[data-theme="light"] .nav-link:hover,
+:root[data-theme="light"] .active-nav-link {
+  color: #1d4ed8;
+}
+
+:root[data-theme="light"] .theme-toggle {
+  background: rgba(139, 92, 246, 0.1);
+  color: #6d28d9;
+}
+
+:root[data-theme="light"] :is(
+  .outline-dark-button,
+  input,
+  textarea,
+  .hero-stats > div,
+  .preview-score-row,
+  .analyze-summary > div,
+  .selected-file-box,
+  .insight-score,
+  .history-score-box,
+  .recent-item,
+  .overall-score-card
+) {
+  background: rgba(241, 245, 249, 0.92);
+  color: #0f172a;
+}
+
+:root[data-theme="light"] :is(
+  .upload-preview-box,
+  .upload-dropzone
+) {
+  background: rgba(239, 246, 255, 0.8);
+}
+
+:root[data-theme="light"] .mini-score-circle {
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, var(--primary), var(--secondary)) border-box;
+}
+
+:root[data-theme="light"] :is(
+  .modern-badge,
+  .step-number,
+  .secondary-action-button,
+  .skill-badge
+) {
+  color: #1d4ed8;
+}
+
+:root[data-theme="light"] .step-item span {
+  color: #0f172a;
+}
+
+:root[data-theme="light"] .step-item.active span,
+:root[data-theme="light"] .step-item.completed span {
+  color: #ffffff;
+}
+
+:root[data-theme="light"] input::placeholder,
+:root[data-theme="light"] textarea::placeholder {
+  color: #94a3b8;
+}
+
+:root[data-theme="light"] .score-status.good {
+  color: #1d4ed8;
+}
+
+:root[data-theme="light"] .score-status.excellent,
+:root[data-theme="light"] .success-box {
+  color: #15803d;
+}
+
+:root[data-theme="light"] .score-status.average,
+:root[data-theme="light"] .warning-box {
+  color: #c2410c;
+}
+
+:root[data-theme="light"] .score-status.needs-work,
+:root[data-theme="light"] .error-box {
+  color: #b91c1c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .theme-toggle {
     transition: none;
   }
 }
