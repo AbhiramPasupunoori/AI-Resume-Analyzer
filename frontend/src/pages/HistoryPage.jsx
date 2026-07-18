@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { getAnalyses } from "../api/analysisApi";
+import {
+  deleteAnalysis,
+  getAnalyses,
+} from "../api/analysisApi";
 
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorMessage from "../components/ErrorMessage";
@@ -12,7 +15,9 @@ import { getErrorMessage } from "../utils/errorUtils";
 function HistoryPage() {
   const [analyses, setAnalyses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const loadAnalyses = useCallback(async () => {
     try {
@@ -39,6 +44,36 @@ function HistoryPage() {
     loadAnalyses();
   }, [loadAnalyses]);
 
+  async function handleDeleteAnalysis(analysisId) {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this analysis?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setDeletingId(analysisId);
+      setError("");
+      setSuccessMessage("");
+
+      await deleteAnalysis(analysisId);
+
+      setAnalyses((currentAnalyses) =>
+        currentAnalyses.filter(
+          (analysis) => analysis.id !== analysisId
+        )
+      );
+
+      setSuccessMessage("Analysis deleted successfully.");
+    } catch (error) {
+      setError(getErrorMessage(error));
+    } finally {
+      setDeletingId(null);
+    }
+  }
+
   if (loading) {
     return (
       <main className="page">
@@ -47,7 +82,7 @@ function HistoryPage() {
     );
   }
 
-  if (error) {
+  if (error && analyses.length === 0) {
     return (
       <main className="page">
         <ErrorMessage message={error} onRetry={loadAnalyses} />
@@ -59,8 +94,14 @@ function HistoryPage() {
     <main className="page">
       <div className="page-header">
         <h1>Analysis History</h1>
-        <p>View your previous resume analysis results.</p>
+        <p>View or delete your previous resume analysis results.</p>
       </div>
+
+      {error && <ErrorMessage message={error} />}
+
+      {successMessage && (
+        <div className="success-box">{successMessage}</div>
+      )}
 
       {analyses.length === 0 ? (
         <EmptyState
@@ -87,9 +128,24 @@ function HistoryPage() {
 
               <p>Status: {analysis.status}</p>
 
-              <Link className="secondary-link" to={`/results/${analysis.id}`}>
-                View Result
-              </Link>
+              <div className="history-actions">
+                <Link
+                  className="secondary-link"
+                  to={`/results/${analysis.id}`}
+                >
+                  View Result
+                </Link>
+
+                <button
+                  className="danger-button"
+                  onClick={() => handleDeleteAnalysis(analysis.id)}
+                  disabled={deletingId === analysis.id}
+                >
+                  {deletingId === analysis.id
+                    ? "Deleting..."
+                    : "Delete"}
+                </button>
+              </div>
             </div>
           ))}
         </div>

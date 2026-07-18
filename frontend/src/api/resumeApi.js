@@ -14,3 +14,8 @@ export async function uploadResume(file, onUploadProgress) {
 
   return response.data;
 }
+export async function deleteResume(resumeId) {
+  const response = await apiClient.delete(`/resumes/${resumeId}/`);
+
+  return response.data;
+}

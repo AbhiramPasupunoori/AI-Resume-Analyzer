@@ -384,4 +384,30 @@ textarea {
   color: #2563eb;
   font-weight: 800;
 }
+.danger-button {
+  border: none;
+  border-radius: 10px;
+  background: #dc2626;
+  color: white;
+  padding: 10px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.danger-button:hover {
+  background: #b91c1c;
+}
+
+.danger-button:disabled {
+  background: #fca5a5;
+  cursor: not-allowed;
+}
+
+.history-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 12px;
+}
 }

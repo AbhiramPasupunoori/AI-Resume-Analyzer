@@ -23,3 +23,8 @@ export async function getAnalyses() {
 
   return response.data;
 }
+export async function deleteAnalysis(analysisId) {
+  const response = await apiClient.delete(`/analyses/${analysisId}/`);
+
+  return response.data;
+}
