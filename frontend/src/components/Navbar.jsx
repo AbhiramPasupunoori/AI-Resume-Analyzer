@@ -6,7 +6,16 @@ function Navbar() {
     <nav className="navbar">
       <NavLink className="logo" to="/">
         <span className="logo-mark" aria-hidden="true">
-          <span>✦</span>
+          <img
+            className="logo-image logo-image-dark"
+            src="/logo-ai-head-dark.png"
+            alt=""
+          />
+          <img
+            className="logo-image logo-image-light"
+            src="/logo-ai-head-light.png"
+            alt=""
+          />
         </span>
         <span>AI Resume Analyzer</span>
       </NavLink>
