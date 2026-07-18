@@ -1,11 +1,11 @@
 from django.urls import path
 
 from analyzer.views import (
-    JobDescriptionDetailView,
+    JobDescriptionDetailDeleteView,
     JobDescriptionListCreateView,
-    ResumeAnalysisDetailView,
+    ResumeAnalysisDetailDeleteView,
     ResumeAnalysisListCreateView,
-    ResumeDetailView,
+    ResumeDetailDeleteView,
     ResumeListView,
     ResumeUploadView,
     database_health_check,
@@ -26,6 +26,7 @@ urlpatterns = [
         database_health_check,
         name="database-health-check",
     ),
+
     path(
         "resumes/",
         ResumeListView.as_view(),
@@ -38,9 +39,10 @@ urlpatterns = [
     ),
     path(
         "resumes/<int:pk>/",
-        ResumeDetailView.as_view(),
+        ResumeDetailDeleteView.as_view(),
         name="resume-detail",
     ),
+
     path(
         "job-descriptions/",
         JobDescriptionListCreateView.as_view(),
@@ -48,9 +50,10 @@ urlpatterns = [
     ),
     path(
         "job-descriptions/<int:pk>/",
-        JobDescriptionDetailView.as_view(),
+        JobDescriptionDetailDeleteView.as_view(),
         name="job-description-detail",
     ),
+
     path(
         "analyses/",
         ResumeAnalysisListCreateView.as_view(),
@@ -58,7 +61,7 @@ urlpatterns = [
     ),
     path(
         "analyses/<int:pk>/",
-        ResumeAnalysisDetailView.as_view(),
+        ResumeAnalysisDetailDeleteView.as_view(),
         name="analysis-detail",
     ),
 ]
