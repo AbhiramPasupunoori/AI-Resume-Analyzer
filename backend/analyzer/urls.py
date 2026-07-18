@@ -40,7 +40,7 @@ urlpatterns = [
     path(
         "resumes/<int:pk>/",
         ResumeDetailDeleteView.as_view(),
-        name="resume-detail-delete",
+        name="resume-detail",
     ),
 
     path(
@@ -51,7 +51,7 @@ urlpatterns = [
     path(
         "job-descriptions/<int:pk>/",
         JobDescriptionDetailDeleteView.as_view(),
-        name="job-description-detail-delete",
+        name="job-description-detail",
     ),
 
     path(
@@ -62,6 +62,6 @@ urlpatterns = [
     path(
         "analyses/<int:pk>/",
         ResumeAnalysisDetailDeleteView.as_view(),
-        name="analysis-detail-delete",
+        name="analysis-detail",
     ),
 ]

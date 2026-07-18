@@ -248,6 +248,22 @@ class JobDescriptionSerializer(
 class ResumeSummarySerializer(
     serializers.ModelSerializer
 ):
+    text_extracted = serializers.SerializerMethodField(
+        read_only=True,
+    )
+
+    word_count = serializers.SerializerMethodField(
+        read_only=True,
+    )
+
+    character_count = serializers.SerializerMethodField(
+        read_only=True,
+    )
+
+    detected_skills = serializers.SerializerMethodField(
+        read_only=True,
+    )
+
     class Meta:
         model = Resume
 
@@ -256,7 +272,37 @@ class ResumeSummarySerializer(
             "original_filename",
             "file_type",
             "file_size",
+            "text_extracted",
+            "word_count",
+            "character_count",
+            "detected_skills",
             "created_at",
+        )
+
+    def get_text_extracted(self, resume) -> bool:
+        return bool(
+            resume.extracted_text
+            and resume.extracted_text.strip()
+        )
+
+    def get_word_count(self, resume) -> int:
+        if not resume.extracted_text:
+            return 0
+
+        return len(resume.extracted_text.split())
+
+    def get_character_count(self, resume) -> int:
+        if not resume.extracted_text:
+            return 0
+
+        return len(resume.extracted_text)
+
+    def get_detected_skills(
+        self,
+        resume,
+    ) -> list[str]:
+        return extract_skills(
+            resume.extracted_text
         )
 
 
