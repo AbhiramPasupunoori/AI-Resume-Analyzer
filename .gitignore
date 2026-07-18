@@ -1,27 +1,38 @@
-# Python virtual environments
+# Python
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.sqlite3
+*.db
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Django
+backend/.env
+backend/media/
+backend/staticfiles/
+
+# Virtual environments
 backend/.venv/
 backend/venv/
 .venv/
 venv/
 
-# Python-generated files
-__pycache__/
-*.py[cod]
-*$py.class
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
+# Node
+frontend/node_modules/
+frontend/dist/
 
-# Local environment and uploaded files
-backend/.env
-backend/media/
+# Environment files
+.env
+.env.local
+*.env
 
-# Editor and operating-system files
+# macOS
 .DS_Store
 
-# Python virtual environment
-backend/.venv/
-backend/__pycache__/
-backend/**/*.pyc
-backend/.pytest_cache/
-backend/.cache/
+# VS Code
+.vscode/
+
+# Logs
+*.log
