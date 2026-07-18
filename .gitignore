@@ -8,10 +8,30 @@
 .mypy_cache/
 .ruff_cache/
 
+# Python
+**/__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+
 # Django
 backend/.env
 backend/media/
 backend/staticfiles/
+
+# Python virtual environment
+backend/.venv/
+backend/.pytest_cache/
+backend/.cache/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# Editor and operating system
+.vscode/
+.DS_Store
 
 # Virtual environments
 backend/.venv/
