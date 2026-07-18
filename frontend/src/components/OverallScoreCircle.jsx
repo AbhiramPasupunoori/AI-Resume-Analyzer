@@ -1,9 +1,8 @@
 function OverallScoreCircle({ score }) {
   const numericScore = Number(score) || 0;
-
   const boundedScore = Math.min(Math.max(numericScore, 0), 100);
 
-  const radius = 70;
+  const radius = 72;
   const strokeWidth = 12;
   const normalizedRadius = radius - strokeWidth / 2;
   const circumference = 2 * Math.PI * normalizedRadius;
@@ -29,13 +28,9 @@ function OverallScoreCircle({ score }) {
 
   return (
     <div className="overall-score-card">
-      <svg
-        height={radius * 2}
-        width={radius * 2}
-        className="score-circle"
-      >
+      <svg height={radius * 2} width={radius * 2} className="score-circle">
         <circle
-          stroke="#e5e7eb"
+          stroke="rgba(148, 163, 184, 0.25)"
           fill="transparent"
           strokeWidth={strokeWidth}
           r={normalizedRadius}
@@ -44,7 +39,7 @@ function OverallScoreCircle({ score }) {
         />
 
         <circle
-          stroke="#2563eb"
+          stroke="#60a5fa"
           fill="transparent"
           strokeWidth={strokeWidth}
           strokeLinecap="round"
@@ -58,7 +53,7 @@ function OverallScoreCircle({ score }) {
       </svg>
 
       <div className="score-circle-content">
-        <strong>{boundedScore.toFixed(2)}</strong>
+        <strong>{boundedScore.toFixed(1)}</strong>
         <span>/ 100</span>
       </div>
 

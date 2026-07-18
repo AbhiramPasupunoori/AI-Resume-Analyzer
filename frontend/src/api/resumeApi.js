@@ -14,8 +14,13 @@ export async function uploadResume(file, onUploadProgress) {
 
   return response.data;
 }
+
+export async function getResumes() {
+  const response = await apiClient.get("/resumes/");
+  return response.data;
+}
+
 export async function deleteResume(resumeId) {
   const response = await apiClient.delete(`/resumes/${resumeId}/`);
-
-  return response.data;
+  return response.data || {};
 }
