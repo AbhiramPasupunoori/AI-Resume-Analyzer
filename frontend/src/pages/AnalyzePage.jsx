@@ -164,13 +164,15 @@ function AnalyzePage() {
         </>
       )}
 
-      <button
-        className="primary-button"
-        onClick={handleAnalyze}
-        disabled={loading}
-      >
-        {loading ? "Processing..." : "Analyze Resume"}
-      </button>
+      <div className="form-actions">
+        <button
+          className="primary-button"
+          onClick={handleAnalyze}
+          disabled={loading}
+        >
+          {loading ? "Processing..." : "Analyze Resume"}
+        </button>
+      </div>
     </main>
   );
 }

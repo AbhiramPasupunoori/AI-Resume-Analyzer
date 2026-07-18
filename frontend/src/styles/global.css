@@ -410,4 +410,164 @@ textarea {
   gap: 16px;
   margin-top: 12px;
 }
+.page-header h1,
+.result-header h1 {
+  margin-bottom: 8px;
+  font-size: 36px;
+  color: #0f172a;
+}
+
+.page-header p,
+.result-header p {
+  font-size: 16px;
+  color: #64748b;
+}
+
+.card {
+  border: 1px solid #e5e7eb;
+}
+
+.card:hover {
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+  transition: box-shadow 0.2s ease;
+}
+
+.primary-button {
+  margin-top: 20px;
+}
+
+.primary-button:hover {
+  background: #1d4ed8;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+button {
+  transition: all 0.2s ease;
+}
+
+.history-list {
+  display: grid;
+  gap: 20px;
+}
+
+.history-item h2 {
+  margin-bottom: 4px;
+}
+
+.history-item p {
+  margin: 4px 0;
+  color: #4b5563;
+}
+
+.score-grid {
+  margin-top: 20px;
+}
+
+.score-card {
+  border: 1px solid #e5e7eb;
+}
+
+.score-card:hover {
+  transform: translateY(-3px);
+  transition: transform 0.2s ease;
+}
+
+.skill-badge {
+  border: 1px solid #bfdbfe;
+}
+
+.success-box {
+  border: 1px solid #bbf7d0;
+}
+
+.error-box {
+  border: 1px solid #fecaca;
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 28px 16px;
+  }
+
+  .navbar {
+    height: auto;
+    padding: 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .nav-links {
+    gap: 14px;
+  }
+
+  .page-header h1,
+  .result-header h1 {
+    font-size: 28px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+
+  .overall-score-card {
+    min-width: 100%;
+  }
+
+  .history-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.hero-badge {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1d4ed8;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.secondary-hero-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #2563eb;
+  font-weight: 800;
+  padding: 14px 18px;
+}
+.nav-link {
+  color: #cbd5e1;
+  font-weight: 700;
+}
+
+.nav-link:hover,
+.active-nav-link {
+  color: white;
+}
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
 }
