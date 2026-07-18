@@ -5,10 +5,15 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from analyzer.models import JobDescription, Resume, ResumeAnalysis
+from analyzer.models import (
+    JobDescription,
+    Resume,
+    ResumeAnalysis,
+)
 from analyzer.serializers import (
     JobDescriptionSerializer,
     ResumeAnalysisSerializer,
+    ResumeSummarySerializer,
     ResumeUploadSerializer,
 )
 
@@ -37,12 +42,6 @@ def database_health_check(request):
             "connected": result == (1,),
         }
     )
-
-
-class ResumeListView(generics.ListAPIView):
-    queryset = Resume.objects.all()
-    serializer_class = ResumeUploadSerializer
-    permission_classes = [AllowAny]
 
 
 class ResumeUploadView(generics.CreateAPIView):
@@ -76,13 +75,42 @@ class ResumeUploadView(generics.CreateAPIView):
         )
 
 
-class ResumeDetailView(generics.RetrieveDestroyAPIView):
+class ResumeListView(generics.ListAPIView):
     queryset = Resume.objects.all()
-    serializer_class = ResumeUploadSerializer
-    permission_classes = [AllowAny]
+    serializer_class = ResumeSummarySerializer
+    permission_classes = [
+        AllowAny,
+    ]
 
 
-class JobDescriptionListCreateView(generics.ListCreateAPIView):
+class ResumeDetailDeleteView(
+    generics.RetrieveDestroyAPIView
+):
+    queryset = Resume.objects.all()
+    serializer_class = ResumeSummarySerializer
+    permission_classes = [
+        AllowAny,
+    ]
+
+    def destroy(self, request, *args, **kwargs):
+        resume = self.get_object()
+
+        if resume.file:
+            resume.file.delete(save=False)
+
+        resume.delete()
+
+        return Response(
+            {
+                "message": "Resume deleted successfully."
+            },
+            status=status.HTTP_200_OK,
+        )
+
+
+class JobDescriptionListCreateView(
+    generics.ListCreateAPIView
+):
     queryset = JobDescription.objects.all()
     serializer_class = JobDescriptionSerializer
     permission_classes = [
@@ -90,10 +118,26 @@ class JobDescriptionListCreateView(generics.ListCreateAPIView):
     ]
 
 
-class JobDescriptionDetailView(generics.RetrieveDestroyAPIView):
+class JobDescriptionDetailDeleteView(
+    generics.RetrieveDestroyAPIView
+):
     queryset = JobDescription.objects.all()
     serializer_class = JobDescriptionSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [
+        AllowAny,
+    ]
+
+    def destroy(self, request, *args, **kwargs):
+        job_description = self.get_object()
+        job_description.delete()
+
+        return Response(
+            {
+                "message": "Job description deleted successfully."
+            },
+            status=status.HTTP_200_OK,
+        )
+
 
 class ResumeAnalysisListCreateView(
     generics.ListCreateAPIView
@@ -108,13 +152,12 @@ class ResumeAnalysisListCreateView(
     )
 
     serializer_class = ResumeAnalysisSerializer
-
     permission_classes = [
         AllowAny,
     ]
 
 
-class ResumeAnalysisDetailView(
+class ResumeAnalysisDetailDeleteView(
     generics.RetrieveDestroyAPIView
 ):
     queryset = (
@@ -127,7 +170,17 @@ class ResumeAnalysisDetailView(
     )
 
     serializer_class = ResumeAnalysisSerializer
-
     permission_classes = [
         AllowAny,
     ]
+
+    def destroy(self, request, *args, **kwargs):
+        analysis = self.get_object()
+        analysis.delete()
+
+        return Response(
+            {
+                "message": "Analysis deleted successfully."
+            },
+            status=status.HTTP_200_OK,
+        )

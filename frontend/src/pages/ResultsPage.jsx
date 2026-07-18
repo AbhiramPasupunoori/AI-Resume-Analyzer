@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { getAnalysis } from "../api/analysisApi";
+import {
+  deleteAnalysis,
+  getAnalysis,
+} from "../api/analysisApi";
 
 import OverallScoreCircle from "../components/OverallScoreCircle";
 import ScoreBreakdown from "../components/ScoreBreakdown";
@@ -16,6 +19,7 @@ import { getErrorMessage } from "../utils/errorUtils";
 
 function ResultsPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [analysis, setAnalysis] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -38,6 +42,28 @@ function ResultsPage() {
   useEffect(() => {
     loadAnalysis();
   }, [loadAnalysis]);
+
+  async function handleDeleteAnalysis() {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this analysis?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+
+      await deleteAnalysis(id);
+
+      navigate("/history");
+    } catch (error) {
+      setError(getErrorMessage(error));
+      setLoading(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -69,11 +95,19 @@ function ResultsPage() {
   return (
     <main className="page">
       <div className="result-header">
+    
         <div>
           <h1>Resume Analysis Result</h1>
           <p className="muted">
             Review your resume match score, missing skills and improvement areas.
           </p>
+
+          <button
+            className="danger-button"
+            onClick={handleDeleteAnalysis}
+          >
+            Delete Analysis
+          </button>
         </div>
 
         <OverallScoreCircle score={analysis.overall_score} />

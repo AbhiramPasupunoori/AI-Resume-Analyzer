@@ -13,3 +13,10 @@ export async function createJobDescription({
 
   return response.data;
 }
+export async function deleteJobDescription(jobDescriptionId) {
+  const response = await apiClient.delete(
+    `/job-descriptions/${jobDescriptionId}/`
+  );
+
+  return response.data;
+}
