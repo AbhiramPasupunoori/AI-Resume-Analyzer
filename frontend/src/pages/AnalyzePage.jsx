@@ -84,10 +84,29 @@ function AnalyzePage() {
   }
 
   function goToStep(stepId) {
-    document.getElementById(stepId)?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    const step = document.getElementById(stepId);
+
+    if (!step) {
+      return;
+    }
+
+    const alignStep = (behavior) => {
+      const navbar = document.querySelector(".navbar");
+      const navbarHeight = navbar?.getBoundingClientRect().height ?? 0;
+      const isMobile = window.matchMedia("(max-width: 650px)").matches;
+      const spacing = isMobile ? 8 : 24;
+      const stepTop = step.getBoundingClientRect().top + window.scrollY;
+
+      window.scrollTo({
+        top: Math.max(0, stepTop - navbarHeight - spacing),
+        behavior,
+      });
+    };
+
+    alignStep("smooth");
+
+    // Safari can finish smooth scrolling before its sticky-header layout settles.
+    window.setTimeout(() => alignStep("auto"), 650);
   }
 
   async function handleAnalyze() {

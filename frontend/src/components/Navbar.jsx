@@ -1,10 +1,23 @@
 import { NavLink } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle";
 
 function Navbar() {
   return (
     <nav className="navbar">
       <NavLink className="logo" to="/">
-        AI Resume Analyzer
+        <span className="logo-mark" aria-hidden="true">
+          <img
+            className="logo-image logo-image-dark"
+            src="/logo-ai-head-dark.png"
+            alt=""
+          />
+          <img
+            className="logo-image logo-image-light"
+            src="/logo-ai-head-light.png"
+            alt=""
+          />
+        </span>
+        <span>AI Resume Analyzer</span>
       </NavLink>
 
       <div className="nav-links">
@@ -44,6 +57,8 @@ function Navbar() {
         >
           History
         </NavLink>
+
+        <ThemeToggle />
       </div>
     </nav>
   );

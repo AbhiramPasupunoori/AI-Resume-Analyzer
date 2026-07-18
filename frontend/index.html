@@ -2,9 +2,34 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon-head-no-border-v16.png"
+    />
+    <link
+      id="app-touch-icon"
+      rel="apple-touch-icon"
+      href="/apple-touch-icon-dark.png?v=8"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <title>AI Resume Analyzer</title>
+    <script>
+      (() => {
+        const savedTheme = localStorage.getItem("resume-analyzer-theme");
+        const theme =
+          savedTheme === "light" || savedTheme === "dark"
+            ? savedTheme
+            : window.matchMedia("(prefers-color-scheme: light)").matches
+              ? "light"
+              : "dark";
+
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
