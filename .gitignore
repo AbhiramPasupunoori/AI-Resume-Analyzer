@@ -1,7 +1,28 @@
 
+# Python
+**/__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+
+# Django
+backend/.env
+backend/media/
+backend/staticfiles/
+
 # Python virtual environment
 backend/.venv/
-backend/__pycache__/
-backend/**/*.pyc
 backend/.pytest_cache/
 backend/.cache/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# Editor and operating system
+.vscode/
+.DS_Store
+
+# Logs
+*.log
