@@ -5,6 +5,9 @@ Full-stack resume analysis application built with Django REST Framework, React, 
 ## Features
 
 - Upload PDF and DOCX resumes (maximum 5 MB)
+- Build and save resumes with a live preview
+- Download built resumes as PDF files
+- Analyze a built resume directly against a job description
 - Extract resume text and detect skills
 - Create and save job descriptions
 - Show matched and missing skills
@@ -36,6 +39,7 @@ Full-stack resume analysis application built with Django REST Framework, React, 
 - Axios
 - React Router
 - Recharts
+- jsPDF
 - CSS
 
 ## Required Software
@@ -314,6 +318,7 @@ Open:
 
 ```text
 React frontend: http://localhost:5173/
+Resume Builder: http://localhost:5173/resume-builder
 Django API:     http://127.0.0.1:8000/api/
 ```
 
@@ -349,6 +354,7 @@ Open:
 ```text
 Application:     http://127.0.0.1:8000/
 Analyze:         http://127.0.0.1:8000/analyze
+Resume Builder:  http://127.0.0.1:8000/resume-builder
 History:         http://127.0.0.1:8000/history
 Health check:    http://127.0.0.1:8000/api/health/
 Database health: http://127.0.0.1:8000/api/health/database/

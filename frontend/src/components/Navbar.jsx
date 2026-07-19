@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
 
+const assetBaseUrl = import.meta.env.BASE_URL;
+
 function Navbar() {
   return (
     <nav className="navbar">
@@ -8,12 +10,12 @@ function Navbar() {
         <span className="logo-mark" aria-hidden="true">
           <img
             className="logo-image logo-image-dark"
-            src="/logo-ai-head-dark.png"
+            src={`${assetBaseUrl}logo-ai-head-dark.png`}
             alt=""
           />
           <img
             className="logo-image logo-image-light"
-            src="/logo-ai-head-light.png"
+            src={`${assetBaseUrl}logo-ai-head-light.png`}
             alt=""
           />
         </span>
@@ -47,6 +49,15 @@ function Navbar() {
           }
         >
           Analyze
+        </NavLink>
+
+        <NavLink
+          to="/resume-builder"
+          className={({ isActive }) =>
+            isActive ? "nav-link active-nav-link" : "nav-link"
+          }
+        >
+          Resume Builder
         </NavLink>
 
         <NavLink

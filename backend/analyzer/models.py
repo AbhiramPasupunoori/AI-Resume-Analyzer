@@ -218,3 +218,81 @@ class ResumeAnalysis(models.Model):
             f"{self.resume.original_filename} "
             f"for {self.job_description.job_title}"
         )
+
+
+class BuiltResume(models.Model):
+    full_name = models.CharField(
+        max_length=150,
+    )
+
+    email = models.EmailField()
+
+    phone = models.CharField(
+        max_length=30,
+        blank=True,
+    )
+
+    location = models.CharField(
+        max_length=150,
+        blank=True,
+    )
+
+    linkedin = models.URLField(
+        blank=True,
+    )
+
+    github = models.URLField(
+        blank=True,
+    )
+
+    portfolio = models.URLField(
+        blank=True,
+    )
+
+    summary = models.TextField(
+        blank=True,
+    )
+
+    skills = models.JSONField(
+        default=list,
+        blank=True,
+    )
+
+    education = models.JSONField(
+        default=list,
+        blank=True,
+    )
+
+    experience = models.JSONField(
+        default=list,
+        blank=True,
+    )
+
+    projects = models.JSONField(
+        default=list,
+        blank=True,
+    )
+
+    certifications = models.JSONField(
+        default=list,
+        blank=True,
+    )
+
+    achievements = models.JSONField(
+        default=list,
+        blank=True,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self) -> str:
+        return self.full_name
