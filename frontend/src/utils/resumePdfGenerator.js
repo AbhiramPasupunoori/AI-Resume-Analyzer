@@ -10,6 +10,150 @@ const PAGE_MARGIN = {
 const CONTENT_INDENT = 4;
 const BODY_LINE_HEIGHT = 6;
 const SECTION_GAP = 5;
+const DEFAULT_TEMPLATE_ID = "ats-classic";
+
+const TEMPLATE_STYLES = {
+  "ats-classic": {
+    headerName: {
+      font: "helvetica",
+      fontStyle: "bold",
+      fontSize: 20,
+      color: [17, 24, 39],
+    },
+    contact: {
+      font: "helvetica",
+      fontStyle: "normal",
+      fontSize: 10,
+      color: [55, 65, 81],
+    },
+    section: {
+      font: "helvetica",
+      fontStyle: "bold",
+      fontSize: 12,
+      color: [17, 24, 39],
+      dividerColor: [37, 99, 235],
+      dividerWidth: 0.2,
+      textCase: "title",
+    },
+    itemTitle: {
+      font: "helvetica",
+      fontStyle: "bold",
+      fontSize: 10,
+      color: [17, 24, 39],
+    },
+    body: {
+      font: "helvetica",
+      fontStyle: "normal",
+      fontSize: 10,
+      color: [17, 24, 39],
+    },
+  },
+  modern: {
+    headerName: {
+      font: "helvetica",
+      fontStyle: "bold",
+      fontSize: 24,
+      color: [15, 61, 86],
+    },
+    contact: {
+      font: "helvetica",
+      fontStyle: "normal",
+      fontSize: 9.5,
+      color: [15, 118, 110],
+    },
+    section: {
+      font: "helvetica",
+      fontStyle: "bold",
+      fontSize: 11,
+      color: [15, 118, 110],
+      dividerColor: [20, 184, 166],
+      dividerWidth: 0.6,
+      textCase: "uppercase",
+    },
+    itemTitle: {
+      font: "helvetica",
+      fontStyle: "bold",
+      fontSize: 10,
+      color: [15, 61, 86],
+    },
+    body: {
+      font: "helvetica",
+      fontStyle: "normal",
+      fontSize: 10,
+      color: [30, 41, 59],
+    },
+  },
+  minimal: {
+    headerName: {
+      font: "helvetica",
+      fontStyle: "normal",
+      fontSize: 18,
+      color: [17, 24, 39],
+    },
+    contact: {
+      font: "helvetica",
+      fontStyle: "normal",
+      fontSize: 9,
+      color: [107, 114, 128],
+    },
+    section: {
+      font: "helvetica",
+      fontStyle: "bold",
+      fontSize: 9.5,
+      color: [75, 85, 99],
+      dividerColor: [209, 213, 219],
+      dividerWidth: 0.15,
+      textCase: "uppercase",
+    },
+    itemTitle: {
+      font: "helvetica",
+      fontStyle: "bold",
+      fontSize: 9.5,
+      color: [31, 41, 55],
+    },
+    body: {
+      font: "helvetica",
+      fontStyle: "normal",
+      fontSize: 9.5,
+      color: [31, 41, 55],
+    },
+  },
+  professional: {
+    headerName: {
+      font: "times",
+      fontStyle: "bold",
+      fontSize: 22,
+      color: [91, 35, 51],
+    },
+    contact: {
+      font: "times",
+      fontStyle: "normal",
+      fontSize: 10,
+      color: [75, 85, 99],
+    },
+    section: {
+      font: "times",
+      fontStyle: "bold",
+      fontSize: 13,
+      color: [91, 35, 51],
+      dividerColor: [176, 137, 59],
+      dividerWidth: 0.4,
+      textCase: "title",
+    },
+    itemTitle: {
+      font: "times",
+      fontStyle: "bold",
+      fontSize: 10.5,
+      color: [55, 48, 46],
+    },
+    body: {
+      font: "times",
+      fontStyle: "normal",
+      fontSize: 10,
+      color: [55, 48, 46],
+    },
+  },
+};
 
 function toText(value) {
   if (value === null || value === undefined) {
@@ -29,6 +173,22 @@ function toTextList(values) {
   }
 
   return values.map(toText).filter(Boolean);
+}
+
+function resolveTemplateStyle(templateId) {
+  const normalizedId = toText(templateId).toLowerCase();
+  return TEMPLATE_STYLES[normalizedId] || TEMPLATE_STYLES[DEFAULT_TEMPLATE_ID];
+}
+
+function applyTextStyle(doc, style) {
+  doc.setFont(style.font, style.fontStyle);
+  doc.setFontSize(style.fontSize);
+  doc.setTextColor(...style.color);
+}
+
+function formatSectionTitle(title, textCase) {
+  const text = toText(title);
+  return textCase === "uppercase" ? text.toUpperCase() : text;
 }
 
 function pageBottom(doc) {
@@ -95,18 +255,22 @@ function addBullet(doc, value, x, y, maxWidth) {
   return y;
 }
 
-function addSectionHeading(doc, title, y) {
+function addSectionHeading(doc, title, y, templateStyle) {
   // Keep the heading, divider, and at least one body line on the same page.
   y = ensureSpace(doc, y, SECTION_GAP + 16);
   y += SECTION_GAP;
 
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(12);
-  doc.text(title, PAGE_MARGIN.left, y);
+  applyTextStyle(doc, templateStyle.section);
+  doc.text(
+    formatSectionTitle(title, templateStyle.section.textCase),
+    PAGE_MARGIN.left,
+    y
+  );
 
   y += 3;
 
-  doc.setDrawColor(37, 99, 235);
+  doc.setDrawColor(...templateStyle.section.dividerColor);
+  doc.setLineWidth(templateStyle.section.dividerWidth);
   doc.line(
     PAGE_MARGIN.left,
     y,
@@ -114,13 +278,12 @@ function addSectionHeading(doc, title, y) {
     y
   );
 
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
+  applyTextStyle(doc, templateStyle.body);
 
   return y + 7;
 }
 
-function addSection(doc, title, content, y) {
+function addSection(doc, title, content, y, templateStyle) {
   const listItems = Array.isArray(content) ? toTextList(content) : null;
   const text = listItems ? "" : toText(content);
 
@@ -128,7 +291,7 @@ function addSection(doc, title, content, y) {
     return y;
   }
 
-  y = addSectionHeading(doc, title, y);
+  y = addSectionHeading(doc, title, y, templateStyle);
 
   if (listItems) {
     listItems.forEach((item) => {
@@ -171,7 +334,7 @@ function hasDictItemContent(item, fields) {
   );
 }
 
-function addDictSection(doc, title, values, fields, y) {
+function addDictSection(doc, title, values, fields, y, templateStyle) {
   const items = Array.isArray(values)
     ? values.filter((item) => hasDictItemContent(item, fields))
     : [];
@@ -180,7 +343,7 @@ function addDictSection(doc, title, values, fields, y) {
     return y;
   }
 
-  y = addSectionHeading(doc, title, y);
+  y = addSectionHeading(doc, title, y, templateStyle);
 
   const x = PAGE_MARGIN.left + CONTENT_INDENT;
   const maxWidth =
@@ -195,24 +358,21 @@ function addDictSection(doc, title, values, fields, y) {
     const titleLine = fields.map((field) => toText(item[field])).filter(Boolean);
 
     if (titleLine.length > 0) {
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(10);
+      applyTextStyle(doc, templateStyle.itemTitle);
       y = addWrappedText(doc, titleLine.join(" | "), x, y, maxWidth);
     }
 
     const description = toText(item.description);
 
     if (description) {
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
+      applyTextStyle(doc, templateStyle.body);
       y = addWrappedText(doc, description, x, y, maxWidth);
     }
 
     const bullets = toTextList(item.bullets);
 
     if (bullets.length > 0) {
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
+      applyTextStyle(doc, templateStyle.body);
 
       bullets.forEach((bullet) => {
         y = addBullet(doc, bullet, x + CONTENT_INDENT, y, maxWidth - CONTENT_INDENT);
@@ -237,8 +397,9 @@ export function getBuiltResumePdfFileName(fullName) {
   return `${slug || "resume"}.pdf`;
 }
 
-export function createBuiltResumePdf(resume = {}) {
+export function createBuiltResumePdf(resume = {}, templateId = DEFAULT_TEMPLATE_ID) {
   const data = resume && typeof resume === "object" ? resume : {};
+  const templateStyle = resolveTemplateStyle(templateId);
   const doc = new jsPDF({
     unit: "mm",
     format: "a4",
@@ -246,8 +407,7 @@ export function createBuiltResumePdf(resume = {}) {
 
   let y = PAGE_MARGIN.top;
 
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(20);
+  applyTextStyle(doc, templateStyle.headerName);
   y = addWrappedText(
     doc,
     toText(data.full_name) || "Your Name",
@@ -270,8 +430,7 @@ export function createBuiltResumePdf(resume = {}) {
     .join(" | ");
 
   if (contact) {
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
+    applyTextStyle(doc, templateStyle.contact);
     y = addWrappedText(
       doc,
       contact,
@@ -281,37 +440,43 @@ export function createBuiltResumePdf(resume = {}) {
     );
   }
 
-  y = addSection(doc, "Professional Summary", data.summary, y);
-  y = addSection(doc, "Skills", data.skills, y);
+  y = addSection(doc, "Professional Summary", data.summary, y, templateStyle);
+  y = addSection(doc, "Skills", data.skills, y, templateStyle);
   y = addDictSection(
     doc,
     "Education",
     data.education,
     ["degree", "institution", "year"],
-    y
+    y,
+    templateStyle
   );
   y = addDictSection(
     doc,
     "Experience",
     data.experience,
     ["role", "company", "duration"],
-    y
+    y,
+    templateStyle
   );
   y = addDictSection(
     doc,
     "Projects",
     data.projects,
     ["title", "technologies"],
-    y
+    y,
+    templateStyle
   );
-  y = addSection(doc, "Certifications", data.certifications, y);
-  addSection(doc, "Achievements", data.achievements, y);
+  y = addSection(doc, "Certifications", data.certifications, y, templateStyle);
+  addSection(doc, "Achievements", data.achievements, y, templateStyle);
 
   return doc;
 }
 
-export function downloadBuiltResumePdf(resume = {}) {
-  const doc = createBuiltResumePdf(resume);
+export function downloadBuiltResumePdf(
+  resume = {},
+  templateId = DEFAULT_TEMPLATE_ID
+) {
+  const doc = createBuiltResumePdf(resume, templateId);
   doc.save(getBuiltResumePdfFileName(resume?.full_name));
   return doc;
 }

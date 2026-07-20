@@ -24,7 +24,7 @@ function HomePage() {
             </Link>
 
             <Link className="glow-button" to="/resume-builder">
-              Build Resume
+              Build Your Resume
             </Link>
 
             <Link className="outline-dark-button" to="/history">

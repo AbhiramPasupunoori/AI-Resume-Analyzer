@@ -10,6 +10,8 @@ import { createAnalysis } from "../api/analysisApi";
 import ErrorMessage from "../components/ErrorMessage";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ResumePreview from "../components/resume-builder/ResumePreview";
+import ResumeTemplatePicker from "../components/resume-builder/ResumeTemplatePicker";
+import { RESUME_TEMPLATES } from "../data/resumeTemplates";
 import { getErrorMessage } from "../utils/errorUtils";
 import { downloadBuiltResumePdf } from "../utils/resumePdfGenerator";
 
@@ -148,6 +150,7 @@ function ResumeBuilderPage() {
 
   const [resume, setResume] = useState(EMPTY_RESUME);
   const [savedResumeId, setSavedResumeId] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState("ats-classic");
   const [skillsText, setSkillsText] = useState("");
   const [certificationsText, setCertificationsText] = useState("");
   const [achievementsText, setAchievementsText] = useState("");
@@ -328,7 +331,7 @@ function ResumeBuilderPage() {
 
     try {
       clearFeedback();
-      downloadBuiltResumePdf(data);
+      downloadBuiltResumePdf(data, selectedTemplate);
       setSuccessMessage("Your resume PDF has been downloaded.");
     } catch (pdfError) {
       setError(
@@ -412,6 +415,16 @@ function ResumeBuilderPage() {
           {successMessage}
         </div>
       )}
+
+      <ResumeTemplatePicker
+        templates={RESUME_TEMPLATES}
+        selectedTemplate={selectedTemplate}
+        onSelect={(templateId) => {
+          setSelectedTemplate(templateId);
+          clearFeedback();
+        }}
+        disabled={loading}
+      />
 
       <section className="resume-builder-layout">
         <div className="resume-builder-form">
@@ -1030,7 +1043,10 @@ function ResumeBuilderPage() {
               <h2 id="preview-heading">Live preview</h2>
               <span>Updates as you type</span>
             </div>
-            <ResumePreview resume={previewResume} />
+            <ResumePreview
+              resume={previewResume}
+              templateId={selectedTemplate}
+            />
           </div>
         </aside>
       </section>

@@ -78,7 +78,7 @@ function DictSection({ title, items, titleFields }) {
   );
 }
 
-function ResumePreview({ resume }) {
+function ResumePreview({ resume, templateId = "ats-classic" }) {
   const contactDetails = [
     resume.email,
     resume.phone,
@@ -91,7 +91,10 @@ function ResumePreview({ resume }) {
     .filter(Boolean);
 
   return (
-    <article className="resume-preview-page" aria-label="Resume live preview">
+    <article
+      className={`resume-preview-page resume-preview-${templateId}`}
+      aria-label="Resume live preview"
+    >
       <header className="resume-preview-header">
         <h2>{resume.full_name?.trim() || "Your Name"}</h2>
 
