@@ -1,3 +1,63 @@
+function findFirstError(value, path = []) {
+  if (typeof value === "string" && value.trim()) {
+    return {
+      message: value,
+      path,
+    };
+  }
+
+  if (Array.isArray(value)) {
+    const containsNestedValues = value.some(
+      (item) => item && typeof item === "object"
+    );
+
+    for (const [index, item] of value.entries()) {
+      const itemPath = containsNestedValues ? [...path, String(index)] : path;
+      const error = findFirstError(item, itemPath);
+
+      if (error) {
+        return error;
+      }
+    }
+
+    return null;
+  }
+
+  if (value && typeof value === "object") {
+    for (const [key, item] of Object.entries(value)) {
+      const error = findFirstError(item, [...path, key]);
+
+      if (error) {
+        return error;
+      }
+    }
+  }
+
+  return null;
+}
+
+function formatErrorPath(path) {
+  const visiblePath = path.filter(
+    (part) => part !== "detail" && part !== "non_field_errors"
+  );
+
+  if (visiblePath.length === 0) {
+    return "";
+  }
+
+  const label = visiblePath
+    .map((part) => {
+      if (/^\d+$/.test(part)) {
+        return String(Number(part) + 1);
+      }
+
+      return part.replace(/_id$/, "").replaceAll("_", " ");
+    })
+    .join(" ");
+
+  return `${label.charAt(0).toUpperCase()}${label.slice(1)}`;
+}
+
 export function getErrorMessage(error) {
   if (!error) {
     return "Something went wrong. Please try again.";
@@ -9,40 +69,14 @@ export function getErrorMessage(error) {
 
   const data = error.response.data;
 
-  if (typeof data === "string") {
-    return data;
-  }
+  const firstError = findFirstError(data);
 
-  if (data?.detail) {
-    return data.detail;
-  }
+  if (firstError) {
+    const fieldLabel = formatErrorPath(firstError.path);
 
-  if (data?.file && Array.isArray(data.file)) {
-    return data.file[0];
-  }
-
-  if (data?.analysis) {
-    return Array.isArray(data.analysis) ? data.analysis[0] : data.analysis;
-  }
-
-  if (data?.job_title) {
-    return Array.isArray(data.job_title) ? data.job_title[0] : data.job_title;
-  }
-
-  if (data?.description) {
-    return Array.isArray(data.description)
-      ? data.description[0]
-      : data.description;
-  }
-
-  if (data?.resume_id) {
-    return Array.isArray(data.resume_id) ? data.resume_id[0] : data.resume_id;
-  }
-
-  if (data?.job_description_id) {
-    return Array.isArray(data.job_description_id)
-      ? data.job_description_id[0]
-      : data.job_description_id;
+    return fieldLabel
+      ? `${fieldLabel}: ${firstError.message}`
+      : firstError.message;
   }
 
   return "Something went wrong. Please check your input and try again.";

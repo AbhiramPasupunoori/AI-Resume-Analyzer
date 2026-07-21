@@ -3,6 +3,7 @@ from pathlib import Path
 from rest_framework import serializers
 
 from analyzer.models import (
+    BuiltResume,
     JobDescription,
     Resume,
     ResumeAnalysis,
@@ -55,6 +56,7 @@ class ResumeUploadSerializer(serializers.ModelSerializer):
             "id",
             "file",
             "file_url",
+            "extracted_text",
             "original_filename",
             "file_type",
             "file_size",
@@ -68,6 +70,7 @@ class ResumeUploadSerializer(serializers.ModelSerializer):
         read_only_fields = (
             "id",
             "file_url",
+            "extracted_text",
             "original_filename",
             "file_type",
             "file_size",
@@ -537,3 +540,178 @@ class ResumeAnalysisSerializer(
                 "maximum": 100,
             },
         }
+
+
+class StrictTrimmedCharField(serializers.CharField):
+    def to_internal_value(self, data):
+        if not isinstance(data, str):
+            self.fail("invalid")
+
+        return super().to_internal_value(data)
+
+
+class BuiltResumeEntrySerializer(
+    serializers.Serializer
+):
+    description = StrictTrimmedCharField(
+        required=False,
+        allow_blank=True,
+    )
+
+    bullets = serializers.ListField(
+        child=StrictTrimmedCharField(),
+        required=False,
+        allow_empty=True,
+    )
+
+    def to_internal_value(self, data):
+        if isinstance(data, dict):
+            unexpected_fields = sorted(
+                set(data) - set(self.fields)
+            )
+
+            if unexpected_fields:
+                raise serializers.ValidationError(
+                    {
+                        field: "This field is not supported."
+                        for field in unexpected_fields
+                    }
+                )
+
+        return super().to_internal_value(data)
+
+
+class BuiltResumeEducationSerializer(
+    BuiltResumeEntrySerializer
+):
+    degree = StrictTrimmedCharField(
+        required=False,
+        allow_blank=True,
+    )
+
+    institution = StrictTrimmedCharField(
+        required=False,
+        allow_blank=True,
+    )
+
+    year = StrictTrimmedCharField(
+        required=False,
+        allow_blank=True,
+    )
+
+
+class BuiltResumeExperienceSerializer(
+    BuiltResumeEntrySerializer
+):
+    role = StrictTrimmedCharField(
+        required=False,
+        allow_blank=True,
+    )
+
+    company = StrictTrimmedCharField(
+        required=False,
+        allow_blank=True,
+    )
+
+    duration = StrictTrimmedCharField(
+        required=False,
+        allow_blank=True,
+    )
+
+
+class BuiltResumeProjectSerializer(
+    BuiltResumeEntrySerializer
+):
+    title = StrictTrimmedCharField(
+        required=False,
+        allow_blank=True,
+    )
+
+    technologies = StrictTrimmedCharField(
+        required=False,
+        allow_blank=True,
+    )
+
+
+class BuiltResumeSerializer(
+    serializers.ModelSerializer
+):
+    skills = serializers.ListField(
+        child=StrictTrimmedCharField(),
+        required=False,
+        allow_empty=True,
+    )
+
+    education = BuiltResumeEducationSerializer(
+        many=True,
+        required=False,
+    )
+
+    experience = BuiltResumeExperienceSerializer(
+        many=True,
+        required=False,
+    )
+
+    projects = BuiltResumeProjectSerializer(
+        many=True,
+        required=False,
+    )
+
+    certifications = serializers.ListField(
+        child=StrictTrimmedCharField(),
+        required=False,
+        allow_empty=True,
+    )
+
+    achievements = serializers.ListField(
+        child=StrictTrimmedCharField(),
+        required=False,
+        allow_empty=True,
+    )
+
+    class Meta:
+        model = BuiltResume
+
+        fields = (
+            "id",
+            "full_name",
+            "email",
+            "phone",
+            "location",
+            "linkedin",
+            "github",
+            "portfolio",
+            "summary",
+            "skills",
+            "education",
+            "experience",
+            "projects",
+            "certifications",
+            "achievements",
+            "created_at",
+            "updated_at",
+        )
+
+        read_only_fields = (
+            "id",
+            "created_at",
+            "updated_at",
+        )
+
+
+class BuiltResumePrepareAnalysisSerializer(
+    serializers.Serializer
+):
+    job_title = serializers.CharField(
+        max_length=200,
+    )
+
+    company_name = serializers.CharField(
+        max_length=200,
+        required=False,
+        allow_blank=True,
+    )
+
+    description = serializers.CharField(
+        min_length=30,
+    )

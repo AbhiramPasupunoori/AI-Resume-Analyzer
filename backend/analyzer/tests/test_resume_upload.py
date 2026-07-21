@@ -29,6 +29,10 @@ class ResumeUploadApiTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Resume.objects.count(), 1)
         self.assertTrue(response.data["resume"]["text_extracted"])
+        self.assertEqual(
+            response.data["resume"]["extracted_text"],
+            "Python and Django developer",
+        )
 
     def test_rejects_unsupported_file_type(self):
         upload = SimpleUploadedFile(

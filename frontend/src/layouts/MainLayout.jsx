@@ -2,11 +2,14 @@ import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 import Navbar from "../components/Navbar";
+import { saveLastBuilderRoute } from "../utils/resumeBuilderStorage";
 
 function MainLayout() {
   const { pathname } = useLocation();
 
   useEffect(() => {
+    saveLastBuilderRoute(pathname);
+
     const cardSelector = [
       ".dark-card",
       ".card",
@@ -19,6 +22,7 @@ function MainLayout() {
       ".insight-card",
       ".section-check-item",
       ".history-card",
+      ".edited-resume-card",
       ".dashboard-stat-card",
       ".recent-item",
       ".upload-dropzone",
@@ -26,6 +30,20 @@ function MainLayout() {
       ".history-score-box",
       ".hero-stats > div",
       ".preview-score-row",
+      ".builder-landing-left",
+      ".builder-landing-right",
+      ".builder-stats-row > div",
+      ".template-header",
+      ".template-tabs",
+      ".template-card",
+      ".builder-upload-card",
+      ".resume-import-result",
+      ".builder-editor-panel",
+      ".builder-editor-right > .builder-preview-page",
+      ".builder-repeat-card",
+      ".resume-review-header",
+      ".review-sidebar",
+      ".review-preview-area > .builder-preview-page",
     ].join(",");
 
     const observedCards = new WeakSet();
