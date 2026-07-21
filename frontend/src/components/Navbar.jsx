@@ -1,21 +1,25 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
-
-const assetBaseUrl = import.meta.env.BASE_URL;
+import { loadLastBuilderRoute } from "../utils/resumeBuilderStorage";
 
 function Navbar() {
+  const { pathname } = useLocation();
+  const assetBase = import.meta.env.BASE_URL;
+  const resumeBuilderPath = pathname.startsWith("/resume-builder")
+    ? pathname
+    : loadLastBuilderRoute();
   return (
     <nav className="navbar">
       <NavLink className="logo" to="/">
         <span className="logo-mark" aria-hidden="true">
           <img
             className="logo-image logo-image-dark"
-            src={`${assetBaseUrl}logo-ai-head-dark.png`}
+            src={`${assetBase}logo-ai-head-dark.png`}
             alt=""
           />
           <img
             className="logo-image logo-image-light"
-            src={`${assetBaseUrl}logo-ai-head-light.png`}
+            src={`${assetBase}logo-ai-head-light.png`}
             alt=""
           />
         </span>
@@ -52,7 +56,7 @@ function Navbar() {
         </NavLink>
 
         <NavLink
-          to="/resume-builder"
+          to={resumeBuilderPath}
           className={({ isActive }) =>
             isActive ? "nav-link active-nav-link" : "nav-link"
           }

@@ -56,6 +56,7 @@ class ResumeUploadSerializer(serializers.ModelSerializer):
             "id",
             "file",
             "file_url",
+            "extracted_text",
             "original_filename",
             "file_type",
             "file_size",
@@ -69,6 +70,7 @@ class ResumeUploadSerializer(serializers.ModelSerializer):
         read_only_fields = (
             "id",
             "file_url",
+            "extracted_text",
             "original_filename",
             "file_type",
             "file_size",

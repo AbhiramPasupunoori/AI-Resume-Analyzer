@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import ResumeUpload from "../components/ResumeUpload";
 import JobDescriptionForm from "../components/JobDescriptionForm";
@@ -15,8 +15,10 @@ const SAMPLE_JOB_DESCRIPTION = `We are looking for a Python Full-Stack Developer
 
 function AnalyzePage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const preloadedResumeFile = location.state?.resumeFile || null;
 
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(preloadedResumeFile);
   const [fileError, setFileError] = useState("");
 
   const [jobTitle, setJobTitle] = useState("");

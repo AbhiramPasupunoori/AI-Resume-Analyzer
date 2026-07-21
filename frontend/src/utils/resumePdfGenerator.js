@@ -1,382 +1,78 @@
-import { jsPDF } from "jspdf";
+import jsPDF from "jspdf";
 
-const PAGE_MARGIN = {
-  top: 18,
-  right: 14,
-  bottom: 18,
-  left: 14,
-};
-
-const CONTENT_INDENT = 4;
-const BODY_LINE_HEIGHT = 6;
-const SECTION_GAP = 5;
-const DEFAULT_TEMPLATE_ID = "ats-classic";
-
-const TEMPLATE_STYLES = {
-  "ats-classic": {
-    headerName: {
-      font: "helvetica",
-      fontStyle: "bold",
-      fontSize: 20,
-      color: [17, 24, 39],
-    },
-    contact: {
-      font: "helvetica",
-      fontStyle: "normal",
-      fontSize: 10,
-      color: [55, 65, 81],
-    },
-    section: {
-      font: "helvetica",
-      fontStyle: "bold",
-      fontSize: 12,
-      color: [17, 24, 39],
-      dividerColor: [37, 99, 235],
-      dividerWidth: 0.2,
-      textCase: "title",
-    },
-    itemTitle: {
-      font: "helvetica",
-      fontStyle: "bold",
-      fontSize: 10,
-      color: [17, 24, 39],
-    },
-    body: {
-      font: "helvetica",
-      fontStyle: "normal",
-      fontSize: 10,
-      color: [17, 24, 39],
-    },
-  },
-  modern: {
-    headerName: {
-      font: "helvetica",
-      fontStyle: "bold",
-      fontSize: 24,
-      color: [15, 61, 86],
-    },
-    contact: {
-      font: "helvetica",
-      fontStyle: "normal",
-      fontSize: 9.5,
-      color: [15, 118, 110],
-    },
-    section: {
-      font: "helvetica",
-      fontStyle: "bold",
-      fontSize: 11,
-      color: [15, 118, 110],
-      dividerColor: [20, 184, 166],
-      dividerWidth: 0.6,
-      textCase: "uppercase",
-    },
-    itemTitle: {
-      font: "helvetica",
-      fontStyle: "bold",
-      fontSize: 10,
-      color: [15, 61, 86],
-    },
-    body: {
-      font: "helvetica",
-      fontStyle: "normal",
-      fontSize: 10,
-      color: [30, 41, 59],
-    },
-  },
-  minimal: {
-    headerName: {
-      font: "helvetica",
-      fontStyle: "normal",
-      fontSize: 18,
-      color: [17, 24, 39],
-    },
-    contact: {
-      font: "helvetica",
-      fontStyle: "normal",
-      fontSize: 9,
-      color: [107, 114, 128],
-    },
-    section: {
-      font: "helvetica",
-      fontStyle: "bold",
-      fontSize: 9.5,
-      color: [75, 85, 99],
-      dividerColor: [209, 213, 219],
-      dividerWidth: 0.15,
-      textCase: "uppercase",
-    },
-    itemTitle: {
-      font: "helvetica",
-      fontStyle: "bold",
-      fontSize: 9.5,
-      color: [31, 41, 55],
-    },
-    body: {
-      font: "helvetica",
-      fontStyle: "normal",
-      fontSize: 9.5,
-      color: [31, 41, 55],
-    },
-  },
-  professional: {
-    headerName: {
-      font: "times",
-      fontStyle: "bold",
-      fontSize: 22,
-      color: [91, 35, 51],
-    },
-    contact: {
-      font: "times",
-      fontStyle: "normal",
-      fontSize: 10,
-      color: [75, 85, 99],
-    },
-    section: {
-      font: "times",
-      fontStyle: "bold",
-      fontSize: 13,
-      color: [91, 35, 51],
-      dividerColor: [176, 137, 59],
-      dividerWidth: 0.4,
-      textCase: "title",
-    },
-    itemTitle: {
-      font: "times",
-      fontStyle: "bold",
-      fontSize: 10.5,
-      color: [55, 48, 46],
-    },
-    body: {
-      font: "times",
-      fontStyle: "normal",
-      fontSize: 10,
-      color: [55, 48, 46],
-    },
-  },
-};
-
-function toText(value) {
-  if (value === null || value === undefined) {
-    return "";
-  }
-
-  if (Array.isArray(value)) {
-    return value.map(toText).filter(Boolean).join(", ");
-  }
-
-  return String(value).trim();
-}
-
-function toTextList(values) {
-  if (!Array.isArray(values)) {
-    return [];
-  }
-
-  return values.map(toText).filter(Boolean);
-}
-
-function resolveTemplateStyle(templateId) {
-  const normalizedId = toText(templateId).toLowerCase();
-  return TEMPLATE_STYLES[normalizedId] || TEMPLATE_STYLES[DEFAULT_TEMPLATE_ID];
-}
-
-function applyTextStyle(doc, style) {
-  doc.setFont(style.font, style.fontStyle);
-  doc.setFontSize(style.fontSize);
-  doc.setTextColor(...style.color);
-}
-
-function formatSectionTitle(title, textCase) {
-  const text = toText(title);
-  return textCase === "uppercase" ? text.toUpperCase() : text;
-}
-
-function pageBottom(doc) {
-  return doc.internal.pageSize.getHeight() - PAGE_MARGIN.bottom;
-}
-
-function ensureSpace(doc, y, requiredHeight = BODY_LINE_HEIGHT) {
-  if (y + requiredHeight <= pageBottom(doc)) {
-    return y;
-  }
-
-  doc.addPage();
-  return PAGE_MARGIN.top;
-}
-
-function addWrappedText(
-  doc,
-  value,
-  x,
-  y,
-  maxWidth,
-  lineHeight = BODY_LINE_HEIGHT
-) {
-  const text = toText(value);
-
-  if (!text) {
-    return y;
-  }
-
-  const wrapped = doc.splitTextToSize(text, maxWidth);
-  const lines = Array.isArray(wrapped) ? wrapped : [wrapped];
+function addWrappedText(doc, text, x, y, maxWidth, lineHeight = 6) {
+  const lines = doc.splitTextToSize(text || "", maxWidth);
 
   lines.forEach((line) => {
-    y = ensureSpace(doc, y, lineHeight);
-    doc.text(toText(line), x, y);
+    doc.text(line, x, y);
     y += lineHeight;
   });
 
   return y;
 }
 
-function addBullet(doc, value, x, y, maxWidth) {
-  const text = toText(value);
-
-  if (!text) {
+function addSection(doc, title, content, y) {
+  if (!content || content.length === 0) {
     return y;
   }
 
-  const bulletIndent = 4;
-  const wrapped = doc.splitTextToSize(text, maxWidth - bulletIndent);
-  const lines = Array.isArray(wrapped) ? wrapped : [wrapped];
+  if (y > 260) {
+    doc.addPage();
+    y = 18;
+  }
 
-  lines.forEach((line, index) => {
-    y = ensureSpace(doc, y);
+  y += 6;
 
-    if (index === 0) {
-      doc.text("\u2022", x, y);
-    }
-
-    doc.text(toText(line), x + bulletIndent, y);
-    y += BODY_LINE_HEIGHT;
-  });
-
-  return y;
-}
-
-function addSectionHeading(doc, title, y, templateStyle) {
-  // Keep the heading, divider, and at least one body line on the same page.
-  y = ensureSpace(doc, y, SECTION_GAP + 16);
-  y += SECTION_GAP;
-
-  applyTextStyle(doc, templateStyle.section);
-  doc.text(
-    formatSectionTitle(title, templateStyle.section.textCase),
-    PAGE_MARGIN.left,
-    y
-  );
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.text(title, 14, y);
 
   y += 3;
+  doc.setDrawColor(37, 99, 235);
+  doc.line(14, y, 196, y);
 
-  doc.setDrawColor(...templateStyle.section.dividerColor);
-  doc.setLineWidth(templateStyle.section.dividerWidth);
-  doc.line(
-    PAGE_MARGIN.left,
-    y,
-    doc.internal.pageSize.getWidth() - PAGE_MARGIN.right,
-    y
-  );
+  y += 7;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
 
-  applyTextStyle(doc, templateStyle.body);
-
-  return y + 7;
-}
-
-function addSection(doc, title, content, y, templateStyle) {
-  const listItems = Array.isArray(content) ? toTextList(content) : null;
-  const text = listItems ? "" : toText(content);
-
-  if ((listItems && listItems.length === 0) || (!listItems && !text)) {
-    return y;
-  }
-
-  y = addSectionHeading(doc, title, y, templateStyle);
-
-  if (listItems) {
-    listItems.forEach((item) => {
-      y = addBullet(
-        doc,
-        item,
-        PAGE_MARGIN.left + CONTENT_INDENT,
-        y,
-        doc.internal.pageSize.getWidth() -
-          PAGE_MARGIN.left -
-          PAGE_MARGIN.right -
-          CONTENT_INDENT
-      );
+  if (Array.isArray(content)) {
+    content.forEach((item) => {
+      if (typeof item === "string") {
+        y = addWrappedText(doc, `• ${item}`, 18, y, 170);
+      }
     });
   } else {
-    y = addWrappedText(
-      doc,
-      text,
-      PAGE_MARGIN.left + CONTENT_INDENT,
-      y,
-      doc.internal.pageSize.getWidth() -
-        PAGE_MARGIN.left -
-        PAGE_MARGIN.right -
-        CONTENT_INDENT
-    );
+    y = addWrappedText(doc, content, 18, y, 170);
   }
 
   return y + 2;
 }
 
-function hasDictItemContent(item, fields) {
-  if (!item || typeof item !== "object" || Array.isArray(item)) {
-    return false;
-  }
-
-  return (
-    fields.some((field) => toText(item[field])) ||
-    Boolean(toText(item.description)) ||
-    toTextList(item.bullets).length > 0
-  );
-}
-
-function addDictSection(doc, title, values, fields, y, templateStyle) {
-  const items = Array.isArray(values)
-    ? values.filter((item) => hasDictItemContent(item, fields))
-    : [];
-
-  if (items.length === 0) {
+function addItemSection(doc, title, items, fields, y) {
+  if (!items || items.length === 0) {
     return y;
   }
 
-  y = addSectionHeading(doc, title, y, templateStyle);
-
-  const x = PAGE_MARGIN.left + CONTENT_INDENT;
-  const maxWidth =
-    doc.internal.pageSize.getWidth() -
-    PAGE_MARGIN.left -
-    PAGE_MARGIN.right -
-    CONTENT_INDENT;
+  y = addSection(doc, title, [" "], y);
 
   items.forEach((item) => {
-    y = ensureSpace(doc, y, BODY_LINE_HEIGHT * 2);
-
-    const titleLine = fields.map((field) => toText(item[field])).filter(Boolean);
-
-    if (titleLine.length > 0) {
-      applyTextStyle(doc, templateStyle.itemTitle);
-      y = addWrappedText(doc, titleLine.join(" | "), x, y, maxWidth);
+    if (y > 260) {
+      doc.addPage();
+      y = 18;
     }
 
-    const description = toText(item.description);
+    const heading = fields
+      .map((field) => item[field])
+      .filter(Boolean)
+      .join(" | ");
 
-    if (description) {
-      applyTextStyle(doc, templateStyle.body);
-      y = addWrappedText(doc, description, x, y, maxWidth);
-    }
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    y = addWrappedText(doc, heading, 18, y, 170);
 
-    const bullets = toTextList(item.bullets);
-
-    if (bullets.length > 0) {
-      applyTextStyle(doc, templateStyle.body);
-
-      bullets.forEach((bullet) => {
-        y = addBullet(doc, bullet, x + CONTENT_INDENT, y, maxWidth - CONTENT_INDENT);
-      });
+    if (item.description) {
+      doc.setFont("helvetica", "normal");
+      y = addWrappedText(doc, item.description, 18, y, 170);
     }
 
     y += 3;
@@ -385,98 +81,141 @@ function addDictSection(doc, title, values, fields, y, templateStyle) {
   return y;
 }
 
-export function getBuiltResumePdfFileName(fullName) {
-  const slug = toText(fullName)
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
+function buildBuiltResumePdf(resume) {
+  const doc = new jsPDF();
 
-  return `${slug || "resume"}.pdf`;
-}
+  let y = 18;
 
-export function createBuiltResumePdf(resume = {}, templateId = DEFAULT_TEMPLATE_ID) {
-  const data = resume && typeof resume === "object" ? resume : {};
-  const templateStyle = resolveTemplateStyle(templateId);
-  const doc = new jsPDF({
-    unit: "mm",
-    format: "a4",
-  });
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(20);
+  doc.text(resume.full_name || "Your Name", 14, y);
 
-  let y = PAGE_MARGIN.top;
+  y += 8;
 
-  applyTextStyle(doc, templateStyle.headerName);
-  y = addWrappedText(
-    doc,
-    toText(data.full_name) || "Your Name",
-    PAGE_MARGIN.left,
-    y,
-    doc.internal.pageSize.getWidth() - PAGE_MARGIN.left - PAGE_MARGIN.right,
-    8
-  );
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
 
   const contact = [
-    data.email,
-    data.phone,
-    data.location,
-    data.linkedin,
-    data.github,
-    data.portfolio,
+    resume.email,
+    resume.phone,
+    resume.location,
+    resume.linkedin,
+    resume.github,
+    resume.portfolio,
   ]
-    .map(toText)
     .filter(Boolean)
     .join(" | ");
 
-  if (contact) {
-    applyTextStyle(doc, templateStyle.contact);
-    y = addWrappedText(
-      doc,
-      contact,
-      PAGE_MARGIN.left,
-      y,
-      doc.internal.pageSize.getWidth() - PAGE_MARGIN.left - PAGE_MARGIN.right
-    );
-  }
+  y = addWrappedText(doc, contact, 14, y, 180);
 
-  y = addSection(doc, "Professional Summary", data.summary, y, templateStyle);
-  y = addSection(doc, "Skills", data.skills, y, templateStyle);
-  y = addDictSection(
-    doc,
-    "Education",
-    data.education,
-    ["degree", "institution", "year"],
-    y,
-    templateStyle
-  );
-  y = addDictSection(
+  y = addSection(doc, "Summary", resume.summary, y);
+  y = addSection(doc, "Skills", resume.skills, y);
+
+  y = addItemSection(
     doc,
     "Experience",
-    data.experience,
+    resume.experience,
     ["role", "company", "duration"],
-    y,
-    templateStyle
+    y
   );
-  y = addDictSection(
+
+  y = addItemSection(
+    doc,
+    "Education",
+    resume.education,
+    ["degree", "institution", "year"],
+    y
+  );
+
+  y = addItemSection(
     doc,
     "Projects",
-    data.projects,
+    resume.projects,
     ["title", "technologies"],
-    y,
-    templateStyle
+    y
   );
-  y = addSection(doc, "Certifications", data.certifications, y, templateStyle);
-  addSection(doc, "Achievements", data.achievements, y, templateStyle);
+
+  y = addSection(doc, "Certifications", resume.certifications, y);
+  y = addSection(doc, "Achievements", resume.achievements, y);
+  y = addSection(doc, "Languages", resume.languages, y);
+  y = addSection(doc, "Awards", resume.awards, y);
+  y = addSection(doc, "Hobbies", resume.hobbies, y);
+  if (resume.custom_section?.title) {
+    y = addSection(doc, resume.custom_section.title, resume.custom_section.content, y);
+  }
 
   return doc;
 }
 
-export function downloadBuiltResumePdf(
-  resume = {},
-  templateId = DEFAULT_TEMPLATE_ID
-) {
-  const doc = createBuiltResumePdf(resume, templateId);
-  doc.save(getBuiltResumePdfFileName(resume?.full_name));
-  return doc;
+function getResumePdfFileName(resume, requestedName) {
+  const baseName = (requestedName || resume.full_name || "resume")
+    .toLowerCase()
+    .replace(/\.pdf$/i, "")
+    .replace(/[^a-z0-9_-]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "resume";
+  return `${baseName}.pdf`;
+}
+
+export function createBuiltResumePdfFile(resume, fileName) {
+  const doc = buildBuiltResumePdf(resume);
+  return new File([doc.output("blob")], getResumePdfFileName(resume, fileName), {
+    type: "application/pdf",
+    lastModified: Date.now(),
+  });
+}
+
+export function downloadBuiltResumePdf(resume, fileName) {
+  buildBuiltResumePdf(resume).save(getResumePdfFileName(resume, fileName));
+}
+
+export function downloadBuiltResumeTxt(resume) {
+  const text = `
+${resume.full_name || ""}
+${[
+  resume.email,
+  resume.phone,
+  resume.location,
+  resume.linkedin,
+  resume.github,
+  resume.portfolio,
+]
+  .filter(Boolean)
+  .join(" | ")}
+
+SUMMARY
+${resume.summary || ""}
+
+SKILLS
+${(resume.skills || []).join(", ")}
+
+EXPERIENCE
+${(resume.experience || [])
+  .map((item) => `${item.role || ""} | ${item.company || ""} | ${item.duration || ""}
+${item.description || ""}`)
+  .join("\n\n")}
+
+EDUCATION
+${(resume.education || [])
+  .map((item) => `${item.degree || ""} | ${item.institution || ""} | ${item.year || ""}`)
+  .join("\n")}
+
+PROJECTS
+${(resume.projects || [])
+  .map((item) => `${item.title || ""} | ${item.technologies || ""}
+${item.description || ""}`)
+  .join("\n\n")}
+`;
+
+  const blob = new Blob([text], {
+    type: "text/plain",
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "resume.txt";
+  link.click();
+
+  URL.revokeObjectURL(url);
 }

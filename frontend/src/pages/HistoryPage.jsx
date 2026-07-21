@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { deleteAnalysis, getAnalyses } from "../api/analysisApi";
 
@@ -8,9 +8,17 @@ import ErrorMessage from "../components/ErrorMessage";
 import EmptyState from "../components/EmptyState";
 
 import { getErrorMessage } from "../utils/errorUtils";
+import {
+  deleteEditedResumeSnapshot,
+  loadEditedResumeHistory,
+  restoreEditedResume,
+  saveBuilderStep,
+} from "../utils/resumeBuilderStorage";
 
 function HistoryPage() {
+  const navigate = useNavigate();
   const [analyses, setAnalyses] = useState([]);
+  const [editedResumes, setEditedResumes] = useState(() => loadEditedResumeHistory());
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
   const [error, setError] = useState("");
@@ -77,7 +85,7 @@ function HistoryPage() {
     );
   }
 
-  if (error && analyses.length === 0) {
+  if (error && analyses.length === 0 && editedResumes.length === 0) {
     return (
       <main className="page">
         <ErrorMessage message={error} onRetry={loadAnalyses} />
@@ -85,18 +93,74 @@ function HistoryPage() {
     );
   }
 
+  function reopenResume(snapshot, destination) {
+    restoreEditedResume(snapshot);
+    saveBuilderStep(0);
+    navigate(destination);
+  }
+
+  function handleDeleteEditedResume(snapshotId) {
+    const confirmed = window.confirm("Are you sure you want to delete this saved resume?");
+    if (confirmed) {
+      setEditedResumes(deleteEditedResumeSnapshot(snapshotId));
+      setSuccessMessage("Saved resume deleted successfully.");
+    }
+  }
+
   return (
     <main className="page history-page">
-      <div className="page-header">
-        <span className="modern-badge">History</span>
-        <h1>Analysis History</h1>
-        <p>View or delete your previous resume analysis results.</p>
-      </div>
-
       {error && <ErrorMessage message={error} />}
 
       {successMessage && <div className="success-box">{successMessage}</div>}
 
+      <details className="history-accordion" open>
+        <summary>
+          <span className="history-accordion-copy">
+            <strong>Resume History</strong>
+            <small>Continue editing or reopen your saved resume-builder drafts.</small>
+          </span>
+          <span className="history-accordion-arrow" aria-hidden="true" />
+        </summary>
+        <section className="history-section">
+        {editedResumes.length === 0 ? (
+          <EmptyState
+            title="No edited resumes yet"
+            message="Finalize a resume in the builder and it will appear here."
+            action={<Link className="glow-button" to="/resume-builder">Build a Resume</Link>}
+          />
+        ) : (
+          <div className="edited-resume-grid">
+            {editedResumes.map((snapshot) => (
+              <article className="edited-resume-card" key={snapshot.id}>
+                <div className="edited-resume-icon" aria-hidden="true">▤</div>
+                <div className="edited-resume-details">
+                  <span>Edited resume</span>
+                  <h3>{snapshot.name}</h3>
+                  <p>{snapshot.resume?.desired_job_title || "No desired job title"}</p>
+                  <small>Updated {new Date(snapshot.updatedAt).toLocaleString()}</small>
+                  <small>Template: {snapshot.template || "ATS Classic"}</small>
+                </div>
+                <div className="edited-resume-actions">
+                  <button className="glow-button" type="button" onClick={() => reopenResume(snapshot, "/resume-builder/edit")}>Continue Editing</button>
+                  <button className="outline-dark-button" type="button" onClick={() => reopenResume(snapshot, "/resume-builder/review")}>Open Final Resume</button>
+                  <button className="danger-button" type="button" onClick={() => handleDeleteEditedResume(snapshot.id)}>Delete</button>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+        </section>
+      </details>
+
+      <details className="history-accordion">
+        <summary>
+          <span className="history-accordion-copy">
+            <strong>Analysis History</strong>
+            <small>Review your previous ATS scores and resume analysis results.</small>
+          </span>
+          <span className="history-accordion-arrow" aria-hidden="true" />
+        </summary>
+        <section className="history-section analysis-history-section">
       {analyses.length === 0 ? (
         <EmptyState
           title="No analyses yet"
@@ -149,6 +213,8 @@ function HistoryPage() {
           ))}
         </div>
       )}
+        </section>
+      </details>
     </main>
   );
 }

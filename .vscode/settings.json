@@ -12,5 +12,6 @@
     ".",
     "-p",
     "test_*.py"
-  ]
+  ],
+  "postman.settings.dotenv-detection-notification-visibility": false
 }
