@@ -134,7 +134,7 @@ docker compose version
 
 Docker Desktop includes Docker Compose on macOS and Windows. You do not need to install PostgreSQL separately because this project runs PostgreSQL 17 in Docker.
 
-## Quick Start (Local)
+## First-Time Setup (Merged Application)
 
 Clone the project:
 
@@ -143,10 +143,10 @@ git clone <repository-url>
 cd AI-Resume-Analyzer
 ```
 
-Start PostgreSQL:
+From the project root, start Docker Desktop and PostgreSQL:
 
 ```bash
-open -a Docker  # macOS only
+open -a Docker  # macOS only; wait until Docker reports that it is running
 docker compose up -d
 docker compose ps
 ```
@@ -160,10 +160,10 @@ source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 cp .env.example .env
-python manage.py makemigrations
 python manage.py migrate
-python manage.py createsuperuser
 ```
+
+Do not run `cd backend` if the terminal prompt already ends with `backend %`.
 
 On Windows PowerShell, activate the environment with:
 
@@ -171,12 +171,19 @@ On Windows PowerShell, activate the environment with:
 .venv\Scripts\Activate.ps1
 ```
 
-Set up the frontend:
+Install and build the frontend into Django:
 
 ```bash
 cd ../frontend
 npm install
+npm run build
+
+cd ../backend
+python manage.py runserver
 ```
+
+Keep this terminal open and visit <http://127.0.0.1:8000/>. Press `Control-C`
+to stop the server.
 
 ## Environment Variables
 
@@ -326,28 +333,50 @@ Vite automatically forwards `/api` and `/media` requests to Django.
 
 ## Merged Application (One Server)
 
-Build React into Django:
+### Everyday startup (including after reopening VS Code)
+
+Closing VS Code stops Django. A newly opened terminal also does not retain its
+previous directory or activated virtual environment. Run these commands from
+any terminal:
 
 ```bash
-cd AI-Resume-Analyzer/frontend
-npm install
-npm run build
-```
-
-The React build is created in:
-
-```text
-backend/static/frontend/
-```
-
-Run Django only:
-
-```bash
-cd ../backend
+cd "/Users/abhiram/Documents/GitHub/AI-Resume-Analyzer"
+open -a Docker
+docker compose up -d
+cd backend
 source .venv/bin/activate
 python manage.py migrate
 python manage.py runserver
 ```
+
+Keep the terminal open while using the application. Open
+<http://127.0.0.1:8000/> and press `Control-C` when you want to stop Django.
+
+You can start Django without activating the virtual environment by running this
+from the project root:
+
+```bash
+docker compose up -d
+backend/.venv/bin/python backend/manage.py migrate
+backend/.venv/bin/python backend/manage.py runserver
+```
+
+### After changing frontend code
+
+Rebuild React so Django serves the latest frontend:
+
+```bash
+cd "/Users/abhiram/Documents/GitHub/AI-Resume-Analyzer/frontend"
+npm install
+npm run build
+
+cd ../backend
+source .venv/bin/activate
+python manage.py runserver
+```
+
+The React build is written to `backend/static/frontend/`. You do not need to
+run the Vite development server for the merged application.
 
 Open:
 
@@ -360,8 +389,6 @@ Health check:    http://127.0.0.1:8000/api/health/
 Database health: http://127.0.0.1:8000/api/health/database/
 Admin:           http://127.0.0.1:8000/admin/
 ```
-
-Run `npm run build` again after changing frontend code.
 
 ## Run Tests
 
@@ -383,24 +410,12 @@ npm run lint
 npm run build
 ```
 
-## Start the Project Later
-
-Merged application:
-
-```bash
-cd AI-Resume-Analyzer
-docker compose up -d
-cd backend
-source .venv/bin/activate
-python manage.py migrate
-python manage.py runserver
-```
-
-Open <http://127.0.0.1:8000/>.
-
 ## Notes
 
 - Docker Desktop must be running before Django connects to PostgreSQL.
+- Run `python manage.py runserver` from `backend`, where `manage.py` is located.
+- Do not recreate `.venv` or reinstall dependencies during normal daily startup.
+- Do not commit `backend/.env`; it contains machine-specific settings and secrets.
 - The first analysis downloads the Sentence Transformer model and may take longer.
 - Use `DJANGO_DEBUG=False` and secure credentials in production.
 - Uploaded resumes are stored in `backend/media/` during local development.
