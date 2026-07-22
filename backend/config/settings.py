@@ -213,7 +213,13 @@ if not DEBUG:
     )
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
+    # Railway terminates TLS before forwarding traffic to the container.
+    # Keep this configurable so its internal HTTP health check is not
+    # redirected and can receive a direct 200 response.
+    SECURE_SSL_REDIRECT = os.getenv(
+        "DJANGO_SECURE_SSL_REDIRECT",
+        "False",
+    ).lower() == "true"
     SECURE_HSTS_SECONDS = int(
         os.getenv("DJANGO_SECURE_HSTS_SECONDS", "31536000")
     )
