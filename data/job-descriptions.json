@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "job_title": "Python full-stack developer",
+    "company_name": "kopensoftware technologies pvt ltd.",
+    "description": "Role & responsibilities\nRequirements\nResponsibilities\nDevelop and maintain fullstack applications using Python, Angular, HTML, CSS, JavaScript\nBuild and integrate complex user interfaces with backend APIs for internal smart applications\nDevelop backend services using Python and REST APIs\nWork on cloudbased platforms (GCP)\nOperate within existing CI/CD pipelines (build, test, deploy)\nSupport ongoing and new projects under a staff augmentation model\nBenefits\nCompetitive salaries\nMedical Insurance\nEmployee Referral Bonuses\nPerformance Based Bonuses\nFlexible Work Options & Fun Culture\nRobust Learning & Development Programs\nIn-House Technology Training\nRole: Full Stack Developer\nIndustry Type: IT Services & Consulting\nDepartment: Engineering - Software & QA\nEmployment Type: Full Time, Permanent\nRole Category: Software Development\nEducation\nUG: Any Graduate\nKey Skills\nSkills highlighted with ‘‘ are preferred keyskills\nAngularPython\nAWSazure",
+    "required_skills": [
+      "CSS",
+      "HTML",
+      "JavaScript",
+      "Python",
+      "REST APIs"
+    ],
+    "created_at": "2026-07-22T11:31:45.360Z",
+    "updated_at": "2026-07-22T11:31:45.360Z"
+  },
+  {
+    "id": 2,
+    "job_title": "QA Engineer (Manual)",
+    "company_name": "Kopen Software Solutions pvt ltd",
+    "description": "We are seeking a meticulous QA Manual Tester with specialized expertise in Functional and Localization testing. In this role, you will ensure our software application functions flawlessly while delivering a native, culturally accurate user experience across multiple global markets. You will be responsible for end-to-end manual testing, designing comprehensive test cases, identifying critical bugs, and validating that our localized product versions align with regional language standards and cultural nuances.Key Responsibilities1. Functional Testing & Core QAAnalyze requirements: Review project specifications, user stories, and technical layouts to identify testing requirements.Test creation: Design, write, and maintain highly detailed manual test plans and test scenarios.Test execution: Perform functional, integration, smoke, regression, and user acceptance testing (UAT).Defect tracking: Document, prioritize, and report software bugs with detailed reproduction steps using Jira.Bug verification: Collaborate closely with developers to retest bug fixes and verify overall system stability.2. Localization (L10n) & Internationalization (I18n) TestingLinguistic validation: Verify translation accuracy, text formatting, punctuation, typos, and grammar consistency across target locales.UI & Layout checks: Identify layout breaks, text clipping, truncation, and overlapping text caused by string length variations.Cultural adaptation: Validate that regional formats—such as date/time stamps, currencies, number systems, and symbols—are correctly implemented.Local functionality: Test whether localized features, third-party payment gateways, and regional hyperlinks operate identically to the core build.3. Collaboration & ReportingDaily syncs: Participate in daily scrum meetings, requirement grooming, and defect triage sessions.Status tracking: Update the QA Lead on daily execution progress, blockages, and overall build quality metrics.Required Skills and QualificationsEducation: Bachelor’s degree in Computer Science, Linguistics, Engineering, or a related field.Core Experience: Minimum of 3+ years of proven experience as a Manual QA Tester on web and mobile platforms.L10n Expertise: Strong background in localization QA processes, terminology databases, and internationalization standards.Language Skills: Professional proficiency in English, plus native or professional working proficiency in at least one other major language (e.g., Spanish, German, French, Japanese, Arabic).Tool Proficiency: Deep familiarity with test management and bug tracking platforms like Jira, TestRail, or Confluence.Attention to Detail: Exceptional eye for spotting minor UI anomalies, formatting errors, and subtle behavioral bugs.Preferred QualificationsFamiliarity with localization translation management systems (TMS) like Crowdin, Phrase, or Smartling.Basic understanding of HTML, CSS, or browser developer tools to inspect localized layout anomalies.Professional QA certifications such as ISTQB Certified Tester (Foundation Level or Certified Specialist).",
+    "required_skills": [
+      "CSS",
+      "HTML"
+    ],
+    "created_at": "2026-07-22T11:39:34.128Z",
+    "updated_at": "2026-07-22T11:39:34.128Z"
+  }
+]

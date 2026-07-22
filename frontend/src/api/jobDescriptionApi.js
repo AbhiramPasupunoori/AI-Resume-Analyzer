@@ -13,16 +13,3 @@ export async function createJobDescription({
 
   return response.data;
 }
-
-export async function getJobDescriptions() {
-  const response = await apiClient.get("/job-descriptions/");
-  return response.data;
-}
-
-export async function deleteJobDescription(jobDescriptionId) {
-  const response = await apiClient.delete(
-    `/job-descriptions/${jobDescriptionId}/`
-  );
-
-  return response.data || {};
-}

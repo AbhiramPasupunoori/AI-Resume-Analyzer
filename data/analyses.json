@@ -1,0 +1,244 @@
+[
+  {
+    "id": 1,
+    "status": "completed",
+    "overall_score": 62.11,
+    "skill_score": 36,
+    "semantic_score": 8.61,
+    "section_score": 12.5,
+    "achievement_score": 0,
+    "readability_score": 5,
+    "semantic_similarity": 34.44,
+    "skill_coverage_percentage": 80,
+    "resume_skills": [
+      "CSS",
+      "Django",
+      "HTML",
+      "Java",
+      "JavaScript",
+      "MongoDB",
+      "MySQL",
+      "Node.js",
+      "Python",
+      "React"
+    ],
+    "job_skills": [
+      "CSS",
+      "HTML",
+      "JavaScript",
+      "Python",
+      "REST APIs"
+    ],
+    "matched_skills": [
+      "CSS",
+      "HTML",
+      "JavaScript",
+      "Python"
+    ],
+    "missing_skills": [
+      "REST APIs"
+    ],
+    "section_results": {
+      "present_sections": [
+        "Skills",
+        "Experience",
+        "Education",
+        "Projects",
+        "Certifications"
+      ],
+      "missing_sections": [
+        "Summary"
+      ],
+      "present_count": 5,
+      "total_sections": 6,
+      "completeness_percentage": 83
+    },
+    "achievement_results": {
+      "quantified_achievements": 0,
+      "score": 0
+    },
+    "readability_results": {
+      "average_sentence_words": 21.74,
+      "score": 5
+    },
+    "recommendations": [
+      "Add evidence of REST APIs experience where it is accurate.",
+      "Add a clear Summary section.",
+      "Quantify achievements with measurable outcomes."
+    ],
+    "error_message": "",
+    "analysis_time_ms": 1,
+    "score_breakdown": {
+      "skill": {
+        "score": 36,
+        "maximum": 45
+      },
+      "semantic": {
+        "score": 8.61,
+        "maximum": 25
+      },
+      "sections": {
+        "score": 12.5,
+        "maximum": 15
+      },
+      "achievements": {
+        "score": 0,
+        "maximum": 10
+      },
+      "readability": {
+        "score": 5,
+        "maximum": 5
+      },
+      "overall": {
+        "score": 62.11,
+        "maximum": 100
+      }
+    },
+    "resume_id": 1,
+    "job_description_id": 1,
+    "resume": {
+      "id": 1,
+      "original_filename": "abhiram_pasupunoori_resume.pdf",
+      "file_type": "pdf",
+      "file_size": 15825,
+      "text_extracted": true,
+      "word_count": 582,
+      "character_count": 4013,
+      "detected_skills": [
+        "CSS",
+        "Django",
+        "HTML",
+        "Java",
+        "JavaScript",
+        "MongoDB",
+        "MySQL",
+        "Node.js",
+        "Python",
+        "React"
+      ],
+      "created_at": "2026-07-22T11:31:45.348Z"
+    },
+    "job_description": {
+      "id": 1,
+      "job_title": "Python full-stack developer",
+      "company_name": "kopensoftware technologies pvt ltd.",
+      "required_skills": [
+        "CSS",
+        "HTML",
+        "JavaScript",
+        "Python",
+        "REST APIs"
+      ],
+      "created_at": "2026-07-22T11:31:45.360Z"
+    },
+    "created_at": "2026-07-22T11:31:45.367Z",
+    "updated_at": "2026-07-22T11:31:45.367Z"
+  },
+  {
+    "id": 2,
+    "status": "completed",
+    "overall_score": 27.68,
+    "skill_score": 0,
+    "semantic_score": 7.68,
+    "section_score": 12.5,
+    "achievement_score": 2.5,
+    "readability_score": 5,
+    "semantic_similarity": 30.71,
+    "skill_coverage_percentage": 0,
+    "resume_skills": [
+      "SQL"
+    ],
+    "job_skills": [
+      "CSS",
+      "HTML"
+    ],
+    "matched_skills": [],
+    "missing_skills": [
+      "CSS",
+      "HTML"
+    ],
+    "section_results": {
+      "present_sections": [
+        "Summary",
+        "Skills",
+        "Experience",
+        "Education",
+        "Projects"
+      ],
+      "missing_sections": [
+        "Certifications"
+      ],
+      "present_count": 5,
+      "total_sections": 6,
+      "completeness_percentage": 83
+    },
+    "achievement_results": {
+      "quantified_achievements": 1,
+      "score": 2.5
+    },
+    "readability_results": {
+      "average_sentence_words": 17.11,
+      "score": 5
+    },
+    "recommendations": [
+      "Add evidence of CSS experience where it is accurate.",
+      "Add evidence of HTML experience where it is accurate.",
+      "Add a clear Certifications section."
+    ],
+    "error_message": "",
+    "analysis_time_ms": 1,
+    "score_breakdown": {
+      "skill": {
+        "score": 0,
+        "maximum": 45
+      },
+      "semantic": {
+        "score": 7.68,
+        "maximum": 25
+      },
+      "sections": {
+        "score": 12.5,
+        "maximum": 15
+      },
+      "achievements": {
+        "score": 2.5,
+        "maximum": 10
+      },
+      "readability": {
+        "score": 5,
+        "maximum": 5
+      },
+      "overall": {
+        "score": 27.68,
+        "maximum": 100
+      }
+    },
+    "resume_id": 2,
+    "job_description_id": 2,
+    "resume": {
+      "id": 2,
+      "original_filename": "SontiVarun_Resume.pdf",
+      "file_type": "pdf",
+      "file_size": 301533,
+      "text_extracted": true,
+      "word_count": 631,
+      "character_count": 4692,
+      "detected_skills": [
+        "SQL"
+      ],
+      "created_at": "2026-07-22T11:39:34.119Z"
+    },
+    "job_description": {
+      "id": 2,
+      "job_title": "QA Engineer (Manual)",
+      "company_name": "Kopen Software Solutions pvt ltd",
+      "required_skills": [
+        "CSS",
+        "HTML"
+      ],
+      "created_at": "2026-07-22T11:39:34.128Z"
+    },
+    "created_at": "2026-07-22T11:39:34.133Z",
+    "updated_at": "2026-07-22T11:39:34.133Z"
+  }
+]

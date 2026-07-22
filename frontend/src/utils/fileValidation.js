@@ -1,4 +1,5 @@
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
+// Leave room for multipart headers under Vercel's 4.5 MB request limit.
+const MAX_FILE_SIZE = 4 * 1024 * 1024;
 
 const ALLOWED_FILE_TYPES = [
   "application/pdf",
@@ -27,7 +28,7 @@ export function validateResumeFile(file) {
   }
 
   if (file.size > MAX_FILE_SIZE) {
-    return "Resume file size must be less than 5 MB.";
+    return "Resume file size must be less than 4 MB.";
   }
 
   return null;

@@ -113,7 +113,7 @@ function HistoryPage() {
 
       {successMessage && <div className="success-box">{successMessage}</div>}
 
-      <details className="history-accordion" open>
+      <details className="history-accordion">
         <summary>
           <span className="history-accordion-copy">
             <strong>Resume History</strong>
@@ -152,7 +152,7 @@ function HistoryPage() {
         </section>
       </details>
 
-      <details className="history-accordion">
+      <details className="history-accordion" open>
         <summary>
           <span className="history-accordion-copy">
             <strong>Analysis History</strong>

@@ -64,7 +64,7 @@ export function getErrorMessage(error) {
   }
 
   if (!error.response) {
-    return "Could not connect to the backend. Please check if Django is running.";
+    return "Could not connect to the API. Please check the Vercel deployment.";
   }
 
   const data = error.response.data;

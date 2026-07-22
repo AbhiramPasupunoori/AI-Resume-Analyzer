@@ -109,7 +109,7 @@ function HomePage() {
             <span>01</span>
             <h3>Upload Resume</h3>
             <p>
-              Upload your resume in PDF or DOCX format. The backend extracts
+              Upload your resume in PDF or DOCX format. The API extracts
               readable text automatically.
             </p>
           </div>

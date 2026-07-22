@@ -233,7 +233,7 @@ function AnalyzePage() {
             <div>
               <h2>Upload Resume</h2>
               <p>
-                Upload your latest resume so the backend can extract and analyze
+                Upload your latest resume so the API can extract and analyze
                 the text.
               </p>
             </div>

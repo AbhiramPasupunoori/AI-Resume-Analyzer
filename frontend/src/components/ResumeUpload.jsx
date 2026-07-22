@@ -53,7 +53,7 @@ function ResumeUpload({ selectedFile, onFileChange, uploadedResume }) {
           <input type="file" accept=".pdf,.docx" onChange={handleFileChange} />
         </label>
 
-        <small>Supported formats: PDF, DOCX. Maximum size: 5 MB.</small>
+        <small>Supported formats: PDF, DOCX. Maximum size: 4 MB.</small>
       </div>
 
       {selectedFile && (

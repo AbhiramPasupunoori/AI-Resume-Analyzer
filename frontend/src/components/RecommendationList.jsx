@@ -11,7 +11,7 @@ function RecommendationList({ recommendations }) {
         </ul>
       ) : (
         <p className="muted">
-          Recommendations will appear after the backend recommendation service
+          Recommendations will appear after the analysis service
           is added.
         </p>
       )}
