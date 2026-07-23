@@ -2,6 +2,10 @@
 frontend/node_modules/
 frontend/dist/
 
+# Local development data (production files are created through the GitHub API)
+data/*.json
+!data/.gitkeep
+
 # Local environment files
 .env
 .env.*

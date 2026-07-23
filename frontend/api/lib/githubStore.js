@@ -16,7 +16,9 @@ function config() {
   return {
     token,
     repository: fullRepository,
-    branch: process.env.GITHUB_BRANCH || process.env.VERCEL_GIT_COMMIT_REF || "main",
+    // Application data belongs to one stable branch. Preview deployment branch
+    // names must not silently split history into separate JSON files.
+    branch: process.env.GITHUB_BRANCH || "main",
     path: (process.env.GITHUB_DATA_PATH || "data").replace(/^\/+|\/+$/g, ""),
   };
 }
@@ -25,6 +27,7 @@ async function github(url, options = {}) {
   const { token } = config();
   const response = await fetch(`${API}${url}`, {
     ...options,
+    cache: "no-store",
     headers: {
       Accept: "application/vnd.github+json",
       Authorization: `Bearer ${token}`,
