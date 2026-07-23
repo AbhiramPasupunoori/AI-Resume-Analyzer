@@ -1,9 +1,5 @@
 import { readFile } from "node:fs/promises";
 
-import formidable from "formidable";
-import mammoth from "mammoth";
-import { PDFParse } from "pdf-parse";
-
 import { analyze, extractSkills, resumeText } from "./lib/analysis.js";
 import * as store from "./lib/githubStore.js";
 
@@ -28,6 +24,15 @@ function summary(record, includeText = false) {
 }
 
 async function parseUpload(request) {
+  const [
+    { default: formidable },
+    { default: mammoth },
+    { PDFParse },
+  ] = await Promise.all([
+    import("formidable"),
+    import("mammoth"),
+    import("pdf-parse"),
+  ]);
   const [, files] = await formidable({ maxFileSize: 4 * 1024 * 1024, maxFiles: 1 }).parse(request);
   const fileValue = files.file;
   const file = Array.isArray(fileValue) ? fileValue[0] : fileValue;
