@@ -168,15 +168,17 @@ function ResumeReviewPage() {
         <aside className="review-sidebar">
           <h2>Templates</h2>
 
-          {RESUME_TEMPLATES.map((item) => (
-            <button
-              key={item.id}
-              className={template === item.id ? "review-template active" : "review-template"}
-              onClick={() => changeTemplate(item.id)}
-            >
-              {item.name}
-            </button>
-          ))}
+          <div className="review-template-list">
+            {RESUME_TEMPLATES.map((item) => (
+              <button
+                key={item.id}
+                className={template === item.id ? "review-template active" : "review-template"}
+                onClick={() => changeTemplate(item.id)}
+              >
+                {item.name}
+              </button>
+            ))}
+          </div>
 
           <h2>Analyze Resume</h2>
 

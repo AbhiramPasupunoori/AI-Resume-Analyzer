@@ -5334,3 +5334,563 @@ textarea:focus {
   transform: none;
   transition: none;
 }
+
+/* =========================================================
+   18. RESUME BUILDER — PHONE-ONLY RESPONSIVE POLISH
+   Desktop styles remain unchanged above 700px.
+   ========================================================= */
+@media (max-width: 700px) {
+  :is(
+    .builder-landing-page,
+    .template-page,
+    .builder-upload-page,
+    .builder-editor-page,
+    .resume-review-page
+  ) {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  /* Landing */
+  .builder-landing-page {
+    min-height: calc(100dvh - 74px);
+    padding: 32px 16px 48px;
+  }
+
+  .builder-landing-hero {
+    gap: 34px;
+  }
+
+  .builder-landing-left {
+    width: 100%;
+    text-align: center;
+  }
+
+  .builder-landing-left .modern-badge {
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .builder-landing-left h1 {
+    font-size: clamp(2.2rem, 11vw, 3.15rem);
+    line-height: 1.08;
+    letter-spacing: -1px;
+  }
+
+  .builder-landing-left p {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .builder-landing-buttons {
+    width: 100%;
+    gap: 12px;
+  }
+
+  .builder-landing-action {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .builder-stats-row {
+    width: 100%;
+  }
+
+  .builder-stats-row div {
+    width: 100%;
+    min-width: 0;
+    justify-content: flex-start;
+  }
+
+  .builder-landing-right {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .resume-mockup-card {
+    width: min(100%, 360px);
+    min-height: 420px;
+    padding: 22px;
+  }
+
+  .builder-ai-card,
+  .builder-ats-badge {
+    max-width: 360px;
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  /* Template selection */
+  .template-page {
+    padding: 28px 14px 52px;
+  }
+
+  .template-page-inner,
+  .builder-back-row {
+    width: 100%;
+  }
+
+  .builder-back-link {
+    margin-bottom: 24px;
+  }
+
+  .template-header {
+    margin-bottom: 28px;
+  }
+
+  .template-header h1 {
+    font-size: clamp(2.25rem, 11vw, 3.15rem);
+    line-height: 1.08;
+  }
+
+  .template-header p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .template-tabs-shell {
+    grid-template-columns: 36px minmax(0, 1fr) 36px;
+    gap: 4px;
+    margin-bottom: 22px;
+  }
+
+  .template-tabs-arrow {
+    width: 36px;
+    height: 44px;
+  }
+
+  .template-tabs {
+    gap: 8px;
+  }
+
+  .template-tabs button {
+    min-height: 44px;
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+
+  .template-pattern-group {
+    margin-bottom: 38px;
+  }
+
+  .template-pattern-group > header {
+    align-items: flex-end;
+  }
+
+  .template-pattern-group > header h2 {
+    font-size: 23px;
+  }
+
+  .template-grid {
+    width: 100%;
+    gap: 30px;
+  }
+
+  .template-card,
+  .template-card-preview {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .template-card-body h2 {
+    overflow-wrap: anywhere;
+  }
+
+  /* Upload and import */
+  .builder-upload-page {
+    min-height: calc(100dvh - 74px);
+    padding: 30px 14px 48px;
+  }
+
+  .builder-upload-card {
+    width: 100%;
+  }
+
+  .builder-upload-card h1 {
+    font-size: clamp(2.1rem, 10vw, 3rem);
+    line-height: 1.12;
+  }
+
+  .builder-upload-card > p,
+  .builder-small-text {
+    font-size: 15px;
+  }
+
+  .builder-upload-card .upload-dropzone {
+    padding: 34px 16px;
+    border-radius: 18px;
+  }
+
+  .file-upload-button {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+  }
+
+  .resume-import-result {
+    padding: 18px 14px;
+  }
+
+  .import-success-heading {
+    align-items: flex-start;
+  }
+
+  .import-success-heading h2 {
+    font-size: 20px;
+  }
+
+  .import-file-summary {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .import-file-summary button {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 44px;
+    margin-left: 0;
+    border: 1px solid rgba(147, 197, 253, 0.24);
+    border-radius: 10px;
+  }
+
+  /* Editor */
+  .builder-editor-page {
+    display: block;
+    min-height: calc(100dvh - 74px);
+  }
+
+  .builder-editor-left {
+    width: 100%;
+    min-height: 0;
+    border-right: 0;
+  }
+
+  .builder-stepper {
+    position: sticky;
+    top: 0;
+    z-index: 8;
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+  }
+
+  .builder-stepper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .builder-step {
+    flex: 0 0 96px;
+    min-height: 56px;
+    padding: 14px 8px 17px;
+    font-size: 12px;
+  }
+
+  .builder-editor-panel {
+    width: 100%;
+    padding: 24px 16px;
+    overflow: visible;
+  }
+
+  .builder-editor-panel h1 {
+    font-size: clamp(1.8rem, 8vw, 2.2rem);
+  }
+
+  .builder-editor-panel input,
+  .builder-editor-panel textarea {
+    width: 100%;
+    min-width: 0;
+    font-size: 16px;
+  }
+
+  .builder-two-inputs,
+  .builder-extra-fields,
+  .summary-suggestions > div,
+  .additional-section-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .builder-repeat-card,
+  .suggested-skills-box {
+    padding: 15px;
+    border-radius: 14px;
+  }
+
+  .builder-collapsible summary {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 10px;
+    padding: 14px 12px;
+  }
+
+  .builder-skill-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .builder-skill-row .drag-handle {
+    display: none;
+  }
+
+  .builder-editor-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .builder-editor-toolbar button,
+  .builder-add-button {
+    min-height: 44px;
+  }
+
+  .builder-bottom-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 7;
+    gap: 10px;
+    padding: 14px 16px;
+    backdrop-filter: blur(16px);
+  }
+
+  .builder-editor-right {
+    order: 0;
+    width: 100%;
+    padding: 24px 12px 40px;
+    overflow: hidden;
+  }
+
+  .builder-preview-top {
+    margin-bottom: 16px;
+  }
+
+  /* Resume preview, shared by editor and final review */
+  .builder-editor-page .builder-preview-page,
+  .resume-review-page .builder-preview-page {
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "identity" "side" "main" !important;
+    padding: 18px !important;
+    border-right-width: 0;
+    border-left-width: 0;
+  }
+
+  .builder-preview-page .preview-identity {
+    min-width: 0;
+    align-items: flex-start;
+    padding: 18px 0 !important;
+  }
+
+  .builder-preview-page .preview-identity > div:last-child {
+    min-width: 0;
+  }
+
+  .builder-preview-page .preview-identity h2 {
+    font-size: clamp(1.35rem, 7vw, 1.9rem);
+    overflow-wrap: anywhere;
+  }
+
+  .builder-preview-page .preview-photo {
+    width: 54px;
+    height: 54px;
+    flex-basis: 54px;
+    font-size: 21px;
+  }
+
+  .builder-preview-page .builder-preview-side,
+  .builder-preview-page .builder-preview-main {
+    width: 100%;
+    min-width: 0;
+    padding: 18px 0 !important;
+  }
+
+  .builder-preview-page .builder-preview-side {
+    display: block !important;
+    background: transparent;
+  }
+
+  .builder-preview-page :is(p, li, strong, span) {
+    overflow-wrap: anywhere;
+  }
+
+  .preview-item-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .preview-item-heading span {
+    white-space: normal;
+  }
+
+  /* Final review */
+  .resume-review-header {
+    min-height: 0;
+    gap: 12px;
+    padding: 16px 14px;
+  }
+
+  .review-home-link {
+    min-height: 44px;
+    text-align: left;
+  }
+
+  .resume-review-header > span {
+    justify-self: start;
+  }
+
+  .review-download-area {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 48px;
+    gap: 10px;
+  }
+
+  .review-download-area .glow-button,
+  .review-download-area .outline-dark-button {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 46px;
+  }
+
+  .review-download-area .ghost-button {
+    grid-column: 2;
+    grid-row: 3;
+    width: 48px;
+    min-height: 44px;
+  }
+
+  .download-menu {
+    top: 100%;
+    right: 0;
+    width: min(240px, 100%);
+  }
+
+  .review-layout {
+    display: block;
+  }
+
+  .review-sidebar {
+    width: 100%;
+    min-height: 0;
+    padding: 22px 14px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+  }
+
+  .review-template-list {
+    display: flex;
+    gap: 9px;
+    width: 100%;
+    margin-bottom: 26px;
+    padding-bottom: 8px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+  }
+
+  .review-template-list .review-template {
+    width: auto;
+    min-width: max-content;
+    min-height: 44px;
+    margin: 0;
+  }
+
+  .review-sidebar input,
+  .review-sidebar textarea,
+  .review-sidebar .glow-button {
+    width: 100%;
+    min-width: 0;
+    font-size: 16px;
+  }
+
+  .review-preview-area {
+    width: 100%;
+    padding: 24px 12px 44px;
+    overflow: hidden;
+  }
+
+  .resume-file-name-editor,
+  .review-edit-hint {
+    width: 100%;
+  }
+
+  .resume-file-name-editor input {
+    width: 100% !important;
+    min-width: 0;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 430px) {
+  .builder-landing-page,
+  .builder-upload-page {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .template-page {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .builder-landing-left h1,
+  .template-header h1,
+  .builder-upload-card h1 {
+    font-size: 2.1rem;
+  }
+
+  .resume-mockup-card {
+    min-height: 390px;
+    padding: 18px;
+  }
+
+  .builder-step {
+    flex-basis: 86px;
+  }
+
+  .builder-editor-page .builder-preview-page,
+  .resume-review-page .builder-preview-page {
+    padding: 14px !important;
+  }
+
+  .builder-preview-page .preview-identity {
+    gap: 12px;
+  }
+
+  .template-pattern-group > header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+@media (max-width: 360px) {
+  .builder-landing-left h1,
+  .template-header h1,
+  .builder-upload-card h1 {
+    font-size: 1.85rem;
+  }
+
+  .builder-step {
+    flex-basis: 78px;
+    font-size: 11px;
+  }
+
+  .builder-editor-panel,
+  .review-sidebar {
+    padding-right: 11px;
+    padding-left: 11px;
+  }
+
+  .resume-mock-header {
+    gap: 12px;
+  }
+
+  .resume-mock-header div {
+    width: 54px;
+    height: 54px;
+  }
+}
