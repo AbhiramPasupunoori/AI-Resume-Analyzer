@@ -10,8 +10,10 @@ import * as store from "./lib/githubStore.js";
 export const config = { api: { bodyParser: false } };
 
 function send(response, status, body) {
-  if (status === 204) return response.status(204).end();
-  return response.status(status).json(body);
+  response.statusCode = status;
+  if (status === 204) return response.end();
+  response.setHeader("Content-Type", "application/json");
+  return response.end(JSON.stringify(body));
 }
 
 function summary(record, includeText = false) {
@@ -45,8 +47,16 @@ async function parseUpload(request) {
 }
 
 function pathParts(request) {
-  const value = request.query.path;
-  return (Array.isArray(value) ? value : String(value || "").split("/")).filter(Boolean);
+  const value = request.query?.path;
+  if (value) {
+    return (Array.isArray(value) ? value : String(value).split("/")).filter(Boolean);
+  }
+
+  const pathname = new URL(request.url || "/", "http://localhost").pathname;
+  return pathname
+    .replace(/^\/api(?:\/index)?\/?/, "")
+    .split("/")
+    .filter(Boolean);
 }
 
 async function readJsonBody(request) {
