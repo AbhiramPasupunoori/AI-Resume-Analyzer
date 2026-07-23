@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import ResumeTemplatePicker from "../../components/resume-builder/ResumeTemplatePicker";
@@ -22,10 +22,16 @@ const PATTERN_ORDER = [
   "Fresher",
 ];
 
+const MOBILE_TEMPLATES_PER_PAGE = 6;
+
 function TemplateSelectionPage() {
   const navigate = useNavigate();
   const categoryTabsRef = useRef(null);
   const [activeCategory, setActiveCategory] = useState("All templates");
+  const [isMobile, setIsMobile] = useState(
+    () => window.matchMedia("(max-width: 700px)").matches
+  );
+  const [mobilePage, setMobilePage] = useState(0);
 
   const visibleTemplates = useMemo(() => {
     if (activeCategory === "Recommended") {
@@ -49,6 +55,34 @@ function TemplateSelectionPage() {
       return first.name.localeCompare(second.name);
     });
   }, [activeCategory]);
+
+  const mobilePageCount = Math.max(
+    1,
+    Math.ceil(visibleTemplates.length / MOBILE_TEMPLATES_PER_PAGE)
+  );
+
+  const mobileTemplates = useMemo(() => {
+    const start = mobilePage * MOBILE_TEMPLATES_PER_PAGE;
+    return visibleTemplates.slice(start, start + MOBILE_TEMPLATES_PER_PAGE);
+  }, [mobilePage, visibleTemplates]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 700px)");
+    const handleChange = (event) => setIsMobile(event.matches);
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  useEffect(() => {
+    setMobilePage(0);
+  }, [activeCategory]);
+
+  useEffect(() => {
+    if (mobilePage >= mobilePageCount) {
+      setMobilePage(mobilePageCount - 1);
+    }
+  }, [mobilePage, mobilePageCount]);
 
   function chooseTemplate(templateId, color) {
     saveSelectedTemplate(templateId);
@@ -126,7 +160,44 @@ function TemplateSelectionPage() {
         <span>{activeCategory === "All templates" ? "templates available" : `${activeCategory} templates`}</span>
       </div>
 
-      {activeCategory === "All templates" ? (
+      {isMobile ? (
+        <>
+          <section className="template-grid template-mobile-grid" aria-live="polite">
+            {mobileTemplates.map((template) => (
+              <ResumeTemplatePicker
+                key={template.id}
+                template={template}
+                onSelect={chooseTemplate}
+              />
+            ))}
+            {visibleTemplates.length === 0 && (
+              <p className="template-no-results">No templates match your search.</p>
+            )}
+          </section>
+
+          {visibleTemplates.length > MOBILE_TEMPLATES_PER_PAGE && (
+            <nav className="template-mobile-pagination" aria-label="Template pages">
+              <button
+                type="button"
+                onClick={() => setMobilePage((page) => Math.max(0, page - 1))}
+                disabled={mobilePage === 0}
+              >
+                ← Previous
+              </button>
+              <span>
+                Page {mobilePage + 1} of {mobilePageCount}
+              </span>
+              <button
+                type="button"
+                onClick={() => setMobilePage((page) => Math.min(mobilePageCount - 1, page + 1))}
+                disabled={mobilePage === mobilePageCount - 1}
+              >
+                Next →
+              </button>
+            </nav>
+          )}
+        </>
+      ) : activeCategory === "All templates" ? (
         <div className="template-pattern-groups" aria-live="polite">
           {PATTERN_ORDER.map((pattern) => {
             const patternTemplates = visibleTemplates.filter((template) => template.category === pattern);
