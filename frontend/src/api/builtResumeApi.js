@@ -1,13 +1,13 @@
 import apiClient from "./client";
 
 export async function createBuiltResume(data) {
-  const response = await apiClient.post("/built-resumes/", data);
+  const response = await apiClient.post("/built-resumes", data);
   return response.data;
 }
 
 export async function prepareBuiltResumeAnalysis(id, data) {
   const response = await apiClient.post(
-    `/built-resumes/${id}/prepare-analysis/`,
+    `/built-resumes/${id}/prepare-analysis`,
     data
   );
 

@@ -5,7 +5,7 @@ export async function createJobDescription({
   companyName,
   description,
 }) {
-  const response = await apiClient.post("/job-descriptions/", {
+  const response = await apiClient.post("/job-descriptions", {
     job_title: jobTitle,
     company_name: companyName,
     description,
