@@ -27,12 +27,24 @@ async function parseUpload(request) {
   const [
     { default: formidable },
     { default: mammoth },
-    { PDFParse },
+    canvas,
   ] = await Promise.all([
     import("formidable"),
     import("mammoth"),
-    import("pdf-parse"),
+    import("@napi-rs/canvas"),
   ]);
+
+  // PDF.js expects these browser geometry APIs in its Node runtime. Importing
+  // the canvas package explicitly also makes Vercel include its native Linux
+  // binary when tracing this serverless function.
+  globalThis.DOMMatrix ??= canvas.DOMMatrix;
+  globalThis.ImageData ??= canvas.ImageData;
+  globalThis.Path2D ??= canvas.Path2D;
+
+  // Load PDF.js only after its Node polyfills have been installed. A static or
+  // concurrent import can evaluate PDF.js first and fail with "DOMMatrix is not
+  // defined" on Vercel.
+  const { PDFParse } = await import("pdf-parse");
   const [, files] = await formidable({ maxFileSize: 4 * 1024 * 1024, maxFiles: 1 }).parse(request);
   const fileValue = files.file;
   const file = Array.isArray(fileValue) ? fileValue[0] : fileValue;
