@@ -63,9 +63,7 @@ async function verifyPassword(password, user) {
 function validateRegistration({ name, email, password }) {
   if (name.length < 2 || name.length > 80) throw new AuthError("Name must be between 2 and 80 characters.", 400);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new AuthError("Enter a valid email address.", 400);
-  if (password.length < 8 || !/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/\d/.test(password)) {
-    throw new AuthError("Password must be at least 8 characters and include uppercase, lowercase, and a number.", 400);
-  }
+  if (password.length < 8) throw new AuthError("Password must be at least 8 characters.", 400);
 }
 
 export async function register(body) {

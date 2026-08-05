@@ -89,7 +89,7 @@ Local development supplies a development-only session secret automatically.
 ## Authentication
 
 - Registration requires a name, valid email, and a password containing at
-  least eight characters, uppercase, lowercase, and a number.
+  least eight characters in any combination.
 - Passwords are salted and hashed with Node.js `scrypt`; plaintext passwords
   are never stored.
 - Login sessions use signed, HTTP-only, `SameSite=Lax` cookies. Production

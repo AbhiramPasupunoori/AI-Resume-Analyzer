@@ -76,7 +76,7 @@ function AuthPage({ mode }) {
           </label>
           {isRegistration && (
             <>
-              <small>Use at least 8 characters with uppercase, lowercase and a number.</small>
+              <small>Use at least 8 characters in any combination.</small>
               <label>
                 Confirm password
                 <input name="confirmPassword" type="password" value={form.confirmPassword} onChange={updateField} autoComplete="new-password" required minLength="8" />
