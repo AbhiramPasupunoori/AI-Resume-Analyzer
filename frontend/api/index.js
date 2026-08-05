@@ -126,6 +126,13 @@ export default async function handler(request, response) {
       const user = await auth.currentUser(request);
       return send(response, 200, { user });
     }
+    if (parts[0] === "auth" && parts[1] === "change-password" && request.method === "PATCH") {
+      const currentUser = await auth.requireUser(request);
+      const user = await auth.changePassword(currentUser.id, request.body.current_password, request.body.new_password);
+      await auth.recordEvent(user, "password_change", request);
+      auth.setSession(response, user);
+      return send(response, 200, { message: "Password changed successfully.", user });
+    }
 
     const user = await auth.requireUser(request);
 

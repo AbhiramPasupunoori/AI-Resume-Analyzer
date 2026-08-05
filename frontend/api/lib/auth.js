@@ -141,12 +141,20 @@ export async function resetPassword(userId, password) {
   const user = await store.get("users", userId);
   if (!user) throw new AuthError("User not found.", 404);
   const salt = randomBytes(16).toString("hex");
-  await store.update("users", user.id, {
+  const updatedUser = await store.update("users", user.id, {
     password_salt: salt,
     password_hash: await passwordHash(value, salt),
     session_version: (user.session_version || 1) + 1,
   });
-  return publicUser(user);
+  return publicUser(updatedUser);
+}
+
+export async function changePassword(userId, currentPassword, newPassword) {
+  const user = await store.get("users", userId);
+  if (!user || !(await verifyPassword(String(currentPassword || ""), user))) {
+    throw new AuthError("Current password is incorrect.", 400);
+  }
+  return resetPassword(user.id, newPassword);
 }
 
 export function setSession(response, user) {
