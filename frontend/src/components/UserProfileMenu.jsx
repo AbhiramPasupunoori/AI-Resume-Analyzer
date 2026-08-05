@@ -60,6 +60,11 @@ function UserProfileMenu() {
             <span>{user.email}</span>
           </div>
           <button type="button" role="menuitem" onClick={handleHistory}>History</button>
+          {user.is_admin && (
+            <button type="button" role="menuitem" onClick={() => { setOpen(false); navigate("/admin"); }}>
+              Admin Dashboard
+            </button>
+          )}
           <button type="button" role="menuitem" onClick={handleLogout}>Log Out</button>
         </div>
       )}

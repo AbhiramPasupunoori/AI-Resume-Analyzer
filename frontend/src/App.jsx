@@ -10,6 +10,8 @@ import HistoryPage from "./pages/HistoryPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import AuthPage from "./pages/AuthPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
+import AdminPage from "./pages/AdminPage";
 
 import ResumeBuilderLandingPage from "./pages/resume-builder/ResumeBuilderLandingPage";
 import TemplateSelectionPage from "./pages/resume-builder/TemplateSelectionPage";
@@ -38,6 +40,9 @@ function App() {
 
             <Route path="/results/:id" element={<ResultsPage />} />
             <Route path="/history" element={<HistoryPage />} />
+            <Route element={<AdminRoute />}>
+              <Route path="/admin" element={<AdminPage />} />
+            </Route>
           </Route>
 
           <Route path="*" element={<NotFoundPage />} />
