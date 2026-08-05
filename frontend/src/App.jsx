@@ -8,6 +8,8 @@ import AnalyzePage from "./pages/AnalyzePage";
 import ResultsPage from "./pages/ResultsPage";
 import HistoryPage from "./pages/HistoryPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import AuthPage from "./pages/AuthPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import ResumeBuilderLandingPage from "./pages/resume-builder/ResumeBuilderLandingPage";
 import TemplateSelectionPage from "./pages/resume-builder/TemplateSelectionPage";
@@ -21,30 +23,22 @@ function App() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<AuthPage mode="login" />} />
+          <Route path="/register" element={<AuthPage mode="register" />} />
 
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/analyze" element={<AnalyzePage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/analyze" element={<AnalyzePage />} />
 
-          <Route path="/resume-builder" element={<ResumeBuilderLandingPage />} />
-          <Route
-            path="/resume-builder/templates"
-            element={<TemplateSelectionPage />}
-          />
-          <Route
-            path="/resume-builder/upload"
-            element={<ResumeBuilderUploadPage />}
-          />
-          <Route
-            path="/resume-builder/edit"
-            element={<ResumeBuilderEditPage />}
-          />
-          <Route
-            path="/resume-builder/review"
-            element={<ResumeReviewPage />}
-          />
+            <Route path="/resume-builder" element={<ResumeBuilderLandingPage />} />
+            <Route path="/resume-builder/templates" element={<TemplateSelectionPage />} />
+            <Route path="/resume-builder/upload" element={<ResumeBuilderUploadPage />} />
+            <Route path="/resume-builder/edit" element={<ResumeBuilderEditPage />} />
+            <Route path="/resume-builder/review" element={<ResumeReviewPage />} />
 
-          <Route path="/results/:id" element={<ResultsPage />} />
-          <Route path="/history" element={<HistoryPage />} />
+            <Route path="/results/:id" element={<ResultsPage />} />
+            <Route path="/history" element={<HistoryPage />} />
+          </Route>
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>

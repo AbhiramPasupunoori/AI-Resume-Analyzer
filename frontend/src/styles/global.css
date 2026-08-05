@@ -3110,6 +3110,124 @@ textarea:focus {
   }
 }
 
+/* Authentication */
+.auth-page,
+.auth-loading-page {
+  min-height: calc(100dvh - 74px);
+  display: grid;
+  place-items: center;
+  padding: 54px 20px;
+}
+
+.auth-card {
+  width: min(100%, 540px);
+  padding: clamp(26px, 5vw, 44px);
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 28px;
+  box-shadow: var(--shadow-glow);
+  backdrop-filter: blur(20px);
+}
+
+.auth-card-copy h1 {
+  margin: 18px 0 10px;
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: -1px;
+}
+
+.auth-card-copy p,
+.auth-switch,
+.auth-form small {
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.auth-form {
+  display: grid;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.auth-form label {
+  display: grid;
+  gap: 8px;
+  font-weight: 800;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 14px 15px;
+  color: var(--text-main);
+  background: rgba(15, 23, 42, 0.62);
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  font: inherit;
+}
+
+.auth-form input:focus {
+  outline: 2px solid rgba(96, 165, 250, 0.72);
+  outline-offset: 2px;
+}
+
+.auth-form .glow-button {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.auth-switch {
+  margin: 24px 0 0;
+  text-align: center;
+}
+
+.auth-switch a {
+  color: #93c5fd;
+  font-weight: 900;
+}
+
+.nav-auth-button,
+.nav-user button {
+  padding: 10px 15px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border: 0;
+  border-radius: 11px;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.nav-user span {
+  max-width: 130px;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:root[data-theme="light"] .auth-form input {
+  color: #172033;
+  background: rgba(255, 255, 255, 0.86);
+}
+
+@media (max-width: 700px) {
+  .auth-page {
+    align-items: start;
+    padding: 28px 14px 44px;
+  }
+
+  .nav-user span {
+    display: none;
+  }
+}
+
 /* =========================================================
    17. RESUME BUILDER VIEW
    Updated: BetterCV-style flow with your dark blue/purple theme
