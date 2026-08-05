@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/authContext";
 
@@ -32,6 +32,11 @@ function UserProfileMenu() {
     navigate("/");
   }
 
+  function handleHistory() {
+    setOpen(false);
+    navigate("/history");
+  }
+
   return (
     <div className="profile-menu" ref={menuRef}>
       <button
@@ -54,7 +59,7 @@ function UserProfileMenu() {
             <strong>{user.name}</strong>
             <span>{user.email}</span>
           </div>
-          <Link to="/history" role="menuitem" onClick={() => setOpen(false)}>History</Link>
+          <button type="button" role="menuitem" onClick={handleHistory}>History</button>
           <button type="button" role="menuitem" onClick={handleLogout}>Log Out</button>
         </div>
       )}
