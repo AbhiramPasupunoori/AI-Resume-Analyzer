@@ -22,6 +22,7 @@ data/job-descriptions.json
 data/analyses.json
 data/built-resumes.json
 data/users.json
+data/auth-events.json
 ```
 
 PDF and DOCX files are parsed inside the Vercel function. The original binary
@@ -40,6 +41,7 @@ GITHUB_REPOSITORY=owner/AI-Resume-Analyzer
 GITHUB_BRANCH=main
 GITHUB_DATA_PATH=data
 AUTH_SECRET=a-random-secret-with-at-least-32-characters
+ADMIN_EMAILS=your-admin-email@example.com
 ```
 
 Important:
@@ -55,6 +57,8 @@ Important:
   GitHub JSON store with a managed authentication service and database.
 - `AUTH_SECRET` signs the HTTP-only login cookie. Generate a unique random value,
   keep it only in Vercel, and never use a `VITE_` prefix.
+- `ADMIN_EMAILS` is a comma-separated allowlist. Only accounts whose normalized
+  email appears in this server-side value receive administrator privileges.
 - Since data is committed to the application repository, GitHub may notify
   Vercel after every write. Commit messages include `[skip vercel]`, but configure
   Vercel's Ignored Build Step if your Git integration still starts data-only
@@ -98,6 +102,26 @@ Local development supplies a development-only session secret automatically.
   login. API records are assigned to the current user and filtered by owner.
 - Browser-saved builder drafts, template choices, progress, and edited-resume
   history are namespaced by user so accounts sharing one device remain isolated.
+
+## Administrator account
+
+1. Register the intended administrator account before sharing the deployment.
+2. Add its exact email to the Vercel Production variable `ADMIN_EMAILS`. Multiple
+   administrator emails can be separated with commas.
+3. Redeploy, then log out and back in so the refreshed account response includes
+   administrator status.
+4. Open the profile dropdown and select **Admin Dashboard**.
+
+The administrator dashboard can view registered user identity, resume and
+analysis history, and successful registration/login/logout records. Passwords
+are never visible. An administrator can set a new password of at least eight
+characters; doing so invalidates that user's existing sessions. Admin access is
+checked by the server for every request, so hiding or manually opening the route
+cannot bypass authorization.
+
+Register the administrator account before publishing the link because this app
+does not currently verify email ownership. Treat `ADMIN_EMAILS` and
+`AUTH_SECRET` as production secrets and keep the GitHub data repository private.
 
 ## API storage behavior
 
