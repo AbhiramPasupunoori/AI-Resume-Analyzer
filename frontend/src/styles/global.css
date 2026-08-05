@@ -3387,6 +3387,11 @@ textarea:focus {
   font-weight: 900;
 }
 
+.auth-link-divider {
+  margin: 0 10px;
+  color: var(--text-muted);
+}
+
 .password-success {
   margin-top: 20px;
   padding: 14px 16px;

@@ -28,6 +28,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<AuthPage mode="login" />} />
           <Route path="/register" element={<AuthPage mode="register" />} />
+          <Route path="/change-password" element={<ChangePasswordPage />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardPage />} />
@@ -41,7 +42,6 @@ function App() {
 
             <Route path="/results/:id" element={<ResultsPage />} />
             <Route path="/history" element={<HistoryPage />} />
-            <Route path="/change-password" element={<ChangePasswordPage />} />
             <Route element={<AdminRoute />}>
               <Route path="/admin" element={<AdminPage />} />
             </Route>

@@ -26,3 +26,12 @@ export async function changeAccountPassword(currentPassword, newPassword) {
   });
   return response.data;
 }
+
+export async function changePasswordWithCredentials(email, currentPassword, newPassword) {
+  const response = await apiClient.patch("/auth/change-password-with-credentials", {
+    email,
+    current_password: currentPassword,
+    new_password: newPassword,
+  });
+  return response.data;
+}

@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { changeAccountPassword } from "../api/authApi";
+import { changeAccountPassword, changePasswordWithCredentials } from "../api/authApi";
 import ErrorMessage from "../components/ErrorMessage";
+import { useAuth } from "../context/authContext";
 import { getErrorMessage } from "../utils/errorUtils";
 
 function ChangePasswordPage() {
+  const { user } = useAuth();
+  const [email, setEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -24,7 +27,10 @@ function ChangePasswordPage() {
 
     try {
       setSubmitting(true);
-      const response = await changeAccountPassword(currentPassword, newPassword);
+      const response = user
+        ? await changeAccountPassword(currentPassword, newPassword)
+        : await changePasswordWithCredentials(email, currentPassword, newPassword);
+      setEmail("");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -49,6 +55,12 @@ function ChangePasswordPage() {
         {success && <div className="password-success" role="status">{success}</div>}
 
         <form className="auth-form" onSubmit={handleSubmit}>
+          {!user && (
+            <label>
+              Email address
+              <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" required />
+            </label>
+          )}
           <label>
             Current password
             <input type="password" value={currentPassword} onChange={(event) => setCurrentPassword(event.target.value)} autoComplete="current-password" required />
@@ -67,7 +79,9 @@ function ChangePasswordPage() {
           </button>
         </form>
 
-        <p className="auth-switch"><Link to="/dashboard">Return to Dashboard</Link></p>
+        <p className="auth-switch">
+          <Link to={user ? "/dashboard" : "/login"}>{user ? "Return to Dashboard" : "Return to Login"}</Link>
+        </p>
       </section>
     </main>
   );

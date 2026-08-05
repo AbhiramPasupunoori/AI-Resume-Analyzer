@@ -93,6 +93,12 @@ function AuthPage({ mode }) {
           <Link to={isRegistration ? "/login" : "/register"} state={location.state}>
             {isRegistration ? "Log in" : "Create an account"}
           </Link>
+          {!isRegistration && (
+            <>
+              <span className="auth-link-divider" aria-hidden="true">|</span>
+              <Link to="/change-password">Change password</Link>
+            </>
+          )}
         </p>
       </section>
     </main>

@@ -157,6 +157,14 @@ export async function changePassword(userId, currentPassword, newPassword) {
   return resetPassword(user.id, newPassword);
 }
 
+export async function changePasswordWithCredentials(email, currentPassword, newPassword) {
+  const user = await store.findBy("users", "email", String(email || "").trim().toLowerCase());
+  if (!user || !(await verifyPassword(String(currentPassword || ""), user))) {
+    throw new AuthError("Email or current password is incorrect.", 400);
+  }
+  return resetPassword(user.id, newPassword);
+}
+
 export function setSession(response, user) {
   const payload = encode({ userId: user.id, sessionVersion: user.session_version || 1, expiresAt: Date.now() + SESSION_SECONDS * 1000 });
   const token = `${payload}.${sign(payload)}`;
