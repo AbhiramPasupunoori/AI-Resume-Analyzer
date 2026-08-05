@@ -37,5 +37,17 @@
     ],
     "created_at": "2026-08-05T06:53:27.438Z",
     "updated_at": "2026-08-05T06:53:27.438Z"
+  },
+  {
+    "id": 4,
+    "job_title": "QA engineer",
+    "company_name": "kopensoft",
+    "description": "We are hiring for QA Engineer role, if interested for the role below please share updated resume to tarannum.k@incedoinc.com.\n\nExperience: 7- 13 Years\nWork Location: Hyderabad\nCurrent CTC:\nExpected CTC:\nNotice Period:\nAvailable for F2F interview on 8th Aug 2026- Yes/No\n\nImmediate joiners or candidates serving a notice period of up to 30 days\nStrong experience in Quality Assurance, Automation Testing, and Test Leadership\nMandatory Skills\nPlaywright Automation\nAWS (Amazon Web Services)\nJava Coding\nSelenium Automation\nAI Testing Tools / AI-assisted Testing\nAPI Testing\nCI/CD Integration\nGood communication skills\n\nRegards,\nTarannum\n\nRole: IT Consulting - Other\nIndustry Type: IT Services & Consulting\nDepartment: Consulting\nEmployment Type: Full Time, Permanent\nRole Category: IT Consulting\nEducation\nUG: Any Graduate\nKey Skills\nSkills highlighted with ‘‘ are preferred keyskills\nTest Automation FrameworkAutomation TestingawsPlaywright Automation\nCi/Cd",
+    "required_skills": [
+      "AWS",
+      "Java"
+    ],
+    "created_at": "2026-08-05T07:09:10.321Z",
+    "updated_at": "2026-08-05T07:09:10.321Z"
   }
 ]
