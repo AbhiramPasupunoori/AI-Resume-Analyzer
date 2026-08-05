@@ -3194,6 +3194,31 @@ textarea:focus {
   font: inherit;
   font-weight: 900;
   cursor: pointer;
+  box-shadow: 0 8px 22px rgba(99, 102, 241, 0.2);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    filter 0.22s ease;
+}
+
+.nav-auth-button:hover,
+.nav-user button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.12);
+  box-shadow:
+    0 13px 30px rgba(59, 130, 246, 0.32),
+    0 0 22px rgba(139, 92, 246, 0.34);
+}
+
+.nav-auth-button:focus-visible,
+.nav-user button:focus-visible {
+  outline: 2px solid #bfdbfe;
+  outline-offset: 3px;
+}
+
+.nav-auth-button:active,
+.nav-user button:active {
+  transform: translateY(0);
 }
 
 .nav-user {
@@ -3225,6 +3250,18 @@ textarea:focus {
 
   .nav-user span {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-auth-button,
+  .nav-user button {
+    transition: none;
+  }
+
+  .nav-auth-button:hover,
+  .nav-user button:hover {
+    transform: none;
   }
 }
 
