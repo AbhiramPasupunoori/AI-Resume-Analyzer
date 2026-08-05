@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "name": "Varun",
+    "email": "sontivarun19@gmail.com",
+    "password_salt": "6dd0e4339a08d9b40b8d8babea3856b1",
+    "password_hash": "76f854922474437f3133d7ab16fc63ff03175f478b6d4c79091bc4f54decbb56abadc223c63883f34fdf1409f071987e8c7f6a1f53fef6f4f8f49f68915af3f8",
+    "session_version": 1,
+    "created_at": "2026-08-05T08:18:59.999Z",
+    "updated_at": "2026-08-05T08:18:59.999Z"
+  }
+]
