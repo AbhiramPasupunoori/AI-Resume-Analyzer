@@ -18,3 +18,20 @@ export async function getCurrentUser() {
 export async function logoutAccount() {
   await apiClient.post("/auth/logout");
 }
+
+export async function changeAccountPassword(currentPassword, newPassword) {
+  const response = await apiClient.patch("/auth/change-password", {
+    current_password: currentPassword,
+    new_password: newPassword,
+  });
+  return response.data;
+}
+
+export async function changePasswordWithCredentials(email, currentPassword, newPassword) {
+  const response = await apiClient.patch("/auth/change-password-with-credentials", {
+    email,
+    current_password: currentPassword,
+    new_password: newPassword,
+  });
+  return response.data;
+}

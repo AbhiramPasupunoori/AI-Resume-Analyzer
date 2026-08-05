@@ -12,6 +12,7 @@ import AuthPage from "./pages/AuthPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import AdminPage from "./pages/AdminPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 
 import ResumeBuilderLandingPage from "./pages/resume-builder/ResumeBuilderLandingPage";
 import TemplateSelectionPage from "./pages/resume-builder/TemplateSelectionPage";
@@ -27,6 +28,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<AuthPage mode="login" />} />
           <Route path="/register" element={<AuthPage mode="register" />} />
+          <Route path="/change-password" element={<ChangePasswordPage />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<DashboardPage />} />

@@ -37,6 +37,11 @@ function UserProfileMenu() {
     navigate("/history");
   }
 
+  function handleChangePassword() {
+    setOpen(false);
+    navigate("/change-password");
+  }
+
   return (
     <div className="profile-menu" ref={menuRef}>
       <button
@@ -59,6 +64,7 @@ function UserProfileMenu() {
             <strong>{user.name}</strong>
             <span>{user.email}</span>
           </div>
+          <button type="button" role="menuitem" onClick={handleChangePassword}>Change Password</button>
           <button type="button" role="menuitem" onClick={handleHistory}>History</button>
           {user.is_admin && (
             <button type="button" role="menuitem" onClick={() => { setOpen(false); navigate("/admin"); }}>
