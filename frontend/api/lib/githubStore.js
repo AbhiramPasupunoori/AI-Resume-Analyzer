@@ -107,6 +107,11 @@ export async function get(collection, id) {
   return records.find((record) => record.id === Number(id)) || null;
 }
 
+export async function findBy(collection, field, value) {
+  const { records } = await readCollection(collection);
+  return records.find((record) => record[field] === value) || null;
+}
+
 export async function create(collection, values) {
   return mutate(collection, (records) => {
     const now = new Date().toISOString();
@@ -115,6 +120,15 @@ export async function create(collection, values) {
     records.push(record);
     return record;
   }, `data: add ${collection}`);
+}
+
+export async function update(collection, id, values) {
+  return mutate(collection, (records) => {
+    const index = records.findIndex((record) => record.id === Number(id));
+    if (index < 0) return null;
+    records[index] = { ...records[index], ...values, id: records[index].id, updated_at: new Date().toISOString() };
+    return records[index];
+  }, `data: update ${collection}`);
 }
 
 export async function remove(collection, id) {

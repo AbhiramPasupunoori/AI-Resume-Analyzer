@@ -1,9 +1,12 @@
 import { NavLink, useLocation } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
+import UserProfileMenu from "./UserProfileMenu";
 import { loadLastBuilderRoute } from "../utils/resumeBuilderStorage";
+import { useAuth } from "../context/authContext";
 
 function Navbar() {
   const { pathname } = useLocation();
+  const { user, loading } = useAuth();
   const assetBase = import.meta.env.BASE_URL;
   const resumeBuilderPath = pathname.startsWith("/resume-builder")
     ? pathname
@@ -37,41 +40,48 @@ function Navbar() {
           Home
         </NavLink>
 
-        <NavLink
-          to="/dashboard"
-          className={({ isActive }) =>
-            isActive ? "nav-link active-nav-link" : "nav-link"
-          }
-        >
-          Dashboard
-        </NavLink>
+        {user && (
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              isActive ? "nav-link active-nav-link" : "nav-link"
+            }
+          >
+            Dashboard
+          </NavLink>
+        )}
 
-        <NavLink
-          to="/analyze"
-          className={({ isActive }) =>
-            isActive ? "nav-link active-nav-link" : "nav-link"
-          }
-        >
-          Analyze
-        </NavLink>
+        {user && (
+          <NavLink
+            to="/analyze"
+            className={({ isActive }) =>
+              isActive ? "nav-link active-nav-link" : "nav-link"
+            }
+          >
+            Analyze
+          </NavLink>
+        )}
 
-        <NavLink
-          to={resumeBuilderPath}
-          className={({ isActive }) =>
-            isActive ? "nav-link active-nav-link" : "nav-link"
-          }
-        >
-          Resume Builder
-        </NavLink>
+        {user && (
+          <NavLink
+            to={resumeBuilderPath}
+            className={({ isActive }) =>
+              isActive ? "nav-link active-nav-link" : "nav-link"
+            }
+          >
+            Resume Builder
+          </NavLink>
+        )}
 
-        <NavLink
-          to="/history"
-          className={({ isActive }) =>
-            isActive ? "nav-link active-nav-link" : "nav-link"
-          }
-        >
-          History
-        </NavLink>
+        {!loading && !user && (
+          <NavLink to="/login" className="nav-auth-button">
+            Login/Register
+          </NavLink>
+        )}
+
+        {user && (
+          <UserProfileMenu />
+        )}
 
         <ThemeToggle />
       </div>
