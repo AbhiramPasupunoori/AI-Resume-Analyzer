@@ -96,6 +96,8 @@ Local development supplies a development-only session secret automatically.
   cookies are also marked `Secure` and expire after seven days.
 - Dashboard, analysis, results, history, and all resume-builder routes require
   login. API records are assigned to the current user and filtered by owner.
+- Browser-saved builder drafts, template choices, progress, and edited-resume
+  history are namespaced by user so accounts sharing one device remain isolated.
 
 ## API storage behavior
 

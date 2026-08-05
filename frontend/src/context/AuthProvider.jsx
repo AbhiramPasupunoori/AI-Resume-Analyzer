@@ -7,6 +7,7 @@ import {
   registerAccount,
 } from "../api/authApi";
 import { AuthContext } from "./authContext";
+import { setResumeStorageUser } from "../utils/resumeBuilderStorage";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -16,10 +17,16 @@ export function AuthProvider({ children }) {
     let active = true;
     getCurrentUser()
       .then((currentUser) => {
-        if (active) setUser(currentUser);
+        if (active) {
+          setResumeStorageUser(currentUser?.id);
+          setUser(currentUser);
+        }
       })
       .catch(() => {
-        if (active) setUser(null);
+        if (active) {
+          setResumeStorageUser(null);
+          setUser(null);
+        }
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -35,16 +42,19 @@ export function AuthProvider({ children }) {
       loading,
       async login(credentials) {
         const authenticatedUser = await loginAccount(credentials);
+        setResumeStorageUser(authenticatedUser.id);
         setUser(authenticatedUser);
         return authenticatedUser;
       },
       async register(details) {
         const authenticatedUser = await registerAccount(details);
+        setResumeStorageUser(authenticatedUser.id);
         setUser(authenticatedUser);
         return authenticatedUser;
       },
       async logout() {
         await logoutAccount();
+        setResumeStorageUser(null);
         setUser(null);
       },
     }),
