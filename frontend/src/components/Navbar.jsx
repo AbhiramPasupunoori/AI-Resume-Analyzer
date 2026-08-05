@@ -73,17 +73,6 @@ function Navbar() {
           </NavLink>
         )}
 
-        {user && (
-          <NavLink
-            to="/history"
-            className={({ isActive }) =>
-              isActive ? "nav-link active-nav-link" : "nav-link"
-            }
-          >
-            History
-          </NavLink>
-        )}
-
         {!loading && !user && (
           <NavLink to="/login" className="nav-auth-button">
             Login/Register
