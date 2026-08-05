@@ -21,6 +21,7 @@ data/resumes.json
 data/job-descriptions.json
 data/analyses.json
 data/built-resumes.json
+data/users.json
 ```
 
 PDF and DOCX files are parsed inside the Vercel function. The original binary
@@ -38,6 +39,7 @@ GITHUB_TOKEN=github_pat_...
 GITHUB_REPOSITORY=owner/AI-Resume-Analyzer
 GITHUB_BRANCH=main
 GITHUB_DATA_PATH=data
+AUTH_SECRET=a-random-secret-with-at-least-32-characters
 ```
 
 Important:
@@ -47,6 +49,12 @@ Important:
 - The target branch must exist and allow the token owner to commit.
 - Resume text remains in Git history even after a JSON record is deleted.
   Do not use a public repository for real resumes.
+- Registered users are stored with salted `scrypt` password hashes. The data
+  repository must be private; a public repository would expose password hashes
+  to offline attacks. For a public or higher-traffic application, replace the
+  GitHub JSON store with a managed authentication service and database.
+- `AUTH_SECRET` signs the HTTP-only login cookie. Generate a unique random value,
+  keep it only in Vercel, and never use a `VITE_` prefix.
 - Since data is committed to the application repository, GitHub may notify
   Vercel after every write. Commit messages include `[skip vercel]`, but configure
   Vercel's Ignored Build Step if your Git integration still starts data-only
@@ -61,6 +69,9 @@ the catch-all `/api/*` JavaScript Function.
 No `VITE_API_BASE_URL` is required in production because the frontend and API
 share the same origin.
 
+After adding or changing `AUTH_SECRET`, redeploy the project. Existing sessions
+become invalid whenever this value changes, which is expected.
+
 ## Local development
 
 Requirements: Node.js 22.12+.
@@ -73,6 +84,18 @@ npm run dev
 Vite runs both the frontend and a local adapter for the Vercel API function.
 During local development, records are written directly to `data/*.json`; no
 GitHub token is required. On Vercel, the API commits those files through GitHub.
+Local development supplies a development-only session secret automatically.
+
+## Authentication
+
+- Registration requires a name, valid email, and a password containing at
+  least eight characters, uppercase, lowercase, and a number.
+- Passwords are salted and hashed with Node.js `scrypt`; plaintext passwords
+  are never stored.
+- Login sessions use signed, HTTP-only, `SameSite=Lax` cookies. Production
+  cookies are also marked `Secure` and expire after seven days.
+- Dashboard, analysis, results, history, and all resume-builder routes require
+  login. API records are assigned to the current user and filtered by owner.
 
 ## API storage behavior
 
