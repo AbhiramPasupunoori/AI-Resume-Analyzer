@@ -107,6 +107,11 @@ export async function get(collection, id) {
   return records.find((record) => record.id === Number(id)) || null;
 }
 
+export async function findBy(collection, field, value) {
+  const { records } = await readCollection(collection);
+  return records.find((record) => record[field] === value) || null;
+}
+
 export async function create(collection, values) {
   return mutate(collection, (records) => {
     const now = new Date().toISOString();
