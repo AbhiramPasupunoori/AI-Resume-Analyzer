@@ -1,12 +1,12 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
+import UserProfileMenu from "./UserProfileMenu";
 import { loadLastBuilderRoute } from "../utils/resumeBuilderStorage";
 import { useAuth } from "../context/authContext";
 
 function Navbar() {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const { user, loading, logout } = useAuth();
+  const { user, loading } = useAuth();
   const assetBase = import.meta.env.BASE_URL;
   const resumeBuilderPath = pathname.startsWith("/resume-builder")
     ? pathname
@@ -91,18 +91,7 @@ function Navbar() {
         )}
 
         {user && (
-          <div className="nav-user">
-            <span title={user.email}>{user.name}</span>
-            <button
-              type="button"
-              onClick={async () => {
-                await logout();
-                navigate("/");
-              }}
-            >
-              Log Out
-            </button>
-          </div>
+          <UserProfileMenu />
         )}
 
         <ThemeToggle />

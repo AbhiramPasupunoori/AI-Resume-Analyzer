@@ -3237,6 +3237,142 @@ textarea:focus {
   white-space: nowrap;
 }
 
+.profile-menu {
+  position: relative;
+}
+
+.profile-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 4px;
+  color: var(--text-main);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 50%;
+  box-shadow: 0 8px 22px rgba(99, 102, 241, 0.28);
+  font-weight: 900;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.profile-menu-trigger:hover .profile-avatar {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(99, 102, 241, 0.42);
+}
+
+.profile-menu-trigger:focus-visible {
+  outline: 2px solid #93c5fd;
+  outline-offset: 3px;
+}
+
+.profile-caret {
+  width: 0;
+  height: 0;
+  border-top: 6px solid var(--text-muted);
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 15px);
+  right: 0;
+  z-index: 50;
+  width: min(280px, calc(100vw - 28px));
+  overflow: visible;
+  color: var(--text-main);
+  background: #111827;
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.42);
+}
+
+.profile-dropdown::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  right: 21px;
+  width: 12px;
+  height: 12px;
+  background: #111827;
+  border-top: 1px solid var(--border-soft);
+  border-left: 1px solid var(--border-soft);
+  transform: rotate(45deg);
+}
+
+.profile-identity {
+  display: grid;
+  gap: 4px;
+  padding: 18px 17px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.profile-identity span {
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-dropdown > a,
+.profile-dropdown > button {
+  position: relative;
+  width: 100%;
+  display: block;
+  padding: 15px 17px;
+  color: var(--text-main);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--border-soft);
+  border-radius: 0;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    color 0.18s ease,
+    background 0.18s ease;
+}
+
+.profile-dropdown > :last-child {
+  border-bottom: 0;
+}
+
+.profile-dropdown > a:hover,
+.profile-dropdown > button:hover,
+.profile-dropdown > a:focus-visible,
+.profile-dropdown > button:focus-visible {
+  color: #bfdbfe;
+  background: rgba(59, 130, 246, 0.13);
+  outline: none;
+}
+
+:root[data-theme="light"] .profile-dropdown,
+:root[data-theme="light"] .profile-dropdown::before {
+  color: #263244;
+  background: #fff;
+}
+
+:root[data-theme="light"] .profile-dropdown > a,
+:root[data-theme="light"] .profile-dropdown > button {
+  color: #263244;
+}
+
 :root[data-theme="light"] .auth-form input {
   color: #172033;
   background: rgba(255, 255, 255, 0.86);
