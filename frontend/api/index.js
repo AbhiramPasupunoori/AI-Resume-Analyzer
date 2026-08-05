@@ -41,6 +41,11 @@ async function parseUpload(request) {
   globalThis.ImageData ??= canvas.ImageData;
   globalThis.Path2D ??= canvas.Path2D;
 
+  // Preload the worker through a literal import so Vercel traces and bundles
+  // it. PDF.js otherwise tries to resolve a relative pdf.worker.mjs at runtime,
+  // but that file is omitted from the serverless function output.
+  await import("pdfjs-dist/legacy/build/pdf.worker.mjs");
+
   // Load PDF.js only after its Node polyfills have been installed. A static or
   // concurrent import can evaluate PDF.js first and fail with "DOMMatrix is not
   // defined" on Vercel.
