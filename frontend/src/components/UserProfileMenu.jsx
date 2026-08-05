@@ -54,10 +54,7 @@ function UserProfileMenu() {
             <strong>{user.name}</strong>
             <span>{user.email}</span>
           </div>
-          <Link to="/dashboard" role="menuitem" onClick={() => setOpen(false)}>Dashboard</Link>
           <Link to="/history" role="menuitem" onClick={() => setOpen(false)}>History</Link>
-          <Link to="/resume-builder" role="menuitem" onClick={() => setOpen(false)}>Resume Builder</Link>
-          <a href="mailto:" role="menuitem">Help &amp; Contact</a>
           <button type="button" role="menuitem" onClick={handleLogout}>Log Out</button>
         </div>
       )}
