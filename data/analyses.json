@@ -347,5 +347,131 @@
     },
     "created_at": "2026-08-05T06:53:27.446Z",
     "updated_at": "2026-08-05T06:53:27.446Z"
+  },
+  {
+    "id": 4,
+    "status": "completed",
+    "overall_score": 50.09,
+    "skill_score": 22.5,
+    "semantic_score": 7.59,
+    "section_score": 15,
+    "achievement_score": 0,
+    "readability_score": 5,
+    "semantic_similarity": 30.38,
+    "skill_coverage_percentage": 50,
+    "resume_skills": [
+      "CSS",
+      "Django",
+      "GitHub",
+      "HTML",
+      "Java",
+      "JavaScript",
+      "MongoDB",
+      "MySQL",
+      "Node.js",
+      "Python",
+      "React"
+    ],
+    "job_skills": [
+      "AWS",
+      "Java"
+    ],
+    "matched_skills": [
+      "Java"
+    ],
+    "missing_skills": [
+      "AWS"
+    ],
+    "section_results": {
+      "present_sections": [
+        "Summary",
+        "Skills",
+        "Experience",
+        "Education",
+        "Projects",
+        "Certifications"
+      ],
+      "missing_sections": [],
+      "present_count": 6,
+      "total_sections": 6,
+      "completeness_percentage": 100
+    },
+    "achievement_results": {
+      "quantified_achievements": 0,
+      "score": 0
+    },
+    "readability_results": {
+      "average_sentence_words": 20.64,
+      "score": 5
+    },
+    "recommendations": [
+      "Add evidence of AWS experience where it is accurate.",
+      "Quantify achievements with measurable outcomes."
+    ],
+    "error_message": "",
+    "analysis_time_ms": 1,
+    "score_breakdown": {
+      "skill": {
+        "score": 22.5,
+        "maximum": 45
+      },
+      "semantic": {
+        "score": 7.59,
+        "maximum": 25
+      },
+      "sections": {
+        "score": 15,
+        "maximum": 15
+      },
+      "achievements": {
+        "score": 0,
+        "maximum": 10
+      },
+      "readability": {
+        "score": 5,
+        "maximum": 5
+      },
+      "overall": {
+        "score": 50.09,
+        "maximum": 100
+      }
+    },
+    "resume_id": 4,
+    "job_description_id": 4,
+    "resume": {
+      "id": 4,
+      "original_filename": "Abhi's Resume.pdf",
+      "file_type": "pdf",
+      "file_size": 78443,
+      "text_extracted": true,
+      "word_count": 676,
+      "character_count": 4915,
+      "detected_skills": [
+        "CSS",
+        "Django",
+        "GitHub",
+        "HTML",
+        "Java",
+        "JavaScript",
+        "MongoDB",
+        "MySQL",
+        "Node.js",
+        "Python",
+        "React"
+      ],
+      "created_at": "2026-08-05T07:09:08.928Z"
+    },
+    "job_description": {
+      "id": 4,
+      "job_title": "QA engineer",
+      "company_name": "kopensoft",
+      "required_skills": [
+        "AWS",
+        "Java"
+      ],
+      "created_at": "2026-08-05T07:09:10.321Z"
+    },
+    "created_at": "2026-08-05T07:09:11.671Z",
+    "updated_at": "2026-08-05T07:09:11.671Z"
   }
 ]
