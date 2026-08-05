@@ -46,8 +46,29 @@ function cookies(request) {
   );
 }
 
+function adminEmails() {
+  return new Set(
+    String(process.env.ADMIN_EMAILS || "")
+      .split(",")
+      .map((email) => email.trim().toLowerCase())
+      .filter(Boolean)
+  );
+}
+
+export function isAdminEmail(email) {
+  return adminEmails().has(String(email || "").toLowerCase());
+}
+
 function publicUser(user) {
-  return { id: user.id, name: user.name, email: user.email, created_at: user.created_at };
+  const value = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    is_admin: isAdminEmail(user.email),
+    created_at: user.created_at,
+  };
+  Object.defineProperty(value, "session_version", { value: user.session_version || 1 });
+  return value;
 }
 
 async function passwordHash(password, salt) {
@@ -63,6 +84,10 @@ async function verifyPassword(password, user) {
 function validateRegistration({ name, email, password }) {
   if (name.length < 2 || name.length > 80) throw new AuthError("Name must be between 2 and 80 characters.", 400);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new AuthError("Enter a valid email address.", 400);
+  if (password.length < 8) throw new AuthError("Password must be at least 8 characters.", 400);
+}
+
+function validatePassword(password) {
   if (password.length < 8) throw new AuthError("Password must be at least 8 characters.", 400);
 }
 
@@ -83,6 +108,7 @@ export async function register(body) {
     email,
     password_salt: salt,
     password_hash: await passwordHash(password, salt),
+    session_version: 1,
   });
   return publicUser(user);
 }
@@ -98,8 +124,33 @@ export async function login(body) {
   return publicUser(user);
 }
 
+export async function recordEvent(user, event, request) {
+  if (!user) return null;
+  const forwardedFor = String(request.headers["x-forwarded-for"] || "").split(",")[0].trim();
+  return store.create("auth-events", {
+    user_id: user.id,
+    event,
+    ip_address: forwardedFor || String(request.socket?.remoteAddress || "unknown"),
+    user_agent: String(request.headers["user-agent"] || "unknown").slice(0, 300),
+  });
+}
+
+export async function resetPassword(userId, password) {
+  const value = String(password || "");
+  validatePassword(value);
+  const user = await store.get("users", userId);
+  if (!user) throw new AuthError("User not found.", 404);
+  const salt = randomBytes(16).toString("hex");
+  await store.update("users", user.id, {
+    password_salt: salt,
+    password_hash: await passwordHash(value, salt),
+    session_version: (user.session_version || 1) + 1,
+  });
+  return publicUser(user);
+}
+
 export function setSession(response, user) {
-  const payload = encode({ userId: user.id, expiresAt: Date.now() + SESSION_SECONDS * 1000 });
+  const payload = encode({ userId: user.id, sessionVersion: user.session_version || 1, expiresAt: Date.now() + SESSION_SECONDS * 1000 });
   const token = `${payload}.${sign(payload)}`;
   const secure = process.env.LOCAL_JSON_STORAGE === "true" ? "" : "; Secure";
   response.setHeader("Set-Cookie", `${COOKIE_NAME}=${token}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${SESSION_SECONDS}${secure}`);
@@ -124,6 +175,7 @@ export async function currentUser(request) {
     const session = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
     if (!session.userId || session.expiresAt <= Date.now()) return null;
     const user = await store.get("users", session.userId);
+    if ((user?.session_version || 1) !== session.sessionVersion) return null;
     return user ? publicUser(user) : null;
   } catch {
     return null;
@@ -133,5 +185,11 @@ export async function currentUser(request) {
 export async function requireUser(request) {
   const user = await currentUser(request);
   if (!user) throw new AuthError("Please log in to continue.");
+  return user;
+}
+
+export async function requireAdmin(request) {
+  const user = await requireUser(request);
+  if (!user.is_admin) throw new AuthError("Administrator access is required.", 403);
   return user;
 }

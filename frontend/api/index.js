@@ -106,15 +106,19 @@ export default async function handler(request, response) {
 
     if (parts[0] === "auth" && parts[1] === "register" && request.method === "POST") {
       const user = await auth.register(request.body);
+      await auth.recordEvent(user, "register", request);
       auth.setSession(response, user);
       return send(response, 201, { user });
     }
     if (parts[0] === "auth" && parts[1] === "login" && request.method === "POST") {
       const user = await auth.login(request.body);
+      await auth.recordEvent(user, "login", request);
       auth.setSession(response, user);
       return send(response, 200, { user });
     }
     if (parts[0] === "auth" && parts[1] === "logout" && request.method === "POST") {
+      const user = await auth.currentUser(request);
+      await auth.recordEvent(user, "logout", request);
       auth.clearSession(response);
       return send(response, 204);
     }
@@ -124,6 +128,43 @@ export default async function handler(request, response) {
     }
 
     const user = await auth.requireUser(request);
+
+    if (parts[0] === "admin") {
+      await auth.requireAdmin(request);
+      if (parts[1] === "users" && !parts[2] && request.method === "GET") {
+        const users = await store.list("users");
+        const analyses = await store.list("analyses");
+        const events = await store.list("auth-events");
+        return send(response, 200, users.map((record) => ({
+          id: record.id,
+          name: record.name,
+          email: record.email,
+          is_admin: auth.isAdminEmail(record.email),
+          created_at: record.created_at,
+          analysis_count: analyses.filter((analysis) => analysis.user_id === record.id).length,
+          last_login_at: events.find((event) => event.user_id === record.id && event.event === "login")?.created_at || null,
+        })));
+      }
+      if (parts[1] === "users" && parts[2] && !parts[3] && request.method === "GET") {
+        const selectedUser = await store.get("users", parts[2]);
+        if (!selectedUser) return send(response, 404, { detail: "User not found." });
+        const analyses = (await store.list("analyses")).filter((record) => record.user_id === selectedUser.id);
+        const events = (await store.list("auth-events")).filter((record) => record.user_id === selectedUser.id);
+        const resumes = (await store.list("resumes")).filter((record) => record.user_id === selectedUser.id).map((record) => summary(record));
+        return send(response, 200, {
+          user: { id: selectedUser.id, name: selectedUser.name, email: selectedUser.email, created_at: selectedUser.created_at },
+          analyses,
+          events,
+          resumes,
+        });
+      }
+      if (parts[1] === "users" && parts[2] && parts[3] === "password" && request.method === "PATCH") {
+        const selectedUser = await auth.resetPassword(parts[2], request.body.password);
+        await auth.recordEvent(user, "admin_password_reset", request);
+        return send(response, 200, { message: `Password updated for ${selectedUser.email}.` });
+      }
+      return send(response, 404, { detail: "Admin API route not found." });
+    }
 
     if (parts[0] === "resumes" && parts[1] === "upload" && request.method === "POST") {
       const { file, extension, text } = await parseUpload(request);
