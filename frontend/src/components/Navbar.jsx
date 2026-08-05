@@ -85,10 +85,9 @@ function Navbar() {
         )}
 
         {!loading && !user && (
-          <>
-            <NavLink to="/login" className="nav-link">Log In</NavLink>
-            <NavLink to="/register" className="nav-auth-button">Register</NavLink>
-          </>
+          <NavLink to="/login" className="nav-auth-button">
+            Login/Register
+          </NavLink>
         )}
 
         {user && (
