@@ -43,5 +43,14 @@
     "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15",
     "created_at": "2026-08-08T11:01:17.011Z",
     "updated_at": "2026-08-08T11:01:17.011Z"
+  },
+  {
+    "id": 6,
+    "user_id": 3,
+    "event": "logout",
+    "ip_address": "106.214.2.55",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15",
+    "created_at": "2026-08-08T11:06:44.800Z",
+    "updated_at": "2026-08-08T11:06:44.800Z"
   }
 ]
