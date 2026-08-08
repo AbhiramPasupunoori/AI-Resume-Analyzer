@@ -34,5 +34,14 @@
     "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
     "created_at": "2026-08-05T08:19:12.585Z",
     "updated_at": "2026-08-05T08:19:12.585Z"
+  },
+  {
+    "id": 5,
+    "user_id": 3,
+    "event": "register",
+    "ip_address": "106.214.2.55",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.5.2 Safari/605.1.15",
+    "created_at": "2026-08-08T11:01:17.011Z",
+    "updated_at": "2026-08-08T11:01:17.011Z"
   }
 ]
