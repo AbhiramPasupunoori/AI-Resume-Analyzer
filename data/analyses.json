@@ -259,5 +259,103 @@
     },
     "created_at": "2026-08-05T07:09:11.671Z",
     "updated_at": "2026-08-05T07:09:11.671Z"
+  },
+  {
+    "id": 5,
+    "status": "completed",
+    "overall_score": 20.34,
+    "skill_score": 0,
+    "semantic_score": 2.84,
+    "section_score": 12.5,
+    "achievement_score": 0,
+    "readability_score": 5,
+    "semantic_similarity": 11.36,
+    "skill_coverage_percentage": 0,
+    "resume_skills": [
+      "Excel"
+    ],
+    "job_skills": [],
+    "matched_skills": [],
+    "missing_skills": [],
+    "section_results": {
+      "present_sections": [
+        "Summary",
+        "Skills",
+        "Experience",
+        "Education",
+        "Projects"
+      ],
+      "missing_sections": [
+        "Certifications"
+      ],
+      "present_count": 5,
+      "total_sections": 6,
+      "completeness_percentage": 83
+    },
+    "achievement_results": {
+      "quantified_achievements": 0,
+      "score": 0
+    },
+    "readability_results": {
+      "average_sentence_words": 22.07,
+      "score": 5
+    },
+    "recommendations": [
+      "Add a clear Certifications section.",
+      "Quantify achievements with measurable outcomes."
+    ],
+    "error_message": "",
+    "analysis_time_ms": 1,
+    "score_breakdown": {
+      "skill": {
+        "score": 0,
+        "maximum": 45
+      },
+      "semantic": {
+        "score": 2.84,
+        "maximum": 25
+      },
+      "sections": {
+        "score": 12.5,
+        "maximum": 15
+      },
+      "achievements": {
+        "score": 0,
+        "maximum": 10
+      },
+      "readability": {
+        "score": 5,
+        "maximum": 5
+      },
+      "overall": {
+        "score": 20.34,
+        "maximum": 100
+      }
+    },
+    "user_id": 3,
+    "resume_id": 6,
+    "job_description_id": 5,
+    "resume": {
+      "id": 6,
+      "original_filename": "SHASHANK PASPUNOORI RESUME..pdf",
+      "file_type": "pdf",
+      "file_size": 97378,
+      "text_extracted": true,
+      "word_count": 304,
+      "character_count": 2087,
+      "detected_skills": [
+        "Excel"
+      ],
+      "created_at": "2026-08-08T11:04:42.760Z"
+    },
+    "job_description": {
+      "id": 5,
+      "job_title": "Cadet pilot",
+      "company_name": "Indigo",
+      "required_skills": [],
+      "created_at": "2026-08-08T11:04:44.172Z"
+    },
+    "created_at": "2026-08-08T11:04:45.445Z",
+    "updated_at": "2026-08-08T11:04:45.445Z"
   }
 ]
