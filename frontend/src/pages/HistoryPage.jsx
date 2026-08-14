@@ -109,6 +109,7 @@ function HistoryPage() {
 
   return (
     <main className="page history-page">
+      <span className="modern-badge page-badge">Resume History</span>
       {error && <ErrorMessage message={error} />}
 
       {successMessage && <div className="success-box">{successMessage}</div>}

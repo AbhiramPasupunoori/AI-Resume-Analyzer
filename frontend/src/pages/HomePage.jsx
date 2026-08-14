@@ -5,7 +5,7 @@ function HomePage() {
     <main className="modern-home">
       <section className="modern-hero">
         <div className="hero-left">
-          <span className="modern-badge">AI Resume Analyzer</span>
+          <span className="modern-badge page-badge">AI Resume Analyzer</span>
 
           <h1>
             Optimize Your Resume for Your{" "}

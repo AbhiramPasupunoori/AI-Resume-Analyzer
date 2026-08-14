@@ -173,7 +173,7 @@ function AnalyzePage() {
   return (
     <main className="page analyze-page">
       <div className="page-header analyze-header">
-        <span className="modern-badge">Resume Analysis</span>
+        <span className="modern-badge page-badge">Resume Analysis</span>
         <h1>Analyze Your Resume</h1>
         <p>
           Follow the steps below to compare your resume with a job description

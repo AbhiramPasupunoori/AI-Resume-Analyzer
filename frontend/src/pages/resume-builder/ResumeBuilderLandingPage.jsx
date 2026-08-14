@@ -7,10 +7,10 @@ function ResumeBuilderLandingPage() {
     <main className="builder-landing-page">
       <section className="builder-landing-hero">
         <div className="builder-landing-left">
-          <span className="modern-badge">AI-powered resume builder</span>
+          <span className="modern-badge page-badge">AI-powered resume builder</span>
 
           <h1>
-            Build a <span>free resume</span> in a few clicks
+            Build a <span className="gradient-text">free resume</span> in a few clicks
           </h1>
 
           <p>
