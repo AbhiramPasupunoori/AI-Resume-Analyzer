@@ -259,5 +259,126 @@
     },
     "created_at": "2026-08-05T07:09:11.671Z",
     "updated_at": "2026-08-05T07:09:11.671Z"
+  },
+  {
+    "id": 5,
+    "status": "completed",
+    "overall_score": 42.5,
+    "skill_score": 15,
+    "semantic_score": 10,
+    "section_score": 12.5,
+    "achievement_score": 0,
+    "readability_score": 5,
+    "semantic_similarity": 40,
+    "skill_coverage_percentage": 33.33,
+    "resume_skills": [
+      "Azure",
+      "Git",
+      "JavaScript",
+      "Power BI",
+      "SQL"
+    ],
+    "job_skills": [
+      "Azure",
+      "GitHub",
+      "Python"
+    ],
+    "matched_skills": [
+      "Azure"
+    ],
+    "missing_skills": [
+      "GitHub",
+      "Python"
+    ],
+    "section_results": {
+      "present_sections": [
+        "Summary",
+        "Skills",
+        "Experience",
+        "Education",
+        "Projects"
+      ],
+      "missing_sections": [
+        "Certifications"
+      ],
+      "present_count": 5,
+      "total_sections": 6,
+      "completeness_percentage": 83
+    },
+    "achievement_results": {
+      "quantified_achievements": 0,
+      "score": 0
+    },
+    "readability_results": {
+      "average_sentence_words": 13.47,
+      "score": 5
+    },
+    "recommendations": [
+      "Add evidence of GitHub experience where it is accurate.",
+      "Add evidence of Python experience where it is accurate.",
+      "Add a clear Certifications section.",
+      "Quantify achievements with measurable outcomes."
+    ],
+    "error_message": "",
+    "analysis_time_ms": 1,
+    "score_breakdown": {
+      "skill": {
+        "score": 15,
+        "maximum": 45
+      },
+      "semantic": {
+        "score": 10,
+        "maximum": 25
+      },
+      "sections": {
+        "score": 12.5,
+        "maximum": 15
+      },
+      "achievements": {
+        "score": 0,
+        "maximum": 10
+      },
+      "readability": {
+        "score": 5,
+        "maximum": 5
+      },
+      "overall": {
+        "score": 42.5,
+        "maximum": 100
+      }
+    },
+    "user_id": 2,
+    "resume_id": 8,
+    "job_description_id": 6,
+    "resume": {
+      "id": 8,
+      "original_filename": "AbhiramPasupunoori.docx",
+      "file_type": "docx",
+      "file_size": 34252,
+      "text_extracted": true,
+      "word_count": 1313,
+      "character_count": 9357,
+      "detected_skills": [
+        "Azure",
+        "Git",
+        "JavaScript",
+        "Power BI",
+        "SQL"
+      ],
+      "created_at": "2026-08-23T09:29:47.033Z"
+    },
+    "job_description": {
+      "id": 6,
+      "job_title": "Mid-Level Azure Developer",
+      "company_name": "Kopensoft",
+      "required_skills": [
+        "Azure",
+        "GitHub",
+        "Python"
+      ],
+      "created_at": "2026-08-23T09:29:48.270Z"
+    },
+    "created_at": "2026-08-23T09:29:50.109Z",
+    "updated_at": "2026-08-23T09:29:50.109Z"
   }
 ]
