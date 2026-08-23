@@ -59,5 +59,19 @@
     "required_skills": [],
     "created_at": "2026-08-08T11:04:44.172Z",
     "updated_at": "2026-08-08T11:04:44.172Z"
+  },
+  {
+    "id": 6,
+    "user_id": 2,
+    "job_title": "Mid-Level Azure Developer",
+    "company_name": "Kopensoft",
+    "description": "Role Overview We’re looking for a mid-level Azure Developer to design, build, and maintain cloud-native integrations and data solutions on Microsoft Azure. You’ll work across data platforms, API management, and serverless compute, with the autonomy to own instances end-to-end.\n\nKey Responsibilities\n\nDesign and develop integrations using Azure Function Apps and Logic Apps\nWork with Microsoft Fabric / Databricks for data engineering and analytics workloads\nBuild and maintain pipelines integrating with data lakes and data warehouses\nIndependently provision, configure, and manage Azure service instances\nDevelop, secure, and publish APIs via Azure API Management (APIM)\nDefine API specifications (OpenAPI/Swagger) following best practices\nImplement and support Model Context Protocol (MCP) based integrations\nWork with Azure AI Search to build search and retrieval solutions\nCollaborate with cross-functional teams to gather requirements and deliver scalable solutions\nTroubleshoot, monitor, and optimize deployed integrations for performance and reliability\nRequired Skills & Experience\n\n3–6 years of hands-on experience with Azure development\nWorking knowledge of Microsoft Fabric or Databricks\nExperience integrating with Azure Data Lake and Azure Synapse/Data Warehouse\nStrong experience with Azure Function Apps and Logic Apps\nProven ability to independently manage Azure resources/instances\nExperience with Azure API Management (APIM) — policies, security, versioning\nFamiliarity with Model Context Protocol (MCP) server/client concepts\nSolid understanding of API development lifecycle and specification definition (OpenAPI/Swagger)\nExposure to Azure AI Search (indexing, querying, semantic/vector search a plus)\nGood understanding of Azure security, networking, and DevOps practices (CI/CD)\nNice to Have\n\nExperience with .NET/C# or Python for Azure development\nFamiliarity with Azure DevOps or GitHub Actions\nKnowledge of event-driven architecture (Event Grid, Service Bus)",
+    "required_skills": [
+      "Azure",
+      "GitHub",
+      "Python"
+    ],
+    "created_at": "2026-08-23T09:29:48.270Z",
+    "updated_at": "2026-08-23T09:29:48.270Z"
   }
 ]
