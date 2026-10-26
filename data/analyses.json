@@ -380,5 +380,131 @@
     },
     "created_at": "2026-08-23T09:29:50.109Z",
     "updated_at": "2026-08-23T09:29:50.109Z"
+  },
+  {
+    "id": 6,
+    "status": "completed",
+    "overall_score": 19.64,
+    "skill_score": 0,
+    "semantic_score": 4.64,
+    "section_score": 10,
+    "achievement_score": 0,
+    "readability_score": 5,
+    "semantic_similarity": 18.58,
+    "skill_coverage_percentage": 0,
+    "resume_skills": [
+      "Excel",
+      "Git",
+      "GitHub",
+      "Java",
+      "JavaScript",
+      "MySQL",
+      "Node.js",
+      "Python",
+      "REST APIs",
+      "SQL",
+      "TypeScript"
+    ],
+    "job_skills": [
+      "Go"
+    ],
+    "matched_skills": [],
+    "missing_skills": [
+      "Go"
+    ],
+    "section_results": {
+      "present_sections": [
+        "Summary",
+        "Skills",
+        "Experience",
+        "Education"
+      ],
+      "missing_sections": [
+        "Projects",
+        "Certifications"
+      ],
+      "present_count": 4,
+      "total_sections": 6,
+      "completeness_percentage": 67
+    },
+    "achievement_results": {
+      "quantified_achievements": 0,
+      "score": 0
+    },
+    "readability_results": {
+      "average_sentence_words": 16.12,
+      "score": 5
+    },
+    "recommendations": [
+      "Add evidence of Go experience where it is accurate.",
+      "Add a clear Projects section.",
+      "Add a clear Certifications section.",
+      "Quantify achievements with measurable outcomes."
+    ],
+    "error_message": "",
+    "analysis_time_ms": 1,
+    "score_breakdown": {
+      "skill": {
+        "score": 0,
+        "maximum": 45
+      },
+      "semantic": {
+        "score": 4.64,
+        "maximum": 25
+      },
+      "sections": {
+        "score": 10,
+        "maximum": 15
+      },
+      "achievements": {
+        "score": 0,
+        "maximum": 10
+      },
+      "readability": {
+        "score": 5,
+        "maximum": 5
+      },
+      "overall": {
+        "score": 19.64,
+        "maximum": 100
+      }
+    },
+    "user_id": 4,
+    "resume_id": 10,
+    "job_description_id": 8,
+    "resume": {
+      "id": 10,
+      "original_filename": "BuraRithvikKumar_Tester.pdf",
+      "file_type": "pdf",
+      "file_size": 609157,
+      "text_extracted": true,
+      "word_count": 525,
+      "character_count": 3839,
+      "detected_skills": [
+        "Excel",
+        "Git",
+        "GitHub",
+        "Java",
+        "JavaScript",
+        "MySQL",
+        "Node.js",
+        "Python",
+        "REST APIs",
+        "SQL",
+        "TypeScript"
+      ],
+      "created_at": "2026-10-26T19:05:52.451Z"
+    },
+    "job_description": {
+      "id": 8,
+      "job_title": "Mobile Test Engineer",
+      "company_name": "Deloitte",
+      "required_skills": [
+        "Go"
+      ],
+      "created_at": "2026-10-26T19:05:54.190Z"
+    },
+    "created_at": "2026-10-26T19:05:56.126Z",
+    "updated_at": "2026-10-26T19:05:56.126Z"
   }
 ]
